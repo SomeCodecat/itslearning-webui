@@ -1,0 +1,114 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                Int      @id @default(autoincrement())
+  email             String   @unique
+  encryptedCreds    String?  // Placeholder for future use
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Course {
+  id              Int      @id @default(autoincrement())
+  itslearningId   Int      @unique
+  title           String
+  code            String?
+  updatedAt       DateTime @updatedAt
+  
+  files           File[]
+  assignments     Assignment[]
+}
+
+model File {
+  plans           Plan[]
+}
+
+// Enum for IHK Exam relevance
+// Or just booleans? User asked for booleans.
+
+model StoredFile {
+  id        Int      @id @default(autoincrement())
+  hash      String   @unique // SHA256 of content
+  size      BigInt
+  localPath String   // Path to blob
+  mimeType  String?
+  createdAt DateTime @default(now())
+  
+  // Back relation
+  userFiles UserFile[]
+}
+
+model UserFile {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  storedFileId Int
+  
+  // Metadata specific to this user/context
+  customName   String?
+  webUrl       String?  // Deep link
+  
+  // IHK Metadata
+  isExamRelevant Boolean @default(false)
+  isAP1          Boolean @default(false)
+  isAP2          Boolean @default(false)
+
+  // Upload Metadata (from RSS or future scraping)
+  uploadedBy     String?  // Name of uploader
+  uploadedAt     DateTime? // When it was posted to the course
+
+  // Relations
+  user       User       @relation(fields: [userId], references: [id])
+  storedFile StoredFile @relation(fields: [storedFileId], references: [id])
+  parentFolder Plan?    @relation(fields: [planId], references: [id])
+  planId       Int?
+
+  createdAt  DateTime   @default(now())
+}
+
+model Plan {
+  id        Int      @id @default(autoincrement()) // Planner ID
+  courseId  Int
+  title     String
+  topic     String?
+  
+  // IHK Metadata inheritance
+  isExamRelevant Boolean @default(false)
+  isAP1          Boolean @default(false)
+  isAP2          Boolean @default(false)
+
+  course    Course     @relation(fields: [courseId], references: [id])
+  files     UserFile[]
+  
+  createdAt DateTime   @default(now())
+}
+
+model Assignment {
+  id        Int      @id @default(autoincrement())
+  elementId Int      @unique
+  courseId  Int
+  title     String
+  webUrl    String?
+  deadline  DateTime?
+  status    String?  // NotStarted, InProgress, Completed
+  
+  // Link to a grade if exists
+  grade     Grade?
+
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model Grade {
+  feedback        String?
+  webUrl          String?
+  updatedAt       DateTime @updatedAt
+  
+  // Link to course or assignment if possible, but often grades are standalone or loosely coupled
+  courseId        Int? 
+}

@@ -1,0 +1,25 @@
+{
+  "Index": {
+    "title": "My Courses",
+    "welcome": "Welcome back, User!",
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "tasks": "Tasks",
+    "files": "Files",
+    "settings": "Settings",
+    "recentFiles": "Recent Files"
+  },
+  "FileBrowser": {
+    "examRelevant": "Exam Relevant",
+    "ap1": "AP1",
+    "ap2": "AP2",
+    "viewInItslearning": "View in itslearning",
+    "download": "Download"
+  },
+  "Dashboard": {
+    "upcomingDeadlines": "Upcoming Deadlines",
+    "newFiles": "New Files",
+    "today": "Today",
+    "dueAt": "Due at {time}"
+  }
+}

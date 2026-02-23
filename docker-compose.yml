@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./storage:/app/storage
+      - ./prisma:/app/prisma
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - DEFAULT_INSTANCE_URL=${DEFAULT_INSTANCE_URL}
+      - ALLOW_CUSTOM_INSTANCE=${ALLOW_CUSTOM_INSTANCE}
+      - ORGANIZATION_NAME=${ORGANIZATION_NAME}
+      - EXTERNAL_URL=${EXTERNAL_URL:-http://localhost:3000}
+    restart: unless-stopped

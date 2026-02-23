@@ -1,0 +1,145 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  
+  // Itslearning Credentials (Encrypted)
+  itslearningUser String     @unique  // [MODIFIED] Now the primary local identifier
+  itslearningPwd  String     // [MODIFIED] Required
+  itslearningIv   String     // Required for decryption
+  itslearningUrl  String?
+  itslearningAccessToken String?
+  itslearningTokenExpiresAt DateTime?
+  
+  firstName      String?
+  lastName       String?
+  
+  files          UserFile[]
+  courses        Course[]   // [NEW] Enrolled courses
+  tags           Tag[]
+  
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  lastSyncedAt   DateTime?
+}
+
+model Course {
+  id            Int          @id @default(autoincrement())
+  itslearningId Int          @unique
+  title         String
+  code          String?
+  
+  plans         Plan[]
+  assignments   Assignment[]
+  users         User[]       // [NEW] Enrolled users
+  
+  updatedAt     DateTime     @updatedAt
+}
+
+model Plan {
+  id             Int        @id @default(autoincrement()) // Planner ID
+  courseId       Int
+  title          String
+  topic          String?
+  
+  // IHK Metadata inheritance
+  isExamRelevant Boolean    @default(false)
+  isAP1          Boolean    @default(false)
+  isAP2          Boolean    @default(false)
+
+  course         Course     @relation(fields: [courseId], references: [id])
+  files          UserFile[]
+  
+  createdAt      DateTime   @default(now())
+}
+
+model StoredFile {
+  id        Int        @id @default(autoincrement())
+  hash      String     @unique // SHA256
+  size      BigInt
+  localPath String
+  mimeType  String?
+  
+  userFiles UserFile[] // Back relation
+  
+  textContent String? // [NEW] For FTS/Content Search
+  
+  createdAt DateTime   @default(now())
+}
+
+model Tag {
+  id     Int        @id @default(autoincrement())
+  name   String
+  userId Int
+  user   User       @relation(fields: [userId], references: [id])
+  files  UserFile[]
+  
+  @@unique([userId, name])
+}
+
+model UserFile {
+  id             Int        @id @default(autoincrement())
+  userId         Int
+  storedFileId   Int?       // Optional to allow proxy downloading
+  planId         Int?
+  elementId      Int?       // Identify the resource natively across ITSLearning
+  
+  customName     String?
+  webUrl         String?    // Deep link
+  
+  // Virtual Folder Structure
+  folderPath     String?    // e.g. "Lecture Notes/Week 1"
+
+  // IHK Metadata
+  isExamRelevant Boolean    @default(false)
+  isAP1          Boolean    @default(false)
+  isAP2          Boolean    @default(false)
+
+  // Versioning / Archiving
+  isArchived     Boolean    @default(false)
+  archivedAt     DateTime?
+
+  // Upload Metadata
+  uploader       String?    // Name of user who uploaded it
+  uploadedAt     DateTime?
+
+  user           User       @relation(fields: [userId], references: [id])
+  storedFile     StoredFile? @relation(fields: [storedFileId], references: [id])
+  plan           Plan?      @relation(fields: [planId], references: [id])
+  
+  tags           Tag[]
+
+  createdAt      DateTime   @default(now())
+}
+
+model Assignment {
+  id        Int       @id @default(autoincrement())
+  elementId Int       @unique
+  courseId  Int
+  title     String
+  webUrl    String?
+  deadline  DateTime?
+  status    String?   // NotStarted, InProgress, Completed
+  
+  grade     Grade?
+
+  course    Course    @relation(fields: [courseId], references: [id])
+}
+
+model Grade {
+  id           Int        @id @default(autoincrement())
+  assignmentId Int        @unique
+  feedback     String?
+  webUrl       String?
+  
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  
+  updatedAt    DateTime   @updatedAt
+}

@@ -1,0 +1,19 @@
+{
+  "name": "itslearning-webui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:SomeCodecat/itslearning-webui.git",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "5.22.0",
+    "@types/node": "^25.0.10",
+    "axios": "^1.13.3",
+    "axios-cookiejar-support": "^6.0.5",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.2.3",
+    "prisma": "5.22.0",
+    "tough-cookie": "^6.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

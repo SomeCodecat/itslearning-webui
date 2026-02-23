@@ -1,0 +1,2840 @@
+{
+  "timestamp": "2026-01-25T16:28:24.133Z",
+  "courses": [
+    {
+      "id": 4349,
+      "title": "24-E2FS/I (Englisch Seitel)",
+      "resources": [
+        {
+          "id": 317614,
+          "title": "ESL-Brains-What-makes-start-ups-succeed-SV-1162.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317614"
+        },
+        {
+          "id": 327718,
+          "title": "Unit 1 - A company profile.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327718"
+        },
+        {
+          "id": 333454,
+          "title": "Audio File \"My company\"",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333454"
+        },
+        {
+          "id": 334797,
+          "title": "Stress-Lets deal with it",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334797"
+        },
+        {
+          "id": 334801,
+          "title": "Why you will fail to have a great career",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334801"
+        },
+        {
+          "id": 349930,
+          "title": "English FI 1. Lehrjahr",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349930"
+        },
+        {
+          "id": 349931,
+          "title": "Phone Phobia",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349931"
+        },
+        {
+          "id": 349932,
+          "title": "Would you like to work a four day week?",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349932"
+        },
+        {
+          "id": 377998,
+          "title": "Year 2",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377998"
+        },
+        {
+          "id": 378006,
+          "title": "Intro video",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378006"
+        },
+        {
+          "id": 378007,
+          "title": "Worksheet_Amazing medical developments with 3D.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378007"
+        },
+        {
+          "id": 378008,
+          "title": "Amazing medical developments with 3D",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378008"
+        },
+        {
+          "id": 378009,
+          "title": "IT Matters Buch ",
+          "type": "Note",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378009"
+        },
+        {
+          "id": 378017,
+          "title": "The city of the future is here.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378017"
+        },
+        {
+          "id": 380947,
+          "title": "Design an outdoor space",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380947"
+        },
+        {
+          "id": 380978,
+          "title": "Listening Worksheet ",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380978"
+        },
+        {
+          "id": 380981,
+          "title": "Transkript listening",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380981"
+        },
+        {
+          "id": 381158,
+          "title": "Intercultural communication at the workplace FI.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381158"
+        },
+        {
+          "id": 389229,
+          "title": "Intercultural communication at the workplace Kurz PassivFI.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389229"
+        },
+        {
+          "id": 389292,
+          "title": "Listening comprehension practice",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389292"
+        },
+        {
+          "id": 389293,
+          "title": "Task 1.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389293"
+        },
+        {
+          "id": 389294,
+          "title": "Task 2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389294"
+        },
+        {
+          "id": 389295,
+          "title": "Task 3.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389295"
+        },
+        {
+          "id": 395678,
+          "title": "ESL-Brains-Regulating-big-tech-SV-3876.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395678"
+        },
+        {
+          "id": 395769,
+          "title": "Shark tank",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395769"
+        },
+        {
+          "id": 395893,
+          "title": "Image sharks",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395893"
+        },
+        {
+          "id": 396550,
+          "title": "ESL-Brains-Why-do-we-glamourise-overwork-more-than-ever-SV-8143.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396550"
+        },
+        {
+          "id": 396551,
+          "title": "Newspaper article on overworking",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396551"
+        },
+        {
+          "id": 396552,
+          "title": "LearningApps",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396552"
+        },
+        {
+          "id": 396556,
+          "title": "Quote",
+          "type": "Note",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396556"
+        },
+        {
+          "id": 396560,
+          "title": "Upload the link to your learning app here",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396560"
+        },
+        {
+          "id": 381161,
+          "title": "passive voice",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381161"
+        }
+      ],
+      "extractedAssignments": []
+    },
+    {
+      "id": 4803,
+      "title": "BFKO BWL 2025/26 Unv",
+      "resources": [
+        {
+          "id": 377371,
+          "title": "FA 234 Winter 2022 23.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377371"
+        },
+        {
+          "id": 377372,
+          "title": "Lösung Wirtschaftslehre Abiturprüfung 2024.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377372"
+        },
+        {
+          "id": 377373,
+          "title": "FA 234 Sommer 2024.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377373"
+        },
+        {
+          "id": 377374,
+          "title": "FA 234 Sommer 2023.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377374"
+        },
+        {
+          "id": 377375,
+          "title": "FA 230 Winter 2022 23.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377375"
+        },
+        {
+          "id": 377376,
+          "title": "FA 230 Sommer 2024.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377376"
+        },
+        {
+          "id": 377377,
+          "title": "FA 230 Sommer 2023.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377377"
+        },
+        {
+          "id": 377378,
+          "title": "14 Deckungsbeitrag Handelskalkulation.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377378"
+        },
+        {
+          "id": 377379,
+          "title": "15 Break Even Deckungsbeitrag.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377379"
+        },
+        {
+          "id": 377380,
+          "title": "12 Handelskalkulation Break Even.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377380"
+        },
+        {
+          "id": 377381,
+          "title": "14 Deckungsbeitrag Handelskalkulation.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377381"
+        },
+        {
+          "id": 377382,
+          "title": "14 15 Break Even Unternehmensgründung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377382"
+        },
+        {
+          "id": 377383,
+          "title": "04 05 Break Even.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377383"
+        },
+        {
+          "id": 377384,
+          "title": "19 Handelskalkulation Deckungsbeitrag Lösung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377384"
+        },
+        {
+          "id": 377385,
+          "title": "19 Handelskalkulation Deckungsbeitrag.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377385"
+        },
+        {
+          "id": 377386,
+          "title": "17 18 DB Break Even Aufgabe.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377386"
+        },
+        {
+          "id": 377387,
+          "title": "Prüfung Sommer 2025 Break-Even-Analyse.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377387"
+        },
+        {
+          "id": 377388,
+          "title": "Prüfung Winter 2024-25 Break-Even-Analyse.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377388"
+        },
+        {
+          "id": 377389,
+          "title": "Prüfung Sommer 2024.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377389"
+        },
+        {
+          "id": 377390,
+          "title": "Break -Even Übungsaufgaben.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377390"
+        },
+        {
+          "id": 377391,
+          "title": "Kostenbegriffe.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377391"
+        },
+        {
+          "id": 378316,
+          "title": "Bilanz Ewieger Frieden GmbH.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378316"
+        },
+        {
+          "id": 378317,
+          "title": "Lückentext Bilanz und GuV.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378317"
+        },
+        {
+          "id": 378318,
+          "title": "GuV Ewiger Frieden GmbH.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378318"
+        },
+        {
+          "id": 389491,
+          "title": "AB Einstieg Deckungsbeitrag Gewinnschwelle .docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389491"
+        },
+        {
+          "id": 389492,
+          "title": "Break -Even Übungsaufgaben.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389492"
+        }
+      ],
+      "extractedAssignments": []
+    },
+    {
+      "id": 4823,
+      "title": "E2FI E2FS WiKo 2025/26 Unv",
+      "resources": [
+        {
+          "id": 378288,
+          "title": "Geldanlagen Überblick.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378288"
+        },
+        {
+          "id": 378289,
+          "title": "Von der FIRE-Bewegung lernen.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378289"
+        },
+        {
+          "id": 378292,
+          "title": "Staatsanleihe am Beispiel.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378292"
+        },
+        {
+          "id": 378605,
+          "title": "MC Test Geldanlage.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378605"
+        },
+        {
+          "id": 388214,
+          "title": "Devisenkurse.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388214"
+        },
+        {
+          "id": 388215,
+          "title": "Eine Bank.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388215"
+        },
+        {
+          "id": 388242,
+          "title": "Bedeutende Währungen.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388242"
+        },
+        {
+          "id": 389665,
+          "title": "AB Klett Binnenwert  .pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389665"
+        },
+        {
+          "id": 389666,
+          "title": "AB Klett Außenwert.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389666"
+        },
+        {
+          "id": 389667,
+          "title": "AB Devisenkurse.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389667"
+        },
+        {
+          "id": 389668,
+          "title": "AB Inflation.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389668"
+        },
+        {
+          "id": 389669,
+          "title": "Grafik Inflationsrate Farbe.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389669"
+        },
+        {
+          "id": 389671,
+          "title": "Beispiel einer Staatsanleihe.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389671"
+        },
+        {
+          "id": 389673,
+          "title": "Euro Vorteile und Probleme .docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389673"
+        },
+        {
+          "id": 389674,
+          "title": "Symbol DM.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389674"
+        },
+        {
+          "id": 389675,
+          "title": "AB Klett Euro.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389675"
+        },
+        {
+          "id": 389677,
+          "title": "Inflation leer.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389677"
+        },
+        {
+          "id": 389678,
+          "title": "Die Verbraucherpreise in Deutschland.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389678"
+        },
+        {
+          "id": 389679,
+          "title": "Geldschwemme.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389679"
+        },
+        {
+          "id": 389680,
+          "title": "Woher kommt der Wert des Geldes .docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389680"
+        },
+        {
+          "id": 389682,
+          "title": "Kaufkraft gestern und heute.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389682"
+        },
+        {
+          "id": 389683,
+          "title": "Was ist die Inflationsrate.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389683"
+        },
+        {
+          "id": 389684,
+          "title": "Verbraucherpreise 24.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389684"
+        },
+        {
+          "id": 389685,
+          "title": "Inflation Entwicklung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389685"
+        },
+        {
+          "id": 396202,
+          "title": "Inflation 01 26.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396202"
+        },
+        {
+          "id": 396829,
+          "title": "Privatversicherungen 26.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396829"
+        },
+        {
+          "id": 396830,
+          "title": "Leitfragen Privatversicherungen.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396830"
+        },
+        {
+          "id": 396832,
+          "title": "Grafik Geldvermögen 25.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396832"
+        },
+        {
+          "id": 396831,
+          "title": "Grafik Versicherungsmarkt 25.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396831"
+        },
+        {
+          "id": 396833,
+          "title": "AB Privatversicherungen Übersicht.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396833"
+        },
+        {
+          "id": 396894,
+          "title": "WiKo Aufgabe zum Thema Geld .docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396894"
+        }
+      ],
+      "extractedAssignments": []
+    },
+    {
+      "id": 4851,
+      "title": "E2FI/FS Ethik (fis)",
+      "resources": [
+        {
+          "id": 379538,
+          "title": "UE-Werte und Normen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=379538"
+        },
+        {
+          "id": 379638,
+          "title": "UE 1- Werte und Normen",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=379638"
+        },
+        {
+          "id": 379639,
+          "title": "UE-Werte und Normen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=379639"
+        },
+        {
+          "id": 379640,
+          "title": "UE 2- Fragen der Gerechtigkeit",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=379640"
+        },
+        {
+          "id": 379641,
+          "title": "UE-Fragen der Gerechtigkeit.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=379641"
+        },
+        {
+          "id": 381690,
+          "title": "Allgemeines",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381690"
+        },
+        {
+          "id": 381691,
+          "title": "00-Themen - Notenbildung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381691"
+        },
+        {
+          "id": 381737,
+          "title": "UE 3 - Zivilcourage",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381737"
+        },
+        {
+          "id": 381738,
+          "title": "UE 4 - Toleranz",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381738"
+        }
+      ],
+      "extractedAssignments": []
+    },
+    {
+      "id": 4273,
+      "title": "FI24-BFKO",
+      "resources": [
+        {
+          "id": 309363,
+          "title": "BFKO 1LJ Naber",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=309363"
+        },
+        {
+          "id": 328126,
+          "title": "Drucker.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=328126"
+        },
+        {
+          "id": 333570,
+          "title": "Projektmanagement-2023.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333570"
+        },
+        {
+          "id": 333571,
+          "title": "Napo_ Vorsicht Elektrizität_480p.mp4",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333571"
+        },
+        {
+          "id": 333572,
+          "title": "_2021_01_21_Die_Fantastischen_5_FINAL_1080p.mp4",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333572"
+        },
+        {
+          "id": 333573,
+          "title": "Schutz_vor_el_Strom.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333573"
+        },
+        {
+          "id": 335603,
+          "title": "Projektmanagement_Aufgaben.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=335603"
+        },
+        {
+          "id": 341683,
+          "title": "SCRUM-2023.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341683"
+        },
+        {
+          "id": 341684,
+          "title": "2020-Scrum-Guide-German.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341684"
+        },
+        {
+          "id": 351152,
+          "title": "Lizenzrecht.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351152"
+        },
+        {
+          "id": 351153,
+          "title": "Software_Engineering.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351153"
+        },
+        {
+          "id": 351155,
+          "title": "Struktogramm_4LSG.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351155"
+        },
+        {
+          "id": 351154,
+          "title": "Struktogramm_4.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351154"
+        },
+        {
+          "id": 351156,
+          "title": "Struktogramm_3-LSG.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351156"
+        },
+        {
+          "id": 351157,
+          "title": "Struktogramm_3.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351157"
+        },
+        {
+          "id": 351158,
+          "title": "Nassi-Shneidermann-Übung2.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351158"
+        },
+        {
+          "id": 351159,
+          "title": "Green_IT-2.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351159"
+        },
+        {
+          "id": 351160,
+          "title": "Prozessorga-2023.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351160"
+        },
+        {
+          "id": 353540,
+          "title": "EPK_4.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353540"
+        },
+        {
+          "id": 353541,
+          "title": "EPK_3.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353541"
+        },
+        {
+          "id": 353542,
+          "title": "EEPK_1.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353542"
+        },
+        {
+          "id": 381995,
+          "title": "Verschlüsselung.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381995"
+        },
+        {
+          "id": 315062,
+          "title": "BFKO 1. Lj Vielsäcker",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315062"
+        },
+        {
+          "id": 315065,
+          "title": "02_Konfiguration_Router.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315065"
+        },
+        {
+          "id": 315066,
+          "title": "02_PT-Übung.pkt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315066"
+        },
+        {
+          "id": 315067,
+          "title": "05_Switch_4PC_ARP-Sim.pkt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315067"
+        },
+        {
+          "id": 315068,
+          "title": "05_ARP_PT-Übung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315068"
+        },
+        {
+          "id": 315069,
+          "title": "09_Arbeitsblatt_Lösungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315069"
+        },
+        {
+          "id": 315070,
+          "title": "02_Aufg_Subnet_01_Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315070"
+        },
+        {
+          "id": 315072,
+          "title": "Subnetting_Vertiefungsaufgaben.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315072"
+        },
+        {
+          "id": 315073,
+          "title": "VLSM_Einführung_02.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315073"
+        },
+        {
+          "id": 315074,
+          "title": "03_Wdh_AB_Subnetting.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315074"
+        },
+        {
+          "id": 315076,
+          "title": "VLSM_Aufgabe_03.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315076"
+        },
+        {
+          "id": 315077,
+          "title": "Wdh_für_KA2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315077"
+        },
+        {
+          "id": 315078,
+          "title": "Wdh_für_KA2_Lösungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315078"
+        },
+        {
+          "id": 315079,
+          "title": "Aufgabe_Subnetting_PT_02.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315079"
+        },
+        {
+          "id": 315081,
+          "title": "WAN_4Router_Subnetting_Schüler__02_v80.pkt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=315081"
+        },
+        {
+          "id": 317817,
+          "title": "Hausinstallation.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317817"
+        },
+        {
+          "id": 327724,
+          "title": "3_Ohmsches_Gesetz_Aufgaben_01.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327724"
+        },
+        {
+          "id": 333442,
+          "title": "5_Elektrische_Energie_Stromkosten1.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333442"
+        },
+        {
+          "id": 333443,
+          "title": "5_Elektrische_Energie2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333443"
+        },
+        {
+          "id": 333517,
+          "title": "Wdh_KA1_Grundgrößen_1_Lösungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333517"
+        },
+        {
+          "id": 334571,
+          "title": "Formelsammlung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334571"
+        },
+        {
+          "id": 334792,
+          "title": "Wdh_KA1_Grundgrößen_2_Lösungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334792"
+        },
+        {
+          "id": 352571,
+          "title": "02_Aufg_Subnet_01_jdsr.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352571"
+        },
+        {
+          "id": 352728,
+          "title": "02_Aufg_Subnet_01_jdsr_Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352728"
+        },
+        {
+          "id": 377980,
+          "title": "SOL für Do., 18.09.25, 5./6. Std.",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377980"
+        },
+        {
+          "id": 316154,
+          "title": "BFKO mas",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316154"
+        },
+        {
+          "id": 316155,
+          "title": "Einführung und Grundbegriffe Programmieren",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316155"
+        },
+        {
+          "id": 316156,
+          "title": "Online-Suche und Promts zu OOP",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316156"
+        },
+        {
+          "id": 327257,
+          "title": "01 AB Java und eclipse installieren.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327257"
+        },
+        {
+          "id": 327258,
+          "title": "1. Einführung in die Programmierung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327258"
+        },
+        {
+          "id": 327259,
+          "title": "02 AB Einführung in JAVA.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327259"
+        },
+        {
+          "id": 327582,
+          "title": "05 AB if-else, relationale-Operatoren, Struktogramme.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327582"
+        },
+        {
+          "id": 327583,
+          "title": "06 AB Schleifen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327583"
+        },
+        {
+          "id": 327584,
+          "title": "03 AB Java Datentypen-und-Operatoren.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327584"
+        },
+        {
+          "id": 327585,
+          "title": "04 AB Java Konstanten, Literale, Kommentare, Bezeichnerregeln, Konsoleneingabe.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327585"
+        },
+        {
+          "id": 327595,
+          "title": "Flaechenberechnung.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327595"
+        },
+        {
+          "id": 327619,
+          "title": "Konstanten.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327619"
+        },
+        {
+          "id": 327620,
+          "title": "CastingVonElementarenDatentypen.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327620"
+        },
+        {
+          "id": 327621,
+          "title": "Flaechenberechnung.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327621"
+        },
+        {
+          "id": 333580,
+          "title": "Ich-Kann-Liste_ Einführung in die Programmierung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333580"
+        },
+        {
+          "id": 333581,
+          "title": "Inhalt Klassenarbeit",
+          "type": "Note",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333581"
+        },
+        {
+          "id": 334483,
+          "title": "Einführung in die Programmierung",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334483"
+        },
+        {
+          "id": 335128,
+          "title": "AB_Arrays.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=335128"
+        },
+        {
+          "id": 335129,
+          "title": "Arrays in JAVA - w3schools",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=335129"
+        },
+        {
+          "id": 340589,
+          "title": "Multidimensionale Arrays",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340589"
+        },
+        {
+          "id": 340590,
+          "title": "AB_Multidimensionale Arrays in Java.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340590"
+        },
+        {
+          "id": 340880,
+          "title": "Arbeitsauftrag_ Programmierung eines Tic-Tac-Toe-Spiels in Java.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340880"
+        },
+        {
+          "id": 340881,
+          "title": "TicTacToe.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340881"
+        },
+        {
+          "id": 349585,
+          "title": "MySQL-DBMS_PPT.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349585"
+        },
+        {
+          "id": 349586,
+          "title": "SQL Online Compiler",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349586"
+        },
+        {
+          "id": 349587,
+          "title": "XAMPP",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349587"
+        },
+        {
+          "id": 349599,
+          "title": "SQL Bolt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349599"
+        },
+        {
+          "id": 349903,
+          "title": "Einführung SQL",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349903"
+        },
+        {
+          "id": 349904,
+          "title": "MySQL-Entwurfsschritte.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349904"
+        },
+        {
+          "id": 349905,
+          "title": "MySQL-ERM und Beziehungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349905"
+        },
+        {
+          "id": 349906,
+          "title": "MySQL-vom ERM zum RDM.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349906"
+        },
+        {
+          "id": 349907,
+          "title": "CHEN-Notation",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349907"
+        },
+        {
+          "id": 349908,
+          "title": "SQL JOINS und Aggregatisfunktionen",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349908"
+        },
+        {
+          "id": 350500,
+          "title": "MySQL-Befehlsreferenz.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350500"
+        },
+        {
+          "id": 350502,
+          "title": "Datentypen in SQL",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350502"
+        },
+        {
+          "id": 350503,
+          "title": "CRUD-Operationen in SQL",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350503"
+        },
+        {
+          "id": 351103,
+          "title": "DB_Ich-Kann-Liste.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351103"
+        },
+        {
+          "id": 351104,
+          "title": "SQL_Aufgabensammlung_Teil2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351104"
+        },
+        {
+          "id": 351105,
+          "title": "testDataDump.sql",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351105"
+        },
+        {
+          "id": 351106,
+          "title": "SQL_Aufgabensammlung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351106"
+        },
+        {
+          "id": 351107,
+          "title": "9. MariaDB Datenbank Dump und Import.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351107"
+        },
+        {
+          "id": 351108,
+          "title": "Aufgaben zur Testdatenbank.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351108"
+        },
+        {
+          "id": 351109,
+          "title": "SQL Murder Mystery",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351109"
+        },
+        {
+          "id": 351110,
+          "title": "Maulwurfstadt 2033",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351110"
+        },
+        {
+          "id": 351111,
+          "title": "SQL Island",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351111"
+        },
+        {
+          "id": 351112,
+          "title": "SQL Police Department",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351112"
+        },
+        {
+          "id": 351113,
+          "title": "Lost at SQL",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351113"
+        },
+        {
+          "id": 351114,
+          "title": "SQL-Insekten (Injection)",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351114"
+        },
+        {
+          "id": 352444,
+          "title": "DB - ER-Diagramme und SQL Basics",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352444"
+        },
+        {
+          "id": 353006,
+          "title": "SQL CRUD",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353006"
+        },
+        {
+          "id": 353103,
+          "title": "Normalisierung Übungsaufgaben",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353103"
+        },
+        {
+          "id": 353105,
+          "title": "Aufgabe 3_Lösungsvorschlag.png",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353105"
+        },
+        {
+          "id": 388216,
+          "title": "Imperative Programmierung in Java – Zusammenfassung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388216"
+        },
+        {
+          "id": 388217,
+          "title": "Aufgabensammlung zur imperativen Programmierung in Java.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388217"
+        },
+        {
+          "id": 388218,
+          "title": "Lösungsbeispiele zu _Aufgabesammlung zur iperativen Programmierung in JAVA_.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388218"
+        },
+        {
+          "id": 388219,
+          "title": "W.6.2 Tankfüllung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388219"
+        },
+        {
+          "id": 388220,
+          "title": "W.6.1 Wochentag.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388220"
+        },
+        {
+          "id": 388221,
+          "title": "W.5.11 IBAN-Generator.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388221"
+        },
+        {
+          "id": 388222,
+          "title": "W.4.15 Ebbe und Flut berechnen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388222"
+        },
+        {
+          "id": 388223,
+          "title": "W.4.1 Maximum bestimmen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388223"
+        },
+        {
+          "id": 388224,
+          "title": "W.3.3 Blutalkoholkonzentration.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388224"
+        },
+        {
+          "id": 388225,
+          "title": "W.4.15.Beispiellösung",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388225"
+        },
+        {
+          "id": 388226,
+          "title": "Skript OOP _ MNSR (20241117).pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388226"
+        },
+        {
+          "id": 388228,
+          "title": "Kapselung | Encapsulation",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388228"
+        },
+        {
+          "id": 388229,
+          "title": "Vererbung | Inheritance",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388229"
+        },
+        {
+          "id": 388230,
+          "title": "W.8.5 Kopffitness.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388230"
+        },
+        {
+          "id": 388231,
+          "title": "W.10.3 To-Do-Liste.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388231"
+        },
+        {
+          "id": 388232,
+          "title": "W.10.5 Meeting-Protokoll.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388232"
+        },
+        {
+          "id": 388233,
+          "title": "W.8.2 Body-Mass-Index.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388233"
+        },
+        {
+          "id": 388234,
+          "title": "W.8.4 Passwortklasse.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388234"
+        },
+        {
+          "id": 388235,
+          "title": "W.10.1 Online-Shop.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388235"
+        },
+        {
+          "id": 388236,
+          "title": "Übungsaufgaben OOP",
+          "type": "CustomActivity",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388236"
+        },
+        {
+          "id": 388237,
+          "title": "Health.java - template",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388237"
+        },
+        {
+          "id": 388238,
+          "title": "Kapitel 7_ Abstrakte Klassen und Interfaces.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388238"
+        },
+        {
+          "id": 388239,
+          "title": "Methode \"isStrong()\" für Aufgabe 8.4",
+          "type": "Note",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388239"
+        },
+        {
+          "id": 388241,
+          "title": "Passwortklasse.7z",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388241"
+        },
+        {
+          "id": 389486,
+          "title": "beispiellösungen",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389486"
+        },
+        {
+          "id": 389487,
+          "title": "Health.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389487"
+        },
+        {
+          "id": 389488,
+          "title": "Main.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389488"
+        },
+        {
+          "id": 389490,
+          "title": "StarkesPasswort.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389490"
+        },
+        {
+          "id": 389793,
+          "title": "Eclipse-shortcuts-win-4.30.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389793"
+        },
+        {
+          "id": 395986,
+          "title": "OOP_conceptMap_annotated.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395986"
+        },
+        {
+          "id": 395987,
+          "title": "ueberladung.java",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395987"
+        },
+        {
+          "id": 395988,
+          "title": "Ich-Kann-Liste - OOP - E2FS 2025_26.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395988"
+        },
+        {
+          "id": 396038,
+          "title": "Klassenarbeit Theorie OOP",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396038"
+        },
+        {
+          "id": 396561,
+          "title": "Beziehungen in Java - Programmieraufgaben.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396561"
+        },
+        {
+          "id": 396567,
+          "title": "SummaryUML-Diagramme.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396567"
+        },
+        {
+          "id": 396789,
+          "title": "Rückgabe Klassenarbeit",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396789"
+        },
+        {
+          "id": 316613,
+          "title": "ÜbungenAlle.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316613"
+        },
+        {
+          "id": 316653,
+          "title": "BFKO 1LJ Dagenbach IT",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316653"
+        },
+        {
+          "id": 316656,
+          "title": "Internes Bus-System.PNG",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316656"
+        },
+        {
+          "id": 316660,
+          "title": "00 IT-Systeme und EVA.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316660"
+        },
+        {
+          "id": 316661,
+          "title": "00 Bus-Systeme_Kurzversion.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316661"
+        },
+        {
+          "id": 327380,
+          "title": "00 Bus-Systeme_Kurzversion-E1FIS24.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327380"
+        },
+        {
+          "id": 327391,
+          "title": "01b InformationsgrößenV2_S1-2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327391"
+        },
+        {
+          "id": 333205,
+          "title": "01c Digitale Informationen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333205"
+        },
+        {
+          "id": 333206,
+          "title": "01d Zahlensysteme.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333206"
+        },
+        {
+          "id": 333207,
+          "title": "01d-2 Rechnen mit Dualzahlen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333207"
+        },
+        {
+          "id": 333208,
+          "title": "01d-1 Konvertieren Zahlensystemen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333208"
+        },
+        {
+          "id": 333209,
+          "title": "01d Hexadezimales Zahlensystem.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333209"
+        },
+        {
+          "id": 334224,
+          "title": "01e Zeichencodes.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334224"
+        },
+        {
+          "id": 334225,
+          "title": "01e Zeichencodes-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334225"
+        },
+        {
+          "id": 334226,
+          "title": "01e Überblick-Codes.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334226"
+        },
+        {
+          "id": 334918,
+          "title": "01d Übung Zahlensysteme für KA E1FI20250107.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334918"
+        },
+        {
+          "id": 340570,
+          "title": "01b Informationsgrößen-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340570"
+        },
+        {
+          "id": 340662,
+          "title": "02 Logische Verknüpfungen_V2_SuS.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340662"
+        },
+        {
+          "id": 340664,
+          "title": "02 AB_FlipFlop_Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340664"
+        },
+        {
+          "id": 340665,
+          "title": "02 AD_DA-Wandlung_Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340665"
+        },
+        {
+          "id": 340666,
+          "title": "00 Lasten_Pflichtenheft.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340666"
+        },
+        {
+          "id": 340669,
+          "title": "00b Beschaffung IT WE.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340669"
+        },
+        {
+          "id": 340671,
+          "title": "00a Anforderungsanalyse IT-Systems Bsp1.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340671"
+        },
+        {
+          "id": 340672,
+          "title": "00a Anforderungsanalyse IT-Systems Bsp2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340672"
+        },
+        {
+          "id": 340763,
+          "title": "itslearning-Feedbacks",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340763"
+        },
+        {
+          "id": 340765,
+          "title": "Schüler-Lehrer-Feedback",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340765"
+        },
+        {
+          "id": 340766,
+          "title": "Klassenlehrerfeedback",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340766"
+        },
+        {
+          "id": 341468,
+          "title": "01 Klassifizierung_NW.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341468"
+        },
+        {
+          "id": 341470,
+          "title": "2a Aufgabe Kommunikationsmodell.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341470"
+        },
+        {
+          "id": 341471,
+          "title": "2b Info Protokolle und Anwendungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341471"
+        },
+        {
+          "id": 341477,
+          "title": "4c Info Netzwerkkomponenten.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341477"
+        },
+        {
+          "id": 341478,
+          "title": "4c VGL-NW-Komponenten LSG.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341478"
+        },
+        {
+          "id": 341496,
+          "title": "00 Überblick Netzwerke Lücken.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341496"
+        },
+        {
+          "id": 341497,
+          "title": "1+4 Planungsaufgabe NW.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341497"
+        },
+        {
+          "id": 350345,
+          "title": "4a1 Topografie-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350345"
+        },
+        {
+          "id": 350350,
+          "title": "4a2 Topologie-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350350"
+        },
+        {
+          "id": 350436,
+          "title": "4b Info Übertragungsmedien.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350436"
+        },
+        {
+          "id": 352147,
+          "title": "1+4 Planungsaufgabe NW E1FI 24-25.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352147"
+        },
+        {
+          "id": 352440,
+          "title": "3c Adressierung in Netzwerken.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352440"
+        },
+        {
+          "id": 353914,
+          "title": "3c Adressierung in Netzwerken E1FIT26062025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353914"
+        },
+        {
+          "id": 354800,
+          "title": "12.6.6 Packet Tracer - Configure IPv6 Addressing.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354800"
+        },
+        {
+          "id": 354801,
+          "title": "12.6.6 Packet Tracer - Configure IPv6 Addressing.pka",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354801"
+        },
+        {
+          "id": 354802,
+          "title": "3e IPv6-PC-Befehle.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354802"
+        },
+        {
+          "id": 354803,
+          "title": "3d IPv6 1-6.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354803"
+        },
+        {
+          "id": 354804,
+          "title": "3d IPv6 7-12.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354804"
+        },
+        {
+          "id": 387854,
+          "title": "Internes Bus-System.PNG",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387854"
+        },
+        {
+          "id": 387855,
+          "title": "00 IT-Systeme und EVA.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387855"
+        },
+        {
+          "id": 387856,
+          "title": "00 Bus-Systeme_Kurzversion.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387856"
+        },
+        {
+          "id": 387857,
+          "title": "00 Bus-Systeme_Kurzversion-E1FIS24.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387857"
+        },
+        {
+          "id": 387858,
+          "title": "01b InformationsgrößenV2_S1-2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387858"
+        },
+        {
+          "id": 387859,
+          "title": "01c Digitale Informationen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387859"
+        },
+        {
+          "id": 387860,
+          "title": "01d Zahlensysteme.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387860"
+        },
+        {
+          "id": 387861,
+          "title": "01d-2 Rechnen mit Dualzahlen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387861"
+        },
+        {
+          "id": 387862,
+          "title": "01d-1 Konvertieren Zahlensystemen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387862"
+        },
+        {
+          "id": 387863,
+          "title": "01d Hexadezimales Zahlensystem.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387863"
+        },
+        {
+          "id": 387864,
+          "title": "01e Zeichencodes.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387864"
+        },
+        {
+          "id": 387865,
+          "title": "01e Zeichencodes-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387865"
+        },
+        {
+          "id": 387866,
+          "title": "01e Überblick-Codes.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387866"
+        },
+        {
+          "id": 387867,
+          "title": "01d Übung Zahlensysteme für KA E1FI20250107.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387867"
+        },
+        {
+          "id": 387868,
+          "title": "01b Informationsgrößen-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387868"
+        },
+        {
+          "id": 387869,
+          "title": "02 Logische Verknüpfungen_V2_SuS.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387869"
+        },
+        {
+          "id": 387870,
+          "title": "02 AB_FlipFlop_Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387870"
+        },
+        {
+          "id": 387871,
+          "title": "02 AD_DA-Wandlung_Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387871"
+        },
+        {
+          "id": 387872,
+          "title": "00 Lasten_Pflichtenheft.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387872"
+        },
+        {
+          "id": 387873,
+          "title": "00b Beschaffung IT WE.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387873"
+        },
+        {
+          "id": 387874,
+          "title": "00a Anforderungsanalyse IT-Systems Bsp1.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387874"
+        },
+        {
+          "id": 387875,
+          "title": "00a Anforderungsanalyse IT-Systems Bsp2.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387875"
+        },
+        {
+          "id": 387876,
+          "title": "itslearning-Feedbacks",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387876"
+        },
+        {
+          "id": 387878,
+          "title": "Schüler-Lehrer-Feedback",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387878"
+        },
+        {
+          "id": 387879,
+          "title": "Klassenlehrerfeedback",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387879"
+        },
+        {
+          "id": 387881,
+          "title": "01 Klassifizierung_NW.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387881"
+        },
+        {
+          "id": 387882,
+          "title": "2a Aufgabe Kommunikationsmodell.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387882"
+        },
+        {
+          "id": 387883,
+          "title": "2b Info Protokolle und Anwendungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387883"
+        },
+        {
+          "id": 387884,
+          "title": "4c Info Netzwerkkomponenten.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387884"
+        },
+        {
+          "id": 387885,
+          "title": "4c VGL-NW-Komponenten LSG.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387885"
+        },
+        {
+          "id": 387886,
+          "title": "00 Überblick Netzwerke Lücken.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387886"
+        },
+        {
+          "id": 387887,
+          "title": "1+4 Planungsaufgabe NW.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387887"
+        },
+        {
+          "id": 387888,
+          "title": "4a1 Topografie-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387888"
+        },
+        {
+          "id": 387889,
+          "title": "4a2 Topologie-Lsg.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387889"
+        },
+        {
+          "id": 387890,
+          "title": "4b Info Übertragungsmedien.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387890"
+        },
+        {
+          "id": 387891,
+          "title": "1+4 Planungsaufgabe NW E1FI 24-25.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387891"
+        },
+        {
+          "id": 387892,
+          "title": "3c Adressierung in Netzwerken.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387892"
+        },
+        {
+          "id": 387893,
+          "title": "3c Adressierung in Netzwerken E1FIT26062025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387893"
+        },
+        {
+          "id": 387894,
+          "title": "12.6.6 Packet Tracer - Configure IPv6 Addressing.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387894"
+        },
+        {
+          "id": 387895,
+          "title": "12.6.6 Packet Tracer - Configure IPv6 Addressing.pka",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387895"
+        },
+        {
+          "id": 387896,
+          "title": "3e IPv6-PC-Befehle.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387896"
+        },
+        {
+          "id": 387897,
+          "title": "3d IPv6 1-6.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387897"
+        },
+        {
+          "id": 387898,
+          "title": "3d IPv6 7-12.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387898"
+        },
+        {
+          "id": 388403,
+          "title": "3d IPv6 1-6 E1FI20250729.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388403"
+        },
+        {
+          "id": 388404,
+          "title": "3d IPv6 7-12 E1FI (W) 29250923.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388404"
+        },
+        {
+          "id": 388405,
+          "title": "tcp_4.2.5.pcap",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388405"
+        },
+        {
+          "id": 388406,
+          "title": "FTP eagle-server.pcap",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388406"
+        },
+        {
+          "id": 388407,
+          "title": "5c2 Ablauf-Skizze tcp 4-2-5 Wireshark.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388407"
+        },
+        {
+          "id": 388408,
+          "title": "5a Info Transportprotokolle.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388408"
+        },
+        {
+          "id": 388409,
+          "title": "5b AB Transportprotokolle.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388409"
+        },
+        {
+          "id": 388410,
+          "title": "5c1 Übung OSI-Modell und Wireshark.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388410"
+        },
+        {
+          "id": 388411,
+          "title": "5c2 Übung Wireshark und TCP-FTP.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388411"
+        },
+        {
+          "id": 317454,
+          "title": "Lösungen ÜbungenAlle 16.09.2024.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317454"
+        },
+        {
+          "id": 327270,
+          "title": "E1FI Gruppe Stefanski 04.11.2024.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327270"
+        },
+        {
+          "id": 327272,
+          "title": "NSW JAVA.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327272"
+        },
+        {
+          "id": 327626,
+          "title": "E1FI Java Stefanski 06.11.2024.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=327626"
+        },
+        {
+          "id": 329100,
+          "title": "Prgrammieren in Java 1 (Stefanski)",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=329100"
+        },
+        {
+          "id": 329101,
+          "title": "Ich-Kann-Liste_ Kopie.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=329101"
+        },
+        {
+          "id": 329155,
+          "title": "Scannerklasse Kopie.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=329155"
+        },
+        {
+          "id": 329163,
+          "title": "ScannerklasseLösung Kopie.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=329163"
+        },
+        {
+          "id": 333242,
+          "title": "KA1 Training.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333242"
+        },
+        {
+          "id": 333272,
+          "title": "Reiche HIER dein Worddokument ein!",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333272"
+        },
+        {
+          "id": 333408,
+          "title": "KA2Training..pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333408"
+        },
+        {
+          "id": 333412,
+          "title": "Reiche hier deine Klassenarbeit ein (Pflicht nur für Gruppe Stefanski)!",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333412"
+        },
+        {
+          "id": 334602,
+          "title": "1x1 ProgrammNEU.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334602"
+        },
+        {
+          "id": 334603,
+          "title": "E1FI Java 08.01.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334603"
+        },
+        {
+          "id": 335130,
+          "title": "PyramideLösung.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=335130"
+        },
+        {
+          "id": 340654,
+          "title": "E1FI Java 17.02.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340654"
+        },
+        {
+          "id": 340990,
+          "title": "UP1 Kopie.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340990"
+        },
+        {
+          "id": 340998,
+          "title": "E1fi java UP  19.02.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340998"
+        },
+        {
+          "id": 354807,
+          "title": "AB Prim UP 28.7.2025.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354807"
+        },
+        {
+          "id": 341276,
+          "title": "BFKO 1. LJ 2024_25 Stefanski",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341276"
+        },
+        {
+          "id": 341367,
+          "title": "SQL_Quickie.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341367"
+        },
+        {
+          "id": 341368,
+          "title": "Notiz 19.02.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341368"
+        },
+        {
+          "id": 341369,
+          "title": "SQL2.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341369"
+        },
+        {
+          "id": 341465,
+          "title": "E1FI DB 24.02.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341465"
+        },
+        {
+          "id": 341720,
+          "title": "Lösung SQL2 1-6 26.02.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341720"
+        },
+        {
+          "id": 341725,
+          "title": "SQL4 RechercheLösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341725"
+        },
+        {
+          "id": 349917,
+          "title": "Testaufgaben.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349917"
+        },
+        {
+          "id": 349918,
+          "title": "E1FI BFKO DB Stefanski ab 12.05.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349918"
+        },
+        {
+          "id": 350351,
+          "title": "Group, Sort und Aggregation in SQL - SQL 7.mp4",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350351"
+        },
+        {
+          "id": 350352,
+          "title": "MySQL - HAVING-Klausel an einfachen Beispielen erklärt (deutsch).mp4",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350352"
+        },
+        {
+          "id": 350353,
+          "title": "E1FI BFKO DB Stefanski ab 12.05.2025 bis 19.05.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350353"
+        },
+        {
+          "id": 350544,
+          "title": "SQ3 Lösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350544"
+        },
+        {
+          "id": 350545,
+          "title": "TestÜbLösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=350545"
+        },
+        {
+          "id": 352455,
+          "title": "SQL8 AB Lösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352455"
+        },
+        {
+          "id": 352461,
+          "title": "SQL9 AB Lösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352461"
+        },
+        {
+          "id": 353008,
+          "title": "NSW DB.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353008"
+        },
+        {
+          "id": 353009,
+          "title": "SQL10 AB Lösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353009"
+        },
+        {
+          "id": 351691,
+          "title": "EXTERN: KIB3",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351691"
+        },
+        {
+          "id": 351692,
+          "title": "Rechtsvorschrift-zq-ki-und-maschinelles-lernen-data.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351692"
+        },
+        {
+          "id": 351694,
+          "title": "20250602_Anmeldung ZQ_KI-ML_25.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351694"
+        },
+        {
+          "id": 351695,
+          "title": "2024-02-14_RLP_ZQ_KI_ML.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=351695"
+        },
+        {
+          "id": 380069,
+          "title": "KIB3_Info2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380069"
+        },
+        {
+          "id": 353104,
+          "title": "HTML 1 Lösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353104"
+        },
+        {
+          "id": 354548,
+          "title": "Notiz 15.12.2023.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354548"
+        },
+        {
+          "id": 354549,
+          "title": "AB Selfhtml1_2.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=354549"
+        },
+        {
+          "id": 377766,
+          "title": "1 BussgeldStadt Lösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=377766"
+        },
+        {
+          "id": 380049,
+          "title": "1 UP1 Übungen und WDH.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380049"
+        },
+        {
+          "id": 380055,
+          "title": "Benzinverbrauch und Feinstaub LÖSUNG.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380055"
+        },
+        {
+          "id": 380056,
+          "title": "NSW JAVA_Mutter.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380056"
+        },
+        {
+          "id": 380848,
+          "title": "BFKO 2.Lj. Vielsäcker",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380848"
+        },
+        {
+          "id": 380852,
+          "title": "Einführung_statisches_Routing_PT_Lösungen.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380852"
+        },
+        {
+          "id": 380864,
+          "title": "Statisches Routing",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380864"
+        },
+        {
+          "id": 380865,
+          "title": "Einführung_statisches_Routing_PT.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380865"
+        },
+        {
+          "id": 380867,
+          "title": "WAN_4Router_Schüler_ohne_Routing_01.pkt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380867"
+        },
+        {
+          "id": 380871,
+          "title": "Troubleshooting_stat_Routing_01.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380871"
+        },
+        {
+          "id": 380873,
+          "title": "WAN_4Router_Troubleshooting.pkt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380873"
+        },
+        {
+          "id": 380874,
+          "title": "Statisches Routing Zusammenfassung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380874"
+        },
+        {
+          "id": 380876,
+          "title": "Statisches_Routing_Konfiguration.ppt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380876"
+        },
+        {
+          "id": 380868,
+          "title": "Wdh_KA_Subnetting_E2FI.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380868"
+        },
+        {
+          "id": 380869,
+          "title": "Wdh_KA_Subnetting_E2FI_Lösungen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380869"
+        },
+        {
+          "id": 395784,
+          "title": "Statisches_Routing_AB.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395784"
+        },
+        {
+          "id": 395785,
+          "title": "Statisches_Routing_AB.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395785"
+        },
+        {
+          "id": 395786,
+          "title": "Statisches_Routing_AB.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395786"
+        },
+        {
+          "id": 395837,
+          "title": "Wdh_stat_Routing.pkt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395837"
+        },
+        {
+          "id": 395838,
+          "title": "Wdh_Stat_Routing.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395838"
+        },
+        {
+          "id": 396671,
+          "title": "Router_Arbeitsweise.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396671"
+        },
+        {
+          "id": 380976,
+          "title": "Cisco",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380976"
+        },
+        {
+          "id": 341525,
+          "title": "Vorstellung Netacad_SfA.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341525"
+        },
+        {
+          "id": 341526,
+          "title": "Kurs 1 CCNA1v725 ITN Themen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=341526"
+        },
+        {
+          "id": 352885,
+          "title": "Nachfolgend weitere Übungen mit dem PT.txt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=352885"
+        },
+        {
+          "id": 380977,
+          "title": "Kurs 2 CCNA2v725 SWRE Themen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380977"
+        },
+        {
+          "id": 380980,
+          "title": "1. Lehrjahr",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380980"
+        },
+        {
+          "id": 382003,
+          "title": "BFKO 2LJ Naber",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=382003"
+        },
+        {
+          "id": 381996,
+          "title": "Trolley-Problem.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381996"
+        },
+        {
+          "id": 381997,
+          "title": "Weizenbaum_Mythen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381997"
+        },
+        {
+          "id": 381998,
+          "title": "Temi_0.mp4",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381998"
+        },
+        {
+          "id": 381999,
+          "title": "Temi.mp4",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=381999"
+        },
+        {
+          "id": 382000,
+          "title": "Seltsame_Scheinwelt.JPG",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=382000"
+        },
+        {
+          "id": 382001,
+          "title": "Robotergesetze.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=382001"
+        },
+        {
+          "id": 382002,
+          "title": "Before Siri and Alexa, there was ELIZA.mp4",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=382002"
+        },
+        {
+          "id": 388306,
+          "title": "E2FI oop1 03.11.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388306"
+        },
+        {
+          "id": 389236,
+          "title": "E2FI oop2 05.11.2025.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389236"
+        },
+        {
+          "id": 389241,
+          "title": "Test Kopie.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389241"
+        },
+        {
+          "id": 389563,
+          "title": "Kapselung Lösung.doc",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389563"
+        },
+        {
+          "id": 389564,
+          "title": "2 Destruktor in Java.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389564"
+        },
+        {
+          "id": 389567,
+          "title": "1 KonstruktorFachwissen.txt",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389567"
+        },
+        {
+          "id": 389643,
+          "title": "Übungsklassenarbeit Kapseln usw.",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389643"
+        },
+        {
+          "id": 389644,
+          "title": "KAÜbLösung.docx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389644"
+        },
+        {
+          "id": 395401,
+          "title": "BFKO 2LJ Dagenbach IT",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395401"
+        },
+        {
+          "id": 395402,
+          "title": "KA E2FIS 08012026.JPG",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395402"
+        },
+        {
+          "id": 396271,
+          "title": "01c Aufgabe Adresstabelle Switch.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396271"
+        },
+        {
+          "id": 396272,
+          "title": "01c Aufgabe Source-Quell-MAC.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396272"
+        },
+        {
+          "id": 396273,
+          "title": "01b Switch_Funktion_Ergänzung.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396273"
+        },
+        {
+          "id": 396274,
+          "title": "01a Switch_Funktion.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396274"
+        },
+        {
+          "id": 396605,
+          "title": "Bewertung E2FI Projektkompetenzen.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396605"
+        },
+        {
+          "id": 396607,
+          "title": "pka MAC Encapsulation.pka",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396607"
+        },
+        {
+          "id": 396606,
+          "title": "pka MAC Switch Hub.pka",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396606"
+        },
+        {
+          "id": 396608,
+          "title": "pka MAC Addresstable.pka",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396608"
+        },
+        {
+          "id": 396728,
+          "title": "02 Switch-Befehle.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396728"
+        },
+        {
+          "id": 395403,
+          "title": "Kalenderressourcen",
+          "type": "Folder",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395403"
+        },
+        {
+          "id": 395853,
+          "title": "E2FS BFKO 07.01.2026.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395853"
+        },
+        {
+          "id": 395854,
+          "title": "SOL Aufgabe 07.01.2026.pdf",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395854"
+        },
+        {
+          "id": 396563,
+          "title": "1 Vererbung Kopie.pptx",
+          "type": "LearningToolElement",
+          "deepLink": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396563"
+        }
+      ],
+      "extractedAssignments": []
+    }
+  ],
+  "tasks": [
+    {
+      "id": 333272,
+      "title": "Reiche HIER dein Worddokument ein!",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": "2024-12-18T11:59:00Z",
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333272"
+    },
+    {
+      "id": 333412,
+      "title": "Reiche hier deine Klassenarbeit ein (Pflicht nur für Gruppe Stefanski)!",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": "2024-12-18T14:00:00Z",
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=333412"
+    },
+    {
+      "id": 380947,
+      "title": "Design an outdoor space",
+      "course": "24-E2FS/I (Englisch Seitel)",
+      "status": "InProgress",
+      "deadline": "2025-09-25T07:05:00Z",
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=380947"
+    },
+    {
+      "id": 389643,
+      "title": "Übungsklassenarbeit Kapseln usw.",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": "2025-11-10T09:45:00Z",
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=389643"
+    },
+    {
+      "id": 395769,
+      "title": "Shark tank",
+      "course": "24-E2FS/I (Englisch Seitel)",
+      "status": "Completed",
+      "deadline": "2026-01-09T09:35:00Z",
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=395769"
+    },
+    {
+      "id": 396560,
+      "title": "Upload the link to your learning app here",
+      "course": "24-E2FS/I (Englisch Seitel)",
+      "status": "Completed",
+      "deadline": "2026-01-15T08:00:00Z",
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396560"
+    },
+    {
+      "id": 350607,
+      "title": "2. The Enigma machine",
+      "course": "24-E2FS/I (Englisch Seitel)",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/CustomActivity/CustomActivityOverview.aspx?CustomActivityId=350607"
+    },
+    {
+      "id": 350606,
+      "title": "Alan Turing - the inventor of modern computing",
+      "course": "24-E2FS/I (Englisch Seitel)",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/CustomActivity/CustomActivityOverview.aspx?CustomActivityId=350606"
+    },
+    {
+      "id": 378008,
+      "title": "Amazing medical developments with 3D",
+      "course": "24-E2FS/I (Englisch Seitel)",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=378008"
+    },
+    {
+      "id": 334483,
+      "title": "Einführung in die Programmierung",
+      "course": "FI24-BFKO",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=334483"
+    },
+    {
+      "id": 349903,
+      "title": "Einführung SQL",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349903"
+    },
+    {
+      "id": 316155,
+      "title": "Einführung und Grundbegriffe Programmieren",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316155"
+    },
+    {
+      "id": 388228,
+      "title": "Kapselung | Encapsulation",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388228"
+    },
+    {
+      "id": 396038,
+      "title": "Klassenarbeit Theorie OOP",
+      "course": "FI24-BFKO",
+      "status": "Completed",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396038"
+    },
+    {
+      "id": 340766,
+      "title": "Klassenlehrerfeedback",
+      "course": "FI24-BFKO",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340766"
+    },
+    {
+      "id": 387879,
+      "title": "Klassenlehrerfeedback",
+      "course": "FI24-BFKO",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387879"
+    },
+    {
+      "id": 353103,
+      "title": "Normalisierung Übungsaufgaben",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353103"
+    },
+    {
+      "id": 316156,
+      "title": "Online-Suche und Promts zu OOP",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=316156"
+    },
+    {
+      "id": 396789,
+      "title": "Rückgabe Klassenarbeit",
+      "course": "FI24-BFKO",
+      "status": "Completed",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=396789"
+    },
+    {
+      "id": 340765,
+      "title": "Schüler-Lehrer-Feedback",
+      "course": "FI24-BFKO",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=340765"
+    },
+    {
+      "id": 387878,
+      "title": "Schüler-Lehrer-Feedback",
+      "course": "FI24-BFKO",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=387878"
+    },
+    {
+      "id": 353006,
+      "title": "SQL CRUD",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=353006"
+    },
+    {
+      "id": 349908,
+      "title": "SQL JOINS und Aggregatisfunktionen",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=349908"
+    },
+    {
+      "id": 388236,
+      "title": "Übungsaufgaben OOP",
+      "course": "FI24-BFKO",
+      "status": "NotStarted",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/CustomActivity/CustomActivityOverview.aspx?CustomActivityId=388236"
+    },
+    {
+      "id": 388229,
+      "title": "Vererbung | Inheritance",
+      "course": "FI24-BFKO",
+      "status": "InProgress",
+      "deadline": null,
+      "url": "https://kreisrastatt.itslearning.com/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=388229"
+    }
+  ]
+}
