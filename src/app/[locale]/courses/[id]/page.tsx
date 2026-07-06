@@ -6,6 +6,7 @@ import { Loader2, Megaphone } from "lucide-react";
 import { use } from "react";
 import dynamic from "next/dynamic";
 import { PageContainer } from "@/components/PageContainer";
+import { CourseNav } from "@/components/CourseNav";
 
 const FileBrowser = dynamic(
   () => import("@/components/FileBrowser").then((mod) => mod.FileBrowser),
@@ -88,6 +89,7 @@ export default function CoursePage({
             {t("title")}
           </h1>
         </header>
+        <CourseNav courseId={id} />
 
         {isLoading && (
           <div className="flex items-center gap-2 text-gray-500">

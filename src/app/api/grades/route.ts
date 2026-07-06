@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import { isAuthSessionError } from "@/lib/userScraper";
+import { Prisma } from "@prisma/client";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const cookieStore = await cookies();
     const userIdCookie = cookieStore.get("auth_session");
@@ -14,16 +15,32 @@ export async function GET() {
 
     const userId = parseInt(userIdCookie.value);
 
-    const grades = await prisma.grade.findMany({
-      where: {
-        assignment: {
-          course: {
-            users: {
-              some: { id: userId },
-            },
+    const url = request ? request.url : "http://localhost/api/grades";
+    const { searchParams } = new URL(url);
+    const courseIdParam = searchParams.get("courseId");
+    const courseId = courseIdParam ? parseInt(courseIdParam) : null;
+
+    let courseDbId: number | null = null;
+    if (courseId !== null && !isNaN(courseId)) {
+      const course = await prisma.course.findUnique({
+        where: { itslearningId: courseId },
+      });
+      courseDbId = course ? course.id : courseId;
+    }
+
+    const where: Prisma.GradeWhereInput = {
+      assignment: {
+        course: {
+          users: {
+            some: { id: userId },
           },
         },
+        ...(courseDbId !== null ? { courseId: courseDbId } : {}),
       },
+    };
+
+    const grades = await prisma.grade.findMany({
+      where,
       include: {
         assignment: {
           include: {

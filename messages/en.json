@@ -76,7 +76,11 @@
     "sortLabel": "Sort files",
     "contentMatches": "{count, plural, one {# result matched in file content.} other {# results matched in file content.}}",
     "unnamedFile": "Unnamed File",
-    "noMatches": "No files match your filters."
+    "noMatches": "No files match your filters.",
+    "downloadZip": "Download all (ZIP)",
+    "downloadZipAriaLabel": "Download all visible files as a ZIP archive",
+    "zipError": "Failed to download ZIP file.",
+    "zipSkipped": "{count, plural, one {# file skipped} other {# files skipped}}"
   },
   "Dashboard": {
     "upcomingDeadlines": "Upcoming Deadlines",
@@ -97,7 +101,9 @@
     "title": "Calendar",
     "loading": "Loading events...",
     "loadFailed": "Failed to load events.",
-    "empty": "No upcoming events."
+    "empty": "No upcoming events.",
+    "exportLabel": "Export Calendar",
+    "exportAriaLabel": "Export calendar events to ICS format"
   },
   "Files": {
     "title": "Files",
@@ -128,10 +134,17 @@
     "resourceType": {
       "folder": "folder",
       "file": "file"
-    }
+    },
+    "allCourses": "All Courses",
+    "overview": "Overview",
+    "files": "Files",
+    "tasks": "Tasks",
+    "grades": "Grades"
   },
   "Tasks": {
     "title": "Tasks",
+    "exportLabel": "Export CSV",
+    "exportAriaLabel": "Export tasks to CSV",
     "status": {
       "active": "Active",
       "completed": "Completed",
@@ -236,6 +249,13 @@
   "Grades": {
     "title": "Grades",
     "loading": "Loading grades...",
+    "exportLabel": "Export CSV",
+    "exportAriaLabel": "Export grades to CSV",
+    "colCourse": "Course",
+    "colAssignment": "Assignment",
+    "colGrade": "Grade",
+    "colScore": "Score",
+    "colFeedback": "Feedback",
     "loadFailed": "Failed to load grades.",
     "empty": "No grades synced yet",
     "unknownCourse": "Unknown course",

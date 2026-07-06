@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
+    const url = request ? request.url : "http://localhost/api/tasks";
+    const { searchParams } = new URL(url);
     const status = searchParams.get("status") || "Active";
 
     const cookieStore = await cookies();
@@ -19,15 +21,29 @@ export async function GET(request: Request) {
     // Helper to map status string to DB query if needed.
     // Currently DB stores status string directly from API.
 
-    const tasks = await prisma.assignment.findMany({
-      where: {
-        course: {
-          users: {
-            some: { id: userId },
-          },
+    const courseIdParam = searchParams.get("courseId");
+    const courseId = courseIdParam ? parseInt(courseIdParam) : null;
+
+    let courseDbId: number | null = null;
+    if (courseId !== null && !isNaN(courseId)) {
+      const course = await prisma.course.findUnique({
+        where: { itslearningId: courseId },
+      });
+      courseDbId = course ? course.id : courseId;
+    }
+
+    const where: Prisma.AssignmentWhereInput = {
+      course: {
+        users: {
+          some: { id: userId },
         },
-        status: status === "All" ? undefined : status,
       },
+      ...(status !== "All" ? { status } : {}),
+      ...(courseDbId !== null ? { courseId: courseDbId } : {}),
+    };
+
+    const tasks = await prisma.assignment.findMany({
+      where,
       include: {
         course: true,
       },

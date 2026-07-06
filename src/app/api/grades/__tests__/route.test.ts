@@ -59,7 +59,7 @@ describe("GET /api/grades", () => {
   });
 
   it("returns grades for courses owned by the session user", async () => {
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/grades"));
 
     expect(response.status).toBe(200);
     expect(mockPrisma.grade.findMany).toHaveBeenCalledWith({
@@ -103,7 +103,7 @@ describe("GET /api/grades", () => {
   it("returns 401 without an active local session", async () => {
     mockCookieGet.mockReturnValue(undefined);
 
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/grades"));
 
     expect(response.status).toBe(401);
     expect(await response.json()).toEqual({ error: "Unauthorized" });
@@ -115,7 +115,7 @@ describe("GET /api/grades", () => {
     mockCookies.mockRejectedValue(error);
     mockIsAuthSessionError.mockReturnValue(true);
 
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/grades"));
 
     expect(response.status).toBe(401);
     expect(mockIsAuthSessionError).toHaveBeenCalledWith(error);

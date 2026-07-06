@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations, useFormatter } from "next-intl";
 import { useSWRConfig } from "swr";
 import { FileCard } from "./FileCard";
-import { Search, ArrowUpDown, Loader2 } from "lucide-react";
+import { Search, ArrowUpDown, Loader2, Download } from "lucide-react";
 
 interface TagItem {
   id: number;
@@ -66,6 +66,11 @@ export function FileBrowser({
   const [sort, setSort] = useState<"date_desc" | "date_asc" | "name_asc">(
     "date_desc",
   );
+
+  // ZIP download state
+  const [zipLoading, setZipLoading] = useState(false);
+  const [zipError, setZipError] = useState(false);
+  const [zipSkipped, setZipSkipped] = useState(0);
 
   // Full-text search state
   const [searchResults, setSearchResults] = useState<FileItem[]>([]);
@@ -196,8 +201,13 @@ export function FileBrowser({
     (f.customName ?? "").toLowerCase().includes(search.toLowerCase()),
   );
 
+  const allowedFileIds = React.useMemo(() => new Set(files.map((f) => f.id)), [files]);
+  const filteredSearchResults = React.useMemo(() => {
+    return searchResults.filter((r) => allowedFileIds.has(r.id));
+  }, [searchResults, allowedFileIds]);
+
   const merged =
-    search.length >= 2 ? mergeDedup(nameFiltered, searchResults) : nameFiltered;
+    search.length >= 2 ? mergeDedup(nameFiltered, filteredSearchResults) : nameFiltered;
 
   // Apply IHK filter
   const filtered = merged.filter((f) => {
@@ -223,6 +233,39 @@ export function FileBrowser({
     return sort === "date_asc" ? dateA - dateB : dateB - dateA;
   });
   const contentMatchCount = searchResults.filter((r) => r.contentMatch).length;
+
+  async function handleZipDownload() {
+    if (zipLoading || sorted.length === 0) return;
+    setZipLoading(true);
+    setZipError(false);
+    setZipSkipped(0);
+    try {
+      const res = await fetch("/api/files/zip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: sorted.map((f) => f.id) }),
+      });
+      if (!res.ok) {
+        setZipError(true);
+        return;
+      }
+      const skipped = Number(res.headers.get("X-Skipped-Files") ?? 0);
+      if (skipped > 0) setZipSkipped(skipped);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `files-${new Date().toISOString().slice(0, 10)}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      setZipError(true);
+    } finally {
+      setZipLoading(false);
+    }
+  }
   const filterLabels = {
     All: t("filterAll"),
     Exam: t("filterExam"),
@@ -305,7 +348,34 @@ export function FileBrowser({
             <option value="name_asc">{t("sortNameAsc")}</option>
           </select>
         </div>
+
+        {/* ZIP download of the currently displayed files */}
+        <button
+          onClick={handleZipDownload}
+          disabled={zipLoading || sorted.length === 0}
+          aria-label={t("downloadZipAriaLabel")}
+          className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {zipLoading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Download className="w-4 h-4" />
+          )}
+          <span className="hidden sm:inline">{t("downloadZip")}</span>
+        </button>
       </div>
+
+      {/* ZIP download feedback */}
+      {zipError && (
+        <p className="text-xs text-red-500 dark:text-red-400 px-1" role="alert">
+          {t("zipError")}
+        </p>
+      )}
+      {zipSkipped > 0 && (
+        <p className="text-xs text-gray-500 dark:text-gray-400 px-1">
+          {t("zipSkipped", { count: zipSkipped })}
+        </p>
+      )}
 
       {/* Content search indicator */}
       {search.length >= 2 && !searchLoading && searchError && (

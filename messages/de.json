@@ -76,7 +76,11 @@
     "sortLabel": "Dateien sortieren",
     "contentMatches": "{count, plural, one {# Treffer im Dateiinhalt.} other {# Treffer im Dateiinhalt.}}",
     "unnamedFile": "Unbenannte Datei",
-    "noMatches": "Keine Dateien passen zu deinen Filtern."
+    "noMatches": "Keine Dateien passen zu deinen Filtern.",
+    "downloadZip": "Alle herunterladen (ZIP)",
+    "downloadZipAriaLabel": "Alle sichtbaren Dateien als ZIP-Archiv herunterladen",
+    "zipError": "ZIP-Datei konnte nicht heruntergeladen werden.",
+    "zipSkipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}"
   },
   "Dashboard": {
     "upcomingDeadlines": "Anstehende Abgaben",
@@ -97,7 +101,9 @@
     "title": "Kalender",
     "loading": "Termine werden geladen...",
     "loadFailed": "Termine konnten nicht geladen werden.",
-    "empty": "Keine anstehenden Termine."
+    "empty": "Keine anstehenden Termine.",
+    "exportLabel": "Kalender exportieren",
+    "exportAriaLabel": "Kalendertermine im ICS-Format exportieren"
   },
   "Files": {
     "title": "Dateien",
@@ -128,10 +134,17 @@
     "resourceType": {
       "folder": "Ordner",
       "file": "Datei"
-    }
+    },
+    "allCourses": "Alle Kurse",
+    "overview": "Übersicht",
+    "files": "Dateien",
+    "tasks": "Aufgaben",
+    "grades": "Noten"
   },
   "Tasks": {
     "title": "Aufgaben",
+    "exportLabel": "CSV exportieren",
+    "exportAriaLabel": "Aufgaben als CSV exportieren",
     "status": {
       "active": "Aktiv",
       "completed": "Erledigt",
@@ -236,6 +249,13 @@
   "Grades": {
     "title": "Noten",
     "loading": "Noten werden geladen...",
+    "exportLabel": "CSV exportieren",
+    "exportAriaLabel": "Noten als CSV exportieren",
+    "colCourse": "Kurs",
+    "colAssignment": "Aufgabe",
+    "colGrade": "Note",
+    "colScore": "Bewertung",
+    "colFeedback": "Rückmeldung",
     "loadFailed": "Noten konnten nicht geladen werden.",
     "empty": "Noch keine Noten synchronisiert",
     "unknownCourse": "Unbekannter Kurs",
