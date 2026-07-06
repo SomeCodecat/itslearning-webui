@@ -1,3 +1,4 @@
+import axios from "axios";
 import { NextResponse } from "next/server";
 import { getScraperForSession } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
@@ -230,11 +231,30 @@ export async function POST() {
             });
           }
         } catch (err) {
-          skipGradesForRun = true;
-          console.warn(
-            `Sync: Failed to sync grades for course ${course.Title}. Skipping grades for remaining courses in this run.`,
-            err,
-          );
+          if (axios.isAxiosError(err) && err.response) {
+            const upstreamError = {
+              status: err.response.status,
+              data: err.response.data,
+            };
+
+            if (err.response.status === 401 || err.response.status === 403) {
+              skipGradesForRun = true;
+              console.warn(
+                `Sync: Failed to sync grades for course ${course.Title}. Upstream auth error; skipping grades for remaining courses in this run.`,
+                upstreamError,
+              );
+            } else {
+              console.warn(
+                `Sync: Failed to sync grades for course ${course.Title}. Skipping grades for this course only.`,
+                upstreamError,
+              );
+            }
+          } else {
+            console.warn(
+              `Sync: Failed to sync grades for course ${course.Title}. Skipping grades for this course only.`,
+              err,
+            );
+          }
         }
       }
     }

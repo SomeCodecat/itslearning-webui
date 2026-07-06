@@ -50,6 +50,28 @@ describe("ScraperService.getGrades", () => {
   it("requires authentication", async () => {
     await expect(scraper.getGrades(4273)).rejects.toThrow("Not authenticated");
   });
+
+  it("returns an empty list when the course grades endpoint returns 404", async () => {
+    scraper.setAccessToken("test-token");
+    const error = Object.assign(new Error("Request failed"), {
+      isAxiosError: true,
+      response: { status: 404 },
+    });
+    vi.spyOn(scraper.apiClient, "get").mockRejectedValue(error);
+
+    await expect(scraper.getGrades(4273)).resolves.toEqual([]);
+  });
+
+  it("throws when the course grades endpoint returns 500", async () => {
+    scraper.setAccessToken("test-token");
+    const error = Object.assign(new Error("Request failed"), {
+      isAxiosError: true,
+      response: { status: 500 },
+    });
+    vi.spyOn(scraper.apiClient, "get").mockRejectedValue(error);
+
+    await expect(scraper.getGrades(4273)).rejects.toThrow("Request failed");
+  });
 });
 
 describe("ScraperService.getCalendarEvents", () => {

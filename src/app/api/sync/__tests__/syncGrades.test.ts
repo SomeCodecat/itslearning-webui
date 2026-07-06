@@ -149,19 +149,53 @@ describe("POST /api/sync grades integration", () => {
     });
   });
 
-  it("logs the first grades failure once and skips grades for remaining courses", async () => {
+  it("logs a generic grades failure for one course and continues remaining courses", async () => {
     mockScraper.getCourses.mockResolvedValue([
       { CourseId: 100, Title: "Math" },
       { CourseId: 200, Title: "History" },
     ]);
-    mockScraper.getGrades.mockRejectedValue(new Error("404"));
+    const error = new Error("Temporary grades failure");
+    mockScraper.getGrades.mockRejectedValueOnce(error);
 
     const response = await POST();
 
     expect(response.status).toBe(200);
-    expect(mockScraper.getGrades).toHaveBeenCalledTimes(1);
-    expect(mockScraper.getGrades).toHaveBeenCalledWith(100);
+    expect(mockScraper.getGrades).toHaveBeenCalledTimes(2);
+    expect(mockScraper.getGrades).toHaveBeenNthCalledWith(1, 100);
+    expect(mockScraper.getGrades).toHaveBeenNthCalledWith(2, 200);
     expect(console.warn).toHaveBeenCalledTimes(1);
+    expect(console.warn).toHaveBeenCalledWith(
+      "Sync: Failed to sync grades for course Math. Skipping grades for this course only.",
+      error,
+    );
     expect(mockPrisma.grade.upsert).not.toHaveBeenCalled();
   });
+
+  it.each([401, 403])(
+    "skips grades for remaining courses after upstream auth error %i",
+    async (status) => {
+      mockScraper.getCourses.mockResolvedValue([
+        { CourseId: 100, Title: "Math" },
+        { CourseId: 200, Title: "History" },
+      ]);
+      const responseData = { error: "Auth failed" };
+      const error = Object.assign(new Error("Request failed"), {
+        isAxiosError: true,
+        response: { status, data: responseData },
+      });
+      mockScraper.getGrades.mockRejectedValueOnce(error);
+
+      const response = await POST();
+
+      expect(response.status).toBe(200);
+      expect(mockScraper.getGrades).toHaveBeenCalledTimes(1);
+      expect(mockScraper.getGrades).toHaveBeenCalledWith(100);
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn).toHaveBeenCalledWith(
+        "Sync: Failed to sync grades for course Math. Upstream auth error; skipping grades for remaining courses in this run.",
+        { status, data: responseData },
+      );
+      expect(mockPrisma.grade.upsert).not.toHaveBeenCalled();
+    },
+  );
 });

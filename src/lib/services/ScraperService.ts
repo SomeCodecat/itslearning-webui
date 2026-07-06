@@ -204,14 +204,21 @@ export class ScraperService {
   async getGrades(courseId: number): Promise<GradeItem[]> {
     if (!this.accessToken) throw new Error("Not authenticated");
 
-    const res = await this.apiGet<EntityArrayResponse<GradeItem>>(
-      `/restapi/personal/courses/${courseId}/usergrades/v1`,
-      {
-        pageIndex: 0,
-        pageSize: 100,
-      },
-    );
-    return res.data?.EntityArray || [];
+    try {
+      const res = await this.apiGet<EntityArrayResponse<GradeItem>>(
+        `/restapi/personal/courses/${courseId}/usergrades/v1`,
+        {
+          pageIndex: 0,
+          pageSize: 100,
+        },
+      );
+      return res.data?.EntityArray || [];
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 404) {
+        return [];
+      }
+      throw err;
+    }
   }
 
   // Recursive fetching of resources
