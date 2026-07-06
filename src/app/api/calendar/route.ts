@@ -5,6 +5,16 @@ import {
   isAuthSessionError,
 } from "@/lib/userScraper";
 
+interface RawCalendarEvent {
+  EventId?: unknown;
+  EventTitle?: unknown;
+  Description?: unknown;
+  FromDate?: unknown;
+  ToDate?: unknown;
+  EventType?: unknown;
+  LocationTitle?: unknown;
+}
+
 function parseOptionalDate(value: string | null): Date | undefined {
   if (!value) return undefined;
 
@@ -16,6 +26,37 @@ function parseOptionalDate(value: string | null): Date | undefined {
   return date;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function requiredText(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
+function optionalText(value: unknown): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  return typeof value === "string" ? value : String(value);
+}
+
+function mapCalendarEvent(event: unknown) {
+  const raw = (isRecord(event) ? event : {}) as RawCalendarEvent;
+
+  return {
+    EventId:
+      typeof raw.EventId === "number" ? raw.EventId : Number(raw.EventId),
+    Title: requiredText(raw.EventTitle),
+    Description: optionalText(raw.Description),
+    From: requiredText(raw.FromDate),
+    To: requiredText(raw.ToDate),
+    EventType: optionalText(raw.EventType),
+    LocationTitle: optionalText(raw.LocationTitle),
+  };
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -24,7 +65,7 @@ export async function GET(request: Request) {
 
     const scraperService = await getScraperForSession();
     const events = await scraperService.getCalendarEvents(fromDate, toDate);
-    return NextResponse.json(events);
+    return NextResponse.json(events.map(mapCalendarEvent));
   } catch (error) {
     if (error instanceof Error && error.message.startsWith("Invalid date:")) {
       return NextResponse.json({ error: error.message }, { status: 400 });
