@@ -9,7 +9,7 @@ services:
       - ./storage:/app/storage
       - ./prisma:/app/prisma
     environment:
-      - DATABASE_URL=file:/app/prisma/dev.db
+      - DATABASE_URL=file:/app/prisma/app.db
       - DEFAULT_INSTANCE_URL=${DEFAULT_INSTANCE_URL}
       - ALLOW_CUSTOM_INSTANCE=${ALLOW_CUSTOM_INSTANCE}
       - ORGANIZATION_NAME=${ORGANIZATION_NAME}
