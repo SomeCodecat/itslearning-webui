@@ -30,31 +30,34 @@ export function CourseNav({ courseId }: { courseId: string }) {
   return (
     <div className="mb-6">
       {/* Breadcrumb line */}
-      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2">
+      <div className="mb-2 flex items-center gap-2 text-[13px] text-text-tertiary md:mb-2.5">
         <Link
           href="/courses"
-          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          className="transition-colors hover:text-accent-text"
         >
           {t("allCourses")}
         </Link>
         <span>/</span>
-        <span className="font-medium text-gray-900 dark:text-white truncate max-w-[200px] md:max-w-xs">
+        <span className="max-w-[200px] truncate font-medium text-text-primary md:max-w-xs">
           {courseTitle || (
-            <span className="h-4 w-24 bg-gray-200 dark:bg-gray-700 animate-pulse rounded inline-block align-middle"></span>
+            <span className="inline-block h-4 w-24 animate-pulse rounded bg-elevated align-middle"></span>
           )}
         </span>
       </div>
 
       {/* Course Title */}
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+      <h1 className="mb-5 text-xl font-bold leading-tight text-text-primary md:text-[28px] md:tracking-normal">
         {courseTitle || (
-          <span className="h-8 w-48 bg-gray-200 dark:bg-gray-700 animate-pulse rounded inline-block"></span>
+          <span className="inline-block h-8 w-48 animate-pulse rounded bg-elevated"></span>
         )}
       </h1>
 
       {/* Tab bar */}
-      <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
-        <nav className="flex gap-6 -mb-px" aria-label="Course navigation">
+      <div className="mb-6 border-b border-line">
+        <nav
+          className="-mb-px flex gap-[18px] overflow-x-auto md:gap-[26px]"
+          aria-label="Course navigation"
+        >
           {tabs.map((tab) => {
             const targetPath =
               tab.segment === ""
@@ -69,10 +72,10 @@ export function CourseNav({ courseId }: { courseId: string }) {
                 key={tab.segment}
                 href={targetPath}
                 aria-current={isActive ? "page" : undefined}
-                className={`text-sm font-medium transition-colors pb-3 border-b-2 -mb-px ${
+                className={`whitespace-nowrap border-b-2 pb-2.5 text-sm transition-colors md:pb-3 ${
                   isActive
-                    ? "text-blue-600 dark:text-blue-400 font-bold border-blue-600 dark:border-blue-400"
-                    : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-transparent"
+                    ? "border-accent text-accent-text font-semibold"
+                    : "border-transparent text-text-secondary hover:text-text-primary font-medium"
                 }`}
               >
                 {tab.label}

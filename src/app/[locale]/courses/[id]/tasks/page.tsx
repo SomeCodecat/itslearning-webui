@@ -15,10 +15,10 @@ export default function CourseTasksPage({
   const tCourse = useTranslations("CourseDetail");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <PageContainer className="py-6 md:py-10">
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
         <CourseNav courseId={id} />
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <h2 className="mb-4 text-card-title text-text-primary">
           {tCourse("tasks")}
         </h2>
         <TaskList courseId={id} />

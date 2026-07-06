@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./Badge";
-import { Tag, Plus } from "lucide-react";
+import { Download, ExternalLink, FileText, Plus, Tag } from "lucide-react";
 
 interface TagItem {
   id: number;
@@ -250,40 +250,38 @@ export function FileCard({
     { key: "isAP1", label: t("ap1"), color: "blue" },
     { key: "isAP2", label: t("ap2"), color: "blue" },
   ];
+  const extension = (fileType || fileName.split(".").pop() || "FILE")
+    .replace(/^\./, "")
+    .slice(0, 4)
+    .toUpperCase();
+  const extensionTone = extension.startsWith("XL")
+    ? "bg-success-subtle text-success"
+    : extension.startsWith("PP")
+      ? "bg-sky-subtle text-sky"
+      : extension.startsWith("DO")
+        ? "bg-warning-subtle text-warning"
+        : "bg-accent-subtle text-accent-text";
 
   return (
     <div
-      className={`relative flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border transition-shadow hover:shadow-md ${
+      className={`relative flex items-center justify-between gap-4 rounded-card border bg-card px-[18px] py-[15px] transition-colors max-md:flex-col max-md:items-stretch max-md:gap-3 max-md:px-3.5 max-md:py-[13px] ${
         contentMatch
-          ? "border-amber-300 dark:border-amber-700"
-          : "border-gray-200 dark:border-gray-700"
+          ? "border-warning/40"
+          : "border-line hover:border-line-strong"
       }`}
     >
-      <div className="flex items-center gap-4 min-w-0">
-        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400 flex-shrink-0">
-          {/* Placeholder Icon */}
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
+      <div className="flex min-w-0 items-center gap-3.5">
+        <div className={`flex h-10 w-10 flex-none items-center justify-center rounded-[9px] font-mono text-[10px] font-bold ${extensionTone} max-md:h-[34px] max-md:w-[34px] max-md:text-[9px]`}>
+          {extension || <FileText className="h-4 w-4" />}
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h3
-            className="font-medium text-gray-900 dark:text-white truncate max-w-md"
+            className="max-w-md truncate text-sm font-semibold text-text-primary max-md:text-[13px]"
             title={fileName}
           >
             {fileName}
           </h3>
-          <div className="flex gap-2 mt-1 flex-wrap">
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
             {flags.isAP1 && <Badge label={t("ap1")} color="blue" />}
             {flags.isAP2 && <Badge label={t("ap2")} color="blue" />}
             {flags.isExamRelevant && (
@@ -297,24 +295,24 @@ export function FileCard({
             )}
           </div>
           {date && (
-            <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
+            <span className="mt-1 block font-mono text-xs text-text-tertiary">
               {date}
             </span>
           )}
           {(courseTitle || fileType || fileSize) && (
-            <span className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 block">
+            <span className="mt-0.5 block text-xs text-text-tertiary">
               {[courseTitle, fileType, fileSize].filter(Boolean).join(" · ")}
             </span>
           )}
           {errorMsg && (
-            <span className="text-xs text-red-500 dark:text-red-400 mt-1 block font-medium">
+            <span className="mt-1 block text-xs font-medium text-error">
               {errorMsg}
             </span>
           )}
         </div>
       </div>
 
-      <div className="flex gap-3 items-center flex-shrink-0">
+      <div className="flex flex-none items-center gap-2 max-md:w-full">
         {/* Flag + Tag menu — only shown when the file has a real DB row */}
         {persistable && (
           <div className="relative">
@@ -327,13 +325,13 @@ export function FileCard({
               title={t("flagMenuTitle")}
               onClick={handleMenuOpen}
               disabled={saving}
-              className={`p-2 rounded-md transition-colors ${
+              className={`flex h-9 w-9 items-center justify-center rounded-control transition-colors ${
                 flags.isExamRelevant ||
                 flags.isAP1 ||
                 flags.isAP2 ||
                 tags.length > 0
-                  ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-                  : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  ? "bg-accent-subtle text-accent-text"
+                  : "bg-elevated text-text-tertiary hover:bg-elevated-strong hover:text-text-secondary"
               } ${saving ? "opacity-50 cursor-wait" : ""}`}
             >
               <Tag className="w-4 h-4" />
@@ -348,10 +346,10 @@ export function FileCard({
                 />
                 <div
                   id={`flag-menu-${id}`}
-                  className="absolute right-0 top-full mt-1 z-20 min-w-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1"
+                  className="absolute right-0 top-full z-20 mt-1 min-w-[210px] rounded-control border border-line bg-elevated py-1 shadow-popover"
                 >
                   {/* IHK Flags section */}
-                  <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                     {t("ihkFlags")}
                   </div>
                   {flagItems.map(({ key, label, color }) => (
@@ -364,15 +362,15 @@ export function FileCard({
                         toggleFlag(key);
                         setMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-elevated-strong"
                     >
                       <span
                         className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
                           flags[key]
                             ? color === "red"
-                              ? "bg-red-500 border-red-500"
-                              : "bg-blue-500 border-blue-500"
-                            : "border-gray-300 dark:border-gray-600"
+                              ? "bg-error border-error"
+                              : "bg-accent border-accent"
+                            : "border-line-strong"
                         }`}
                       >
                         {flags[key] && (
@@ -394,8 +392,8 @@ export function FileCard({
                       <span
                         className={
                           flags[key]
-                            ? "text-gray-900 dark:text-white font-medium"
-                            : "text-gray-600 dark:text-gray-300"
+                            ? "font-medium text-text-primary"
+                            : "text-text-secondary"
                         }
                       >
                         {label}
@@ -404,14 +402,14 @@ export function FileCard({
                   ))}
 
                   {/* Tags section */}
-                  <div className="mt-1 border-t border-gray-100 dark:border-gray-700 pt-1">
-                    <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  <div className="mt-1 border-t border-line pt-1">
+                    <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                       {t("tags")}
                     </div>
 
                     {/* Existing tags list */}
                     {allTags.length === 0 && tagsLoaded && (
-                      <p className="px-3 py-1.5 text-xs text-gray-400 dark:text-gray-500">
+                      <p className="px-3 py-1.5 text-xs text-text-tertiary">
                         {t("noTagsYet")}
                       </p>
                     )}
@@ -422,13 +420,13 @@ export function FileCard({
                           key={tag.id}
                           id={`tag-toggle-${id}-${tag.id}`}
                           onClick={() => toggleTag(tag)}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                          className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-elevated-strong"
                         >
                           <span
                             className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
                               assigned
-                                ? "bg-yellow-400 border-yellow-400"
-                                : "border-gray-300 dark:border-gray-600"
+                                ? "bg-warning border-warning"
+                                : "border-line-strong"
                             }`}
                           >
                             {assigned && (
@@ -447,7 +445,7 @@ export function FileCard({
                               </svg>
                             )}
                           </span>
-                          <span className="text-gray-700 dark:text-gray-300 truncate">
+                          <span className="truncate text-text-secondary">
                             {tag.name}
                           </span>
                         </button>
@@ -468,14 +466,14 @@ export function FileCard({
                             createAndAssignTag();
                           }
                         }}
-                        className="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        className="flex-1 rounded border border-line-strong bg-card px-2 py-1 text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-accent"
                       />
                       <button
                         id={`new-tag-btn-${id}`}
                         onClick={createAndAssignTag}
                         disabled={!newTagName.trim() || creatingTag}
                         aria-label={t("createTagLabel")}
-                        className="p-1.5 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40 transition-colors"
+                        className="rounded bg-accent p-1.5 text-white transition-colors hover:bg-accent-hover disabled:opacity-40"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
@@ -489,43 +487,20 @@ export function FileCard({
 
         <a
           href={`/api/files/download?id=${id}`}
-          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+          className="flex items-center justify-center gap-2 rounded-control bg-accent px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-accent-hover max-md:flex-1"
         >
           {t("download")}
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            />
-          </svg>
+          <Download className="h-4 w-4" />
         </a>
         <a
           href={webUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+          className="flex items-center justify-center gap-2 rounded-control bg-elevated px-3.5 py-2 text-xs font-semibold text-text-secondary transition-colors hover:bg-elevated-strong max-md:h-10 max-md:w-10 max-md:px-0"
+          title={t("viewInItslearning")}
         >
-          {t("viewInItslearning")}
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
+          <span className="max-md:sr-only">{t("viewInItslearning")}</span>
+          <ExternalLink className="h-4 w-4" />
         </a>
       </div>
     </div>

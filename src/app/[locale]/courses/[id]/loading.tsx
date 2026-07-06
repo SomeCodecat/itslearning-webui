@@ -1,26 +1,21 @@
 import { useTranslations } from "next-intl";
-import { Loader2 } from "lucide-react";
 import { PageContainer } from "@/components/PageContainer";
+import { LoadingState } from "@/components/ui/LoadingState";
 
 export default function Loading() {
   const t = useTranslations("CourseDetail");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <PageContainer className="py-6 md:py-10">
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
         <header className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 animate-pulse">
+          <h1 className="mb-2 animate-pulse text-xl font-bold text-text-primary md:text-[28px]">
             {t("loadingCourse")}
           </h1>
-          <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded-lg w-full animate-pulse mb-4"></div>
+          <div className="mb-4 h-10 w-full animate-pulse rounded-control bg-elevated"></div>
         </header>
 
-        <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 className="animate-spin w-12 h-12 text-blue-500 mb-4" />
-          <p className="text-gray-500 animate-pulse font-medium">
-            {t("preparingResources")}
-          </p>
-        </div>
+        <LoadingState label={t("preparingResources")} />
       </PageContainer>
     </div>
   );

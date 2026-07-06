@@ -28,6 +28,10 @@ vi.mock("next-intl", () => ({
         groupingTopic: "By topic",
         groupingCourse: "By course",
         ungrouped: "Ungrouped",
+        searchLabel: "Search files",
+        sortLabel: "Sort files",
+        downloadZipAriaLabel: "Download ZIP",
+        downloadZip: "Download ZIP",
       } as Record<string, string>
     )[key] ?? key,
   useFormatter: () => ({
@@ -82,6 +86,31 @@ describe("FileBrowser", () => {
     const flagBtns = screen.queryAllByRole("button", { name: /IHK flags/i });
     // One button per file
     expect(flagBtns).toHaveLength(mockFiles.length);
+  });
+
+  it("uses tokenized toolbar and stacked file card styling", () => {
+    render(
+      <FileBrowser
+        files={[
+          {
+            id: 10,
+            customName: "Matched PDF",
+            isAP1: true,
+            isExamRelevant: true,
+            contentMatch: true,
+          },
+        ]}
+      />,
+    );
+
+    const search = screen.getByRole("textbox", { name: "Search files" });
+    expect(search.className).toContain("bg-elevated");
+    expect(search.className).toContain("border-line-strong");
+
+    const card = screen.getByRole("heading", { name: "Matched PDF" }).closest("div.relative");
+    expect(card?.className).toContain("bg-card");
+    expect(card?.className).toContain("border-warning/40");
+    expect(card?.className).toContain("max-md:flex-col");
   });
 
   it("toggles grouping to 'By topic', renders group headers, and collapsing hides files", () => {

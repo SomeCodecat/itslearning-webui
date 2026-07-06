@@ -3,8 +3,19 @@
 import { useTranslations, useFormatter } from "next-intl";
 import useSWR from "swr";
 import { useState } from "react";
-import { ChevronDown, ChevronRight, ExternalLink, Loader2, Download } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  ClipboardList,
+  Download,
+  ExternalLink,
+  Loader2,
+  Search,
+} from "lucide-react";
 import { buildCsv } from "@/lib/exportCsv";
+import { EmptyState } from "./ui/EmptyState";
+import { ErrorState } from "./ui/ErrorState";
+import { LoadingState } from "./ui/LoadingState";
 
 const fetcher = async (url: string) => {
   const response = await fetch(url);
@@ -168,16 +179,18 @@ function TaskDetailsPanel({
 
   if (isLoading) {
     return (
-      <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 flex items-center gap-2 text-sm text-gray-500">
+      <div className="mt-[18px] border-t border-line pt-[18px]">
+        <div className="flex items-center gap-2 text-sm text-text-secondary">
         <Loader2 size={16} className="animate-spin" />
         {t("loadingDetails")}
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 text-sm text-red-600">
+      <div className="mt-[18px] border-t border-line pt-[18px] text-sm text-error">
         {t("detailsFailed")}
       </div>
     );
@@ -198,50 +211,50 @@ function TaskDetailsPanel({
     : [];
 
   return (
-    <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 space-y-5">
-      <div className="grid gap-4 md:grid-cols-4">
+    <div className="mt-[18px] border-t border-line pt-[18px]">
+      <div className="mb-[22px] grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-[18px]">
         <div>
-          <p className="text-xs font-medium uppercase text-gray-400">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-text-tertiary font-mono">
             {t("course")}
           </p>
-          <p className="text-sm text-gray-800 dark:text-gray-100">
+          <p className="text-sm text-text-primary">
             {taskDetails.course?.title || task.CourseTitle || t("unknown")}
           </p>
         </div>
         <div>
-          <p className="text-xs font-medium uppercase text-gray-400">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-text-tertiary font-mono">
             {t("statusLabel")}
           </p>
-          <p className="text-sm text-gray-800 dark:text-gray-100">
+          <p className="text-sm text-text-primary">
             {formatStatus(taskDetails.status || task.Status)}
           </p>
         </div>
         <div>
-          <p className="text-xs font-medium uppercase text-gray-400">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-text-tertiary font-mono">
             {t("deadlineLabel")}
           </p>
-          <p className="text-sm text-gray-800 dark:text-gray-100">
+          <p className="text-sm text-text-primary">
             {formatDate(taskDetails.deadline || task.Deadline, t("none"), format)}
           </p>
         </div>
         <div>
-          <p className="text-xs font-medium uppercase text-gray-400">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-text-tertiary font-mono">
             {t("elementId")}
           </p>
-          <p className="text-sm text-gray-800 dark:text-gray-100">
+          <p className="text-sm font-mono text-text-secondary">
             {taskDetails.elementId || task.TaskId || t("unknown")}
           </p>
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-7 md:grid-cols-2">
         <section className="space-y-3">
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-sm font-semibold text-text-primary">
               {t("statusScale")}
             </h4>
             {statusScale?.Description && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-text-secondary">
                 {statusScale.Description}
               </p>
             )}
@@ -250,7 +263,7 @@ function TaskDetailsPanel({
           {statusScale ? (
             <div className="space-y-2">
               {statusScale.Title && (
-                <p className="text-sm text-gray-700 dark:text-gray-300">
+                <p className="text-sm text-text-secondary">
                   {statusScale.Title}
                 </p>
               )}
@@ -259,24 +272,24 @@ function TaskDetailsPanel({
                   {statusItems.map((item, index) => (
                     <li
                       key={item.AssessmentStatusItemId ?? index}
-                      className="border-l-2 border-gray-200 dark:border-gray-700 pl-3"
+                      className="border-l-2 border-line-strong pl-3"
                     >
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm text-gray-800 dark:text-gray-100">
+                        <span className="text-sm text-text-primary">
                           {item.Title || t("untitledStatus")}
                         </span>
                         {item.IsInitialStatus && (
-                          <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
+                          <span className="rounded-[4px] bg-elevated px-2 py-0.5 text-[10px] text-text-tertiary">
                             {t("initial")}
                           </span>
                         )}
                         {item.IsSubmitted && (
-                          <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
+                          <span className="rounded-[4px] bg-accent-subtle px-2 py-0.5 text-[10px] font-semibold text-accent-text">
                             {t("submitted")}
                           </span>
                         )}
                         {item.IsCompleted && (
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                          <span className="rounded-[4px] bg-success-subtle px-2 py-0.5 text-[10px] font-semibold text-success">
                             {t("completed")}
                           </span>
                         )}
@@ -285,13 +298,13 @@ function TaskDetailsPanel({
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-text-secondary">
                   {t("noStatusItems")}
                 </p>
               )}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-text-secondary">
               {t("noStatusScale")}
             </p>
           )}
@@ -299,11 +312,11 @@ function TaskDetailsPanel({
 
         <section className="space-y-3">
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+            <h4 className="text-sm font-semibold text-text-primary">
               {t("assessmentScale")}
             </h4>
             {assessmentScale?.Description && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-text-secondary">
                 {assessmentScale.Description}
               </p>
             )}
@@ -312,7 +325,7 @@ function TaskDetailsPanel({
           {assessmentScale ? (
             <div className="space-y-2">
               {assessmentScale.Title && (
-                <p className="text-sm text-gray-700 dark:text-gray-300">
+                <p className="text-sm text-text-secondary">
                   {assessmentScale.Title}
                 </p>
               )}
@@ -327,20 +340,20 @@ function TaskDetailsPanel({
                     return (
                       <li
                         key={item.AssessmentItemId ?? index}
-                        className="border-l-2 border-gray-200 dark:border-gray-700 pl-3"
+                        className="border-l-2 border-line-strong pl-3"
                       >
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-sm text-gray-800 dark:text-gray-100">
+                          <span className="text-sm text-text-primary">
                             {item.Title || t("untitledAssessment")}
                           </span>
                           {range && (
-                            <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
+                            <span className="rounded-[4px] bg-elevated px-2 py-0.5 text-xs font-mono text-text-secondary">
                               {range}
                             </span>
                           )}
                         </div>
                         {item.Description && (
-                          <p className="mt-1 text-sm text-gray-500">
+                          <p className="mt-1 text-sm text-text-secondary">
                             {item.Description}
                           </p>
                         )}
@@ -349,13 +362,13 @@ function TaskDetailsPanel({
                   })}
                 </ul>
               ) : (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-text-secondary">
                   {t("noAssessmentItems")}
                 </p>
               )}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-text-secondary">
               {t("noAssessmentScale")}
             </p>
           )}
@@ -468,20 +481,20 @@ export function TaskList({ courseId }: { courseId?: string }) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Filters Toolbar */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 space-y-6">
+      <div className="rounded-card border border-line bg-card p-4 md:px-5 md:py-4">
         {/* Prominent Tabs */}
-        <div className="flex border-b border-gray-200 dark:border-gray-700 items-center justify-between">
-          <div className="flex">
+        <div className="mb-4 flex items-center justify-between border-b border-line">
+          <div className="flex gap-1 overflow-x-auto">
             {(["Active", "Completed", "All"] as const).map((s) => (
               <button
                 key={s}
                 onClick={() => setStatus(s)}
-                className={`px-6 py-3 text-base font-medium transition-colors border-b-2 -mb-px ${
+                className={`border-b-2 px-3 pb-3 text-sm transition-colors md:px-4 ${
                   status === s
-                    ? "border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 font-semibold"
-                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    ? "border-accent text-accent-text font-semibold"
+                    : "border-transparent text-text-secondary hover:text-text-primary"
                 }`}
               >
                 {statusLabels[s]}
@@ -493,31 +506,32 @@ export function TaskList({ courseId }: { courseId?: string }) {
           <button
             onClick={handleExportCsv}
             disabled={sortedTasks.length === 0}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="hidden items-center gap-2 rounded-control border border-line-strong bg-elevated px-3 py-2 text-xs font-semibold text-text-secondary transition-colors hover:bg-elevated-strong disabled:cursor-not-allowed disabled:opacity-50 md:flex"
             aria-label={t("exportAriaLabel")}
           >
-            <Download size={16} />
+            <Download size={14} />
             <span>{t("exportLabel")}</span>
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-4 items-center justify-between">
+        <div className="flex items-center gap-3">
           {/* Search */}
-          <div className="flex-1 min-w-[250px]">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary" />
             <input
               type="text"
               placeholder={t("searchPlaceholder")}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full rounded-control border border-line-strong bg-elevated py-[9px] pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary outline-none transition-colors focus:border-accent"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
-          <div className="flex gap-4">
+          <div className="hidden gap-3 md:flex">
             {/* Course Filter (Only show when not in course-scoped view) */}
             {!courseId && (
               <select
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-[170px] rounded-control border border-line-strong bg-elevated px-3 py-[9px] text-xs font-semibold text-text-secondary outline-none focus:border-accent"
                 value={courseFilter}
                 onChange={(e) => setCourseFilter(e.target.value)}
               >
@@ -532,7 +546,7 @@ export function TaskList({ courseId }: { courseId?: string }) {
 
             {/* Sort */}
             <select
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500"
+              className="w-[180px] rounded-control border border-line-strong bg-elevated px-3 py-[9px] text-xs font-semibold text-text-secondary outline-none focus:border-accent"
               value={sort}
               onChange={(e) =>
                 setSort(e.target.value as "deadline_asc" | "deadline_desc")
@@ -546,18 +560,13 @@ export function TaskList({ courseId }: { courseId?: string }) {
       </div>
 
       {isLoading && (
-        <div className="text-gray-500 text-center py-10 flex justify-center items-center gap-2">
-          <Loader2 className="animate-spin w-5 h-5 text-blue-500" />
-          {t("loading")}
-        </div>
+        <LoadingState label={t("loading")} />
       )}
       {error && (
-        <div className="text-red-500 text-center py-10">
-          {t("loadFailed")}
-        </div>
+        <ErrorState message={t("loadFailed")} />
       )}
 
-      <div className="space-y-4">
+      <div className="flex flex-col gap-3">
         {sortedTasks.map((task) => {
           const taskId = getTaskLookupId(task);
           const isOpen = taskId !== null && openTaskId === taskId;
@@ -565,9 +574,13 @@ export function TaskList({ courseId }: { courseId?: string }) {
           return (
             <div
               key={getTaskKey(task)}
-              className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:border-blue-300 transition-colors"
+              className={`rounded-card border bg-card p-4 transition-colors md:px-[18px] md:py-4 ${
+                isOpen
+                  ? "border-accent shadow-[0_0_0_3px_var(--accent-subtle)]"
+                  : "border-line hover:border-line-strong"
+              }`}
             >
-              <div className="flex justify-between items-center gap-4">
+              <div className="flex items-center justify-between gap-3 max-md:items-start">
                 <button
                   type="button"
                   onClick={() => {
@@ -577,28 +590,28 @@ export function TaskList({ courseId }: { courseId?: string }) {
                     );
                   }}
                   disabled={!taskId}
-                  className="flex flex-1 items-start gap-3 text-left focus:outline-none disabled:cursor-not-allowed"
+                  className="flex flex-1 items-start gap-3 text-left focus:outline-none disabled:cursor-not-allowed md:gap-3.5"
                 >
-                  <span className="mt-0.5 text-gray-400">
+                  <span className={`mt-0.5 flex-none ${isOpen ? "text-accent-text" : "text-text-tertiary"}`}>
                     {isOpen ? (
                       <ChevronDown size={18} />
                     ) : (
                       <ChevronRight size={18} />
                     )}
                   </span>
-                  <span>
-                    <span className="block font-semibold text-gray-900 dark:text-white">
+                  <span className="min-w-0">
+                    <span className="block truncate text-[15px] font-semibold text-text-primary">
                       {task.Title}
                     </span>
-                    <span className="flex flex-wrap items-center gap-2 mt-1">
-                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
+                    <span className="mt-1.5 flex flex-wrap items-center gap-2">
+                      <span className="rounded-[5px] bg-elevated px-2 py-0.5 text-[11px] font-medium text-text-secondary">
                         {task.CourseTitle}
                       </span>
                       <span
-                        className={`text-sm px-2 py-0.5 rounded ${
+                        className={`rounded-[5px] px-2 py-0.5 text-[11px] font-semibold ${
                           task.Status === "Completed"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-blue-50 text-blue-700"
+                            ? "bg-success-subtle text-success"
+                            : "bg-accent-subtle text-accent-text"
                         }`}
                       >
                         {task.Status === "Completed"
@@ -608,7 +621,7 @@ export function TaskList({ courseId }: { courseId?: string }) {
                             : task.Status}
                       </span>
                     </span>
-                    <span className="block text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <span className="mt-1 block text-xs font-mono text-text-tertiary">
                       {t("deadline")}: {formatDate(task.Deadline, t("none"), format)}
                     </span>
                   </span>
@@ -619,7 +632,7 @@ export function TaskList({ courseId }: { courseId?: string }) {
                     href={task.Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
+                    className={`${isOpen ? "max-md:flex" : "max-md:hidden"} inline-flex items-center gap-1.5 rounded-control bg-accent px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-accent-hover max-md:w-full max-md:justify-center`}
                   >
                     <ExternalLink size={14} />
                     {t("open")}
@@ -640,9 +653,10 @@ export function TaskList({ courseId }: { courseId?: string }) {
           );
         })}
         {!isLoading && sortedTasks.length === 0 && (
-          <div className="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
-            <p className="text-gray-500">{t("noMatches")}</p>
-          </div>
+          <EmptyState
+            icon={<ClipboardList size={20} />}
+            title={t("noMatches")}
+          />
         )}
       </div>
     </div>

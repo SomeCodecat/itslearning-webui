@@ -8,14 +8,12 @@ export default function TasksPage() {
   const t = useTranslations("Tasks");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <PageContainer className="py-6 md:py-10">
-        <header className="mb-6">
-          <div className="flex justify-between items-start mb-4">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              {t("title")}
-            </h1>
-          </div>
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
+        <header className="mb-5">
+          <h1 className="text-xl font-bold text-text-primary md:text-[28px]">
+            {t("title")}
+          </h1>
         </header>
 
         <TaskList />

@@ -46,6 +46,8 @@ vi.mock("next-intl", () => ({
       noAssessmentItems: "No assessment items returned.",
       noAssessmentScale: "No assessment scale returned.",
       deadline: "Deadline",
+      exportAriaLabel: "Export tasks as CSV",
+      exportLabel: "Export CSV",
       open: "Open",
       noMatches: "No tasks match your filters.",
     };
@@ -147,11 +149,15 @@ describe("TasksPage", () => {
   });
 
   it("lazy-loads assignment details when a task is opened", async () => {
-    renderWithSWR();
+    const { container } = renderWithSWR();
 
     await waitFor(() => {
       expect(screen.getByText("Essay")).toBeDefined();
     });
+    expect(container.firstElementChild?.className).toContain("bg-background");
+    expect(screen.getByPlaceholderText("Search tasks...").className).toContain(
+      "bg-elevated",
+    );
     expect(mockFetch).toHaveBeenCalledWith("/api/tasks?status=Active");
     expect(mockFetch).not.toHaveBeenCalledWith("/api/tasks/7");
 
@@ -165,5 +171,6 @@ describe("TasksPage", () => {
     expect(screen.getAllByText("Submitted").length).toBeGreaterThan(0);
     expect(screen.getByText("Grade scale")).toBeDefined();
     expect(screen.getByText("90% - 100%")).toBeDefined();
+    expect(screen.getByText("12345").className).toContain("font-mono");
   });
 });

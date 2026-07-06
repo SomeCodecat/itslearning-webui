@@ -2,20 +2,19 @@
 
 import { useFormatter, useTranslations } from "next-intl";
 import useSWR from "swr";
-import { Loader2, Megaphone, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, FolderOpen, Megaphone } from "lucide-react";
 import { use, useState } from "react";
 import dynamic from "next/dynamic";
 import { PageContainer } from "@/components/PageContainer";
 import { CourseNav } from "@/components/CourseNav";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorState } from "@/components/ui/ErrorState";
+import { LoadingState } from "@/components/ui/LoadingState";
 
 const FileBrowser = dynamic(
   () => import("@/components/FileBrowser").then((mod) => mod.FileBrowser),
   {
-    loading: () => (
-      <div className="flex justify-center py-10">
-        <Loader2 className="animate-spin w-8 h-8 text-blue-500" />
-      </div>
-    ),
+    loading: () => <LoadingState label="" />,
     ssr: false,
   },
 );
@@ -98,85 +97,73 @@ export default function CoursePage({
     : [];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <PageContainer className="py-6 md:py-10">
-        <header className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            {t("title")}
-          </h1>
-        </header>
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
         <CourseNav courseId={id} />
 
-        <div className="flex flex-col lg:flex-row gap-6 mt-6 items-start">
+        <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[1.7fr_1fr]">
           {/* Main Column: Resources */}
-          <div className="flex-1 w-full order-2 lg:order-1">
+          <section className="min-w-0">
+            <div className="mb-3.5 flex items-center justify-between gap-3">
+              <h2 className="text-card-title text-text-primary">
+                {t("title")}
+              </h2>
+            </div>
             {isLoading && (
-              <div className="flex items-center gap-2 text-gray-500">
-                <Loader2 className="animate-spin w-5 h-5 text-blue-500" />
-                {t("loadingResources")}
-              </div>
+              <LoadingState label={t("loadingResources")} />
             )}
             {error && (
-              <div className="text-red-500 dark:text-red-400">
-                {t("resourcesFailed")}
-              </div>
+              <ErrorState message={t("resourcesFailed")} />
             )}
 
             {files.length > 0 && (
               <FileBrowser files={files} persistable={false} />
             )}
             {!isLoading && files.length === 0 && (
-              <p className="text-gray-500">{t("noResources")}</p>
+              <EmptyState icon={<FolderOpen size={20} />} title={t("noResources")} />
             )}
-          </div>
+          </section>
 
           {/* Sidebar: Bulletins */}
-          <aside className="w-full lg:w-80 xl:w-96 shrink-0 order-1 lg:order-2 lg:sticky lg:top-6 bg-white dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent border border-gray-200 dark:border-gray-700 lg:border-0 rounded-xl p-4 lg:p-0 shadow-sm lg:shadow-none lg:max-h-[calc(100vh-6rem)] overflow-y-auto">
+          <aside className="w-full min-w-0">
             <button
               type="button"
               onClick={() => setIsExpanded(!isExpanded)}
               aria-expanded={isExpanded}
               aria-controls="bulletins-content"
-              className="w-full flex items-center justify-between text-left lg:pointer-events-none lg:cursor-default"
+              className="mb-3.5 flex w-full items-center justify-between text-left lg:pointer-events-none lg:cursor-default"
             >
               <div className="flex items-center gap-2">
-                <Megaphone className="w-5 h-5 text-blue-500 shrink-0" />
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Megaphone className="h-4 w-4 shrink-0 text-accent-text" />
+                <h2 className="flex items-center gap-2 text-card-title text-text-primary">
                   {t("bulletins")}
-                  <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                  <span className="rounded-full bg-accent-subtle px-2 py-0.5 font-mono text-xs font-semibold text-accent-text">
                     {bulletins.length}
                   </span>
                 </h2>
               </div>
-              <div className="lg:hidden p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <div className="rounded-control p-1 text-text-tertiary transition-colors hover:bg-elevated lg:hidden">
                 {isExpanded ? (
-                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                  <ChevronUp className="h-5 w-5" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                  <ChevronDown className="h-5 w-5" />
                 )}
               </div>
             </button>
 
             <div
               id="bulletins-content"
-              className={`mt-4 lg:mt-6 space-y-3 lg:block ${isExpanded ? "block" : "hidden"}`}
+              className={`space-y-3 lg:block ${isExpanded ? "block" : "hidden"}`}
             >
               {bulletinsLoading && (
-                <div className="flex items-center gap-2 text-gray-500 text-sm">
-                  <Loader2 className="animate-spin w-4 h-4" />
-                  {t("loadingBulletins")}
-                </div>
+                <LoadingState label={t("loadingBulletins")} />
               )}
               {bulletinsError && (
-                <p className="text-red-500 dark:text-red-400 text-sm">
-                  {t("bulletinsFailed")}
-                </p>
+                <ErrorState message={t("bulletinsFailed")} />
               )}
 
               {!bulletinsLoading && bulletins.length === 0 && !bulletinsError && (
-                <p className="text-gray-500 text-sm italic">
-                  {t("noBulletins")}
-                </p>
+                <EmptyState icon={<Megaphone size={20} />} title={t("noBulletins")} />
               )}
 
               <div className="space-y-3">
@@ -191,20 +178,20 @@ export default function CoursePage({
                   return (
                   <div
                     key={bulletinKey}
-                    className="bg-gray-50 dark:bg-gray-900/40 rounded-lg border border-gray-100 dark:border-gray-800 p-4 shadow-sm"
+                    className="rounded-card border border-line bg-card px-4 py-[18px]"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         {b.Title && (
                           <h3
-                            className={`font-medium text-gray-900 dark:text-white mb-1 ${isBulletinExpanded ? "" : "truncate"}`}
+                            className={`mb-1 text-sm font-semibold text-text-primary ${isBulletinExpanded ? "" : "truncate"}`}
                           >
                             {b.Title}
                           </h3>
                         )}
                         {b.Text && (
                           <p
-                            className={`text-sm text-gray-600 dark:text-gray-300 whitespace-pre-line ${isBulletinExpanded ? "" : "line-clamp-4"}`}
+                            className={`whitespace-pre-line text-[13px] leading-[1.55] text-text-secondary ${isBulletinExpanded ? "" : "line-clamp-4"}`}
                           >
                             {b.Text}
                           </p>
@@ -214,7 +201,7 @@ export default function CoursePage({
                             type="button"
                             onClick={() => toggleBulletin(bulletinKey)}
                             aria-expanded={isBulletinExpanded}
-                            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                            className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-accent-text transition-colors hover:text-text-primary"
                           >
                             {isBulletinExpanded ? (
                               <>
@@ -230,7 +217,7 @@ export default function CoursePage({
                           </button>
                         )}
                       </div>
-                      <div className="text-right shrink-0 text-xs text-gray-400 dark:text-gray-500 space-y-0.5">
+                      <div className="shrink-0 space-y-0.5 text-right font-mono text-[11px] text-text-tertiary">
                         {b.PublishedDate && (
                           <div>
                             {format.dateTime(new Date(b.PublishedDate), {

@@ -6,7 +6,8 @@ import { use } from "react";
 import { FileBrowser } from "@/components/FileBrowser";
 import { PageContainer } from "@/components/PageContainer";
 import { CourseNav } from "@/components/CourseNav";
-import { Loader2 } from "lucide-react";
+import { ErrorState } from "@/components/ui/ErrorState";
+import { LoadingState } from "@/components/ui/LoadingState";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -23,24 +24,18 @@ export default function CourseFilesPage({
   const { data: files, error, isLoading } = useSWR(cacheKey, fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <PageContainer className="py-6 md:py-10">
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
         <CourseNav courseId={id} />
 
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+        <h2 className="mb-4 text-card-title text-text-primary">
           {tCourse("files")}
         </h2>
 
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="animate-spin w-10 h-10 text-blue-500 mb-4" />
-            <p className="text-gray-500">{t("loading")}</p>
-          </div>
+          <LoadingState label={t("loading")} />
         ) : error ? (
-          <div className="p-6 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl border border-red-100 dark:border-red-800/30">
-            <p className="font-semibold">{t("loadFailed")}</p>
-            <p className="text-sm">{t("loadFailedHint")}</p>
-          </div>
+          <ErrorState message={t("loadFailed")} hint={t("loadFailedHint")} />
         ) : (
           <FileBrowser files={files || []} cacheKey={cacheKey} />
         )}
