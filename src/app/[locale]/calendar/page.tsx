@@ -70,7 +70,7 @@ export default function CalendarPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-4 py-4 md:px-10 md:py-6">
+      <PageContainer className="px-6 py-6 md:px-10">
         <header className="mb-[18px] flex items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold text-text-primary md:text-2xl">

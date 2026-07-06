@@ -89,6 +89,7 @@
   },
   "Dashboard": {
     "upcomingDeadlines": "Upcoming Deadlines",
+    "overdue": "Overdue",
     "newFiles": "New Files",
     "today": "Today",
     "dueAt": "Due at {time}",

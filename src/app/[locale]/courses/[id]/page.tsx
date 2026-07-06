@@ -98,7 +98,10 @@ export default function CoursePage({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
+      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
+        <h1 className="text-[28px] font-bold tracking-tight text-text-primary mb-5">
+          {t("title")}
+        </h1>
         <CourseNav courseId={id} />
 
         <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[1.7fr_1fr]">

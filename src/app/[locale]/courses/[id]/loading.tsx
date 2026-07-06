@@ -7,7 +7,7 @@ export default function Loading() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
+      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
         <header className="mb-4">
           <h1 className="mb-2 animate-pulse text-xl font-bold text-text-primary md:text-[28px]">
             {t("loadingCourse")}

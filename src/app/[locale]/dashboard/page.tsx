@@ -44,6 +44,72 @@ function getDeadlineTone(deadline?: string | null) {
   return "bg-accent shadow-[0_0_0_4px_var(--accent-subtle)]";
 }
 
+function getDeadlineStatus(
+  deadline: string | null | undefined,
+  t: ReturnType<typeof useTranslations<"Dashboard">>,
+  format: ReturnType<typeof useFormatter>,
+) {
+  if (!deadline) {
+    return {
+      text: t("noDate"),
+      color: "text-text-secondary",
+      formattedDate: "",
+    };
+  }
+
+  const date = new Date(deadline);
+  if (Number.isNaN(date.getTime())) {
+    return {
+      text: "",
+      color: "",
+      formattedDate: "",
+    };
+  }
+
+  const now = new Date();
+  const isOverdue = date.getTime() < now.getTime();
+  const isToday = date.toDateString() === now.toDateString();
+
+  const formattedTime = format.dateTime(date, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
+
+  const formattedDate = format.dateTime(date, {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
+
+  if (isOverdue) {
+    return {
+      text: t("overdue"),
+      color: "text-error",
+      formattedDate: formattedDate,
+    };
+  }
+
+  if (isToday) {
+    return {
+      text: t("today"),
+      color: "text-warning",
+      formattedDate: t("dueAt", { time: formattedTime }),
+    };
+  }
+
+  const relTime = format.relativeTime(date);
+  const capitalizedRelTime = relTime.charAt(0).toUpperCase() + relTime.slice(1);
+
+  return {
+    text: capitalizedRelTime,
+    color: "text-text-secondary",
+    formattedDate: formattedDate,
+  };
+}
+
 function getFileTone(value?: string | null) {
   const extension = (value || "FILE").replace(/^\./, "").slice(0, 4).toUpperCase();
   if (extension.startsWith("XL")) return "bg-success-subtle text-success";
@@ -78,7 +144,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-4 py-[18px] md:px-10 md:py-10">
+      <PageContainer className="px-6 py-6 md:px-10 md:py-10">
         <header className="mb-6 md:mb-[26px]">
           <h1 className="mb-1 text-xl font-bold text-text-primary md:text-[28px]">
             {indexT("title")}
@@ -126,14 +192,25 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </div>
-                    <span className="ml-2 whitespace-nowrap text-right font-mono text-xs font-semibold text-text-secondary">
-                      {task.Deadline
-                        ? format.dateTime(new Date(task.Deadline), {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                          })
-                        : t("noDate")}
-                    </span>
+                    {task.Deadline ? (
+                      (() => {
+                        const { text, color, formattedDate } = getDeadlineStatus(task.Deadline, t, format);
+                        return (
+                          <div className="ml-2 flex-none text-right">
+                            <div className={`font-mono text-xs font-semibold ${color}`}>
+                              {text}
+                            </div>
+                            <div className="font-mono text-[11px] text-text-tertiary">
+                              {formattedDate}
+                            </div>
+                          </div>
+                        );
+                      })()
+                    ) : (
+                      <span className="ml-2 whitespace-nowrap text-right font-mono text-xs font-semibold text-text-secondary">
+                        {t("noDate")}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -181,9 +258,7 @@ export default function DashboardPage() {
                       </div>
                       {file.uploadedAt && (
                         <span className="flex-none font-mono text-[11px] text-text-tertiary">
-                          {format.dateTime(new Date(file.uploadedAt), {
-                            dateStyle: "short",
-                          })}
+                          {format.relativeTime(new Date(file.uploadedAt))}
                         </span>
                       )}
                     </li>

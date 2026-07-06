@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from "swr";
-import { User, School, Save, Loader2, Eye, EyeOff } from "lucide-react";
+import { Save, Loader2, Eye, EyeOff } from "lucide-react";
 import { PageContainer } from "@/components/PageContainer";
 import { LoadingState } from "@/components/ui/LoadingState";
 
@@ -19,7 +19,7 @@ const fetcher = async (url: string) => {
 };
 
 const fieldClass =
-  "w-full rounded-control border border-line-strong bg-elevated px-3 py-[9px] text-sm text-text-primary outline-none transition-colors placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50";
+  "w-full rounded-control border border-line-strong bg-elevated px-3 py-[9px] text-[13px] text-text-primary outline-none transition-colors placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50";
 const labelClass = "mb-1.5 block text-sm font-medium text-text-secondary";
 
 export default function SettingsPage() {
@@ -120,7 +120,7 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-4 py-4 md:px-10 md:py-6">
+      <PageContainer className="px-6 py-6 md:px-10">
         <header className="mb-[18px]">
           <h1 className="mb-1 text-xl font-bold text-text-primary md:text-2xl">
             {t("title")}
@@ -136,25 +136,23 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => setActiveTab("profile")}
-              className={`flex items-center gap-2 rounded-[7px] px-4 py-[7px] text-xs transition-colors ${
+              className={`rounded-[7px] px-4 py-[7px] text-[13px] transition-colors ${
                 activeTab === "profile"
                   ? "bg-card text-accent-text shadow-card font-semibold"
                   : "text-text-secondary hover:text-text-primary font-medium"
               }`}
             >
-              <User size={15} />
               {t("profile")}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("school")}
-              className={`flex items-center gap-2 rounded-[7px] px-4 py-[7px] text-xs transition-colors ${
+              className={`rounded-[7px] px-4 py-[7px] text-[13px] transition-colors ${
                 activeTab === "school"
                   ? "bg-card text-accent-text shadow-card font-semibold"
                   : "text-text-secondary hover:text-text-primary font-medium"
               }`}
             >
-              <School size={15} />
               {t("schoolConnection")}
             </button>
           </div>

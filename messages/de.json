@@ -89,6 +89,7 @@
   },
   "Dashboard": {
     "upcomingDeadlines": "Anstehende Abgaben",
+    "overdue": "Überfällig",
     "newFiles": "Neue Dateien",
     "today": "Heute",
     "dueAt": "Fällig um {time}",

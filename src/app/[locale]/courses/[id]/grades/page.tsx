@@ -14,7 +14,7 @@ export default function CourseGradesPage({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-4 py-4 md:px-10 md:py-7 md:pb-10">
+      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
         <CourseNav courseId={id} />
         <GradesTable courseId={id} />
       </PageContainer>
