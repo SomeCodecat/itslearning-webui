@@ -10,6 +10,8 @@ interface FileCardProps {
   isAP1?: boolean;
   isAP2?: boolean;
   fileSize?: string;
+  courseTitle?: string;
+  fileType?: string;
   date?: string;
 }
 
@@ -21,6 +23,8 @@ export function FileCard({
   isAP1,
   isAP2,
   fileSize,
+  courseTitle,
+  fileType,
   date,
 }: FileCardProps) {
   const t = useTranslations("FileBrowser");
@@ -59,6 +63,11 @@ export function FileCard({
           {date && (
             <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
               {date}
+            </span>
+          )}
+          {(courseTitle || fileType || fileSize) && (
+            <span className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 block">
+              {[courseTitle, fileType, fileSize].filter(Boolean).join(" · ")}
             </span>
           )}
         </div>

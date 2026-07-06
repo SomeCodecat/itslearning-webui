@@ -105,6 +105,13 @@ export function FileBrowser({ files }: FileBrowserProps) {
             isExamRelevant={file.isExamRelevant}
             isAP1={file.isAP1}
             isAP2={file.isAP2}
+            fileSize={
+              file.size != null && !isNaN(Number(file.size))
+                ? String(file.size)
+                : undefined
+            }
+            courseTitle={file.courseTitle ?? undefined}
+            fileType={file.type ?? undefined}
             date={
               file.uploadedAt
                 ? new Date(file.uploadedAt).toLocaleDateString()

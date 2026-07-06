@@ -25,8 +25,13 @@ export function Navigation() {
 
   const isActive = (path: string) => pathname.includes(path);
 
-  // Fetch current user
-  const { data: user, isLoading } = useSWR("/api/user", (url) =>
+  // Hide app chrome on unauthenticated screens (paths like /en/login, /de/login).
+  // Must not early-return here: all hooks below still have to run on every render.
+  const unauthPaths = ["/login", "/setup"];
+  const hideChrome = unauthPaths.some((p) => pathname.includes(p));
+
+  // Fetch current user (skipped while on unauthenticated screens)
+  const { data: user, isLoading } = useSWR(hideChrome ? null : "/api/user", (url) =>
     fetch(url).then((res) => res.json()),
   );
 
@@ -111,8 +116,9 @@ export function Navigation() {
     }
   }, [retryAfter]);
 
-  // Auto-Sync (Every 5 minutes)
+  // Auto-Sync (Every 5 minutes) — not while on unauthenticated screens
   useEffect(() => {
+    if (hideChrome) return;
     const interval = setInterval(
       () => {
         handleSync();
@@ -120,7 +126,7 @@ export function Navigation() {
       5 * 60 * 1000,
     );
     return () => clearInterval(interval);
-  }, []);
+  }, [hideChrome]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -132,6 +138,8 @@ export function Navigation() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  if (hideChrome) return null;
 
   return (
     <nav className="flex gap-6 pb-4">
@@ -160,6 +168,12 @@ export function Navigation() {
             className={`text-sm font-medium transition-colors ${isActive("/tasks") ? "text-blue-600 font-bold" : "text-gray-700 dark:text-gray-300 hover:text-blue-600"}`}
           >
             {t("tasks")}
+          </Link>
+          <Link
+            href="/calendar"
+            className={`text-sm font-medium transition-colors ${isActive("/calendar") ? "text-blue-600 font-bold" : "text-gray-700 dark:text-gray-300 hover:text-blue-600"}`}
+          >
+            {t("calendar")}
           </Link>
         </div>
 
