@@ -4,9 +4,21 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import { wrapper } from "axios-cookiejar-support";
 import * as cheerio from "cheerio";
+import { CookieJar } from "tough-cookie";
 
 type ApiQueryParams = Record<string, string | number | boolean | undefined>;
+
+const DESKTOP_USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36";
+
+export function buildSsoTargetUrl(instanceUrl: string, webUrl: string): string {
+  const baseUrl = instanceUrl.replace(/\/+$/, "");
+  const targetUrl = new URL(webUrl, `${baseUrl}/`);
+  targetUrl.pathname = targetUrl.pathname.replace(/\/{2,}/g, "/");
+  return targetUrl.toString();
+}
 
 interface EntityArrayResponse<T> {
   EntityArray?: T[];
@@ -381,18 +393,93 @@ export class ScraperService {
     }
   }
 
-  // Download a file (Uses API Client / Bearer token)
+  // Download a file through ITSLearning's web SSO flow.
   async downloadFile(url: string): Promise<{
     filename: string;
     buffer: Buffer;
     mimeType: string;
   }> {
-    const res = await this.apiClient.get(url, {
-      responseType: "arraybuffer",
-      headers: {
-        Authorization: `Bearer ${this.accessToken}`,
+    const target = buildSsoTargetUrl(this.instanceUrl, url);
+    const sso = await this.apiGet<{ Url?: string }>(
+      "/restapi/personal/sso/url/v1",
+      {
+        url: target,
       },
+    );
+
+    if (!sso.data.Url) {
+      throw new Error("File download failed: SSO URL response missing Url");
+    }
+
+    const jar = new CookieJar();
+    const webClient = wrapper(
+      axios.create({
+        jar,
+        maxRedirects: 10,
+        validateStatus: () => true,
+        headers: {
+          "User-Agent": DESKTOP_USER_AGENT,
+        },
+      }),
+    );
+
+    const ssoPage = await webClient.get<string>(sso.data.Url);
+    if (ssoPage.status >= 400) {
+      throw new Error(
+        `File download failed: SSO page returned HTTP ${ssoPage.status}`,
+      );
+    }
+
+    const $ = cheerio.load(ssoPage.data);
+    const iframeSrc = $("#ctl00_ContentPlaceHolder_ExtensionIframe").attr(
+      "src",
+    );
+    if (!iframeSrc) {
+      throw new Error(
+        "File download failed: SSO page did not contain extension iframe",
+      );
+    }
+
+    const ssoFinalUrl = ssoPage.request?.res?.responseUrl || target;
+    const iframeUrl = new URL(iframeSrc, ssoFinalUrl).toString();
+    const iframePage = await webClient.get<string>(iframeUrl);
+    if (iframePage.status >= 400) {
+      throw new Error(
+        `File download failed: extension iframe returned HTTP ${iframePage.status}`,
+      );
+    }
+
+    const iframeFinalUrl = iframePage.request?.res?.responseUrl || iframeUrl;
+    const $$ = cheerio.load(iframePage.data);
+    let downloadUrl: string | undefined;
+    $$("a").each((i, el) => {
+      const href = $$(el).attr("href");
+      if (href?.includes("DownloadRedirect.ashx")) {
+        downloadUrl = href;
+      }
     });
+
+    if (!downloadUrl) {
+      throw new Error(
+        "File download failed: extension iframe did not contain DownloadRedirect.ashx link",
+      );
+    }
+
+    const absoluteDownloadUrl = new URL(downloadUrl, iframeFinalUrl).toString();
+    const res = await webClient.get<ArrayBuffer>(absoluteDownloadUrl, {
+      responseType: "arraybuffer",
+    });
+
+    const buffer = Buffer.from(res.data);
+    const mimeType = res.headers["content-type"] || "application/octet-stream";
+    if (buffer.length === 0) {
+      throw new Error("File download failed: final response returned 0 bytes");
+    }
+    if (mimeType.toLowerCase().includes("html")) {
+      throw new Error(
+        "File download failed: final response returned HTML instead of file bytes",
+      );
+    }
 
     let filename = "downloaded_file";
     const contentDisposition = res.headers["content-disposition"];
@@ -414,8 +501,8 @@ export class ScraperService {
 
     return {
       filename,
-      buffer: Buffer.from(res.data),
-      mimeType: res.headers["content-type"] || "application/octet-stream",
+      buffer,
+      mimeType,
     };
   }
 
