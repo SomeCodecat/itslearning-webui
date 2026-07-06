@@ -23,7 +23,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const ids: number[] = body.ids;
+    // Dedupe + coerce to integers. Duplicate ids would make the ownership
+    // count check below (userFiles.length !== ids.length) spuriously 403 on an
+    // otherwise valid request.
+    const ids: number[] = Array.from(new Set(body.ids)).filter(
+      (n): n is number => typeof n === "number" && Number.isInteger(n),
+    );
 
     // Refuse more than 500 files
     if (ids.length > 500) {

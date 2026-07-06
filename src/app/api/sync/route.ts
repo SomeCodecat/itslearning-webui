@@ -58,7 +58,7 @@ export async function POST() {
     // 1. Fetch High-Level Data
     const [courses, tasks] = await Promise.all([
       scraperService.getCourses(),
-      scraperService.getTasks("Active"),
+      scraperService.getTasks("All"),
     ]);
 
     // 2. Persist Courses and Download Files

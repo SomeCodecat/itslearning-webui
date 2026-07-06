@@ -22,7 +22,13 @@ export async function GET(request: Request) {
       const course = await prisma.course.findUnique({
         where: { itslearningId: courseId },
       });
-      courseDbId = course ? course.id : courseId;
+      // Unknown course: the caller filtered by a course we haven't synced.
+      // Return no files rather than falling back to the external id as a
+      // primary key (which would silently match the wrong / no rows).
+      if (!course) {
+        return NextResponse.json([]);
+      }
+      courseDbId = course.id;
     }
 
     const where: Prisma.UserFileWhereInput = {
