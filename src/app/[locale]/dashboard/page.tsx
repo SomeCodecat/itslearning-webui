@@ -100,7 +100,7 @@ function getDeadlineStatus(
     };
   }
 
-  const relTime = format.relativeTime(date);
+  const relTime = format.relativeTime(date, new Date());
   const capitalizedRelTime = relTime.charAt(0).toUpperCase() + relTime.slice(1);
 
   return {
@@ -239,7 +239,9 @@ export default function DashboardPage() {
               <ul className="flex flex-col">
                 {newFiles.map((file, index) => {
                   const name = file.customName || file.fileName || "";
-                  const extension = file.type || name.split(".").pop() || "FILE";
+                  const extension = name.includes(".")
+                    ? name.split(".").pop() || "FILE"
+                    : file.type?.split("/").pop() || "FILE";
                   return (
                     <li
                       key={file.id ?? name ?? index}
@@ -258,7 +260,7 @@ export default function DashboardPage() {
                       </div>
                       {file.uploadedAt && (
                         <span className="flex-none font-mono text-[11px] text-text-tertiary">
-                          {format.relativeTime(new Date(file.uploadedAt))}
+                          {format.relativeTime(new Date(file.uploadedAt), new Date())}
                         </span>
                       )}
                     </li>
