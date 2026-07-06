@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import fs from "fs/promises";
 import path from "path";
-import crypto from "crypto";
 
 // Removed in-memory rate limiting. Wait for Vercel KV or redis integration.
 
@@ -71,25 +70,24 @@ export async function POST() {
     // Ensure base directory exists
     try {
       await fs.mkdir(filesBaseDir, { recursive: true });
-    } catch (e) {}
+    } catch {}
 
     for (const course of courses) {
-      const c = course as any;
-      if (!c.CourseId) continue;
+      if (!course.CourseId) continue;
 
       // Upsert Course
       const dbCourse = await prisma.course.upsert({
-        where: { itslearningId: c.CourseId },
+        where: { itslearningId: course.CourseId },
         update: {
-          title: c.Title || "Untitled Course",
-          code: c.Code || null,
+          title: course.Title || "Untitled Course",
+          code: course.Code || null,
           users: { connect: { id: userId } },
           updatedAt: new Date(),
         },
         create: {
-          itslearningId: c.CourseId,
-          title: c.Title || "Untitled Course",
-          code: c.Code || null,
+          itslearningId: course.CourseId,
+          title: course.Title || "Untitled Course",
+          code: course.Code || null,
           users: { connect: { id: userId } },
         },
       });
@@ -97,9 +95,9 @@ export async function POST() {
       // --- 2a. Fetch and Sync Plans (Topics) ---
       const elementToPlanMap = new Map<number, number>(); // ElementID -> PlanID (DB ID)
       try {
-        const topics = await scraperService.getTopics(c.CourseId);
+        const topics = await scraperService.getTopics(course.CourseId);
         console.log(
-          `Sync: Fetched ${topics.length} plans for course ${c.Title}`,
+          `Sync: Fetched ${topics.length} plans for course ${course.Title}`,
         );
 
         for (const topic of topics) {
@@ -126,15 +124,15 @@ export async function POST() {
           }
         }
       } catch (err) {
-        console.warn(`Sync: Failed to fetch plans for ${c.Title}`, err);
+        console.warn(`Sync: Failed to fetch plans for ${course.Title}`, err);
       }
       // -----------------------------------------
 
       // --- 2b. File Sync Logic ---
-      console.log(`Sync: Fetching resources for course ${c.Title}`);
+      console.log(`Sync: Fetching resources for course ${course.Title}`);
       try {
-        const resources = await scraperService.getResources(c.CourseId);
-        const courseDir = path.join(filesBaseDir, sanitize(c.Title));
+        const resources = await scraperService.getResources(course.CourseId);
+        const courseDir = path.join(filesBaseDir, sanitize(course.Title));
         await fs.mkdir(courseDir, { recursive: true });
 
         for (const res of resources) {
@@ -176,37 +174,36 @@ export async function POST() {
         }
       } catch (err) {
         console.error(
-          `Sync: Failed to fetch resources for course ${c.Title}`,
+          `Sync: Failed to fetch resources for course ${course.Title}`,
           err,
         );
       }
 
       // --- 2c. Fetch and Sync Grades ---
       if (!skipGradesForRun) {
-        console.log(`Sync: Fetching grades for course ${c.Title}`);
+        console.log(`Sync: Fetching grades for course ${course.Title}`);
         try {
-          const grades = await scraperService.getGrades(c.CourseId);
+          const grades = await scraperService.getGrades(course.CourseId);
           console.log(
-            `Sync: Fetched ${grades.length} grades for course ${c.Title}`,
+            `Sync: Fetched ${grades.length} grades for course ${course.Title}`,
           );
 
           for (const grade of grades) {
-            const g = grade as any;
-            if (!g.ElementId) continue;
+            if (!grade.ElementId) continue;
 
             let dbAssignment = await prisma.assignment.findUnique({
-              where: { elementId: g.ElementId },
+              where: { elementId: grade.ElementId },
             });
 
             if (!dbAssignment) {
               dbAssignment = await prisma.assignment.create({
                 data: {
-                  elementId: g.ElementId,
+                  elementId: grade.ElementId,
                   title:
-                    optionalText(g.Title) || "Untitled Graded Assignment",
+                    optionalText(grade.Title) || "Untitled Graded Assignment",
                   courseId: dbCourse.id,
                   status: "Completed",
-                  webUrl: optionalText(g.Url),
+                  webUrl: optionalText(grade.Url),
                 },
               });
             }
@@ -214,25 +211,25 @@ export async function POST() {
             await prisma.grade.upsert({
               where: { assignmentId: dbAssignment.id },
               update: {
-                gradeString: optionalText(g.GradeString),
-                score: optionalScore(g.Score),
-                feedback: optionalText(g.Feedback),
-                webUrl: optionalText(g.Url),
+                gradeString: optionalText(grade.GradeString),
+                score: optionalScore(grade.Score),
+                feedback: optionalText(grade.Feedback),
+                webUrl: optionalText(grade.Url),
                 updatedAt: new Date(),
               },
               create: {
                 assignmentId: dbAssignment.id,
-                gradeString: optionalText(g.GradeString),
-                score: optionalScore(g.Score),
-                feedback: optionalText(g.Feedback),
-                webUrl: optionalText(g.Url),
+                gradeString: optionalText(grade.GradeString),
+                score: optionalScore(grade.Score),
+                feedback: optionalText(grade.Feedback),
+                webUrl: optionalText(grade.Url),
               },
             });
           }
         } catch (err) {
           skipGradesForRun = true;
           console.warn(
-            `Sync: Failed to sync grades for course ${c.Title}. Skipping grades for remaining courses in this run.`,
+            `Sync: Failed to sync grades for course ${course.Title}. Skipping grades for remaining courses in this run.`,
             err,
           );
         }
@@ -242,29 +239,28 @@ export async function POST() {
     // 3. Persist Tasks
     console.log(`Sync: Fetched ${tasks.length} tasks`);
     for (const task of tasks) {
-      const t = task as any;
-      if (!t.TaskId || !t.LocationId) continue;
+      if (!task.TaskId || !task.LocationId) continue;
 
       const course = await prisma.course.findUnique({
-        where: { itslearningId: t.LocationId },
+        where: { itslearningId: task.LocationId },
       });
 
       if (course) {
         await prisma.assignment.upsert({
-          where: { elementId: t.TaskId },
+          where: { elementId: task.TaskId },
           update: {
-            title: t.Title || "Untitled Task",
-            status: t.Status,
-            deadline: t.Deadline ? new Date(t.Deadline) : null,
-            webUrl: t.Url,
+            title: task.Title || "Untitled Task",
+            status: task.Status,
+            deadline: task.Deadline ? new Date(task.Deadline) : null,
+            webUrl: task.Url,
             course: { connect: { id: course.id } },
           },
           create: {
-            elementId: t.TaskId,
-            title: t.Title || "Untitled Task",
-            status: t.Status,
-            deadline: t.Deadline ? new Date(t.Deadline) : null,
-            webUrl: t.Url,
+            elementId: task.TaskId,
+            title: task.Title || "Untitled Task",
+            status: task.Status,
+            deadline: task.Deadline ? new Date(task.Deadline) : null,
+            webUrl: task.Url,
             course: { connect: { id: course.id } },
           },
         });
@@ -278,9 +274,9 @@ export async function POST() {
     });
 
     return NextResponse.json({ success: true, timestamp: new Date() });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Sync failed:", error);
-    if (error.message === "No active session") {
+    if (error instanceof Error && error.message === "No active session") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     return NextResponse.json({ error: "Failed to sync" }, { status: 500 });

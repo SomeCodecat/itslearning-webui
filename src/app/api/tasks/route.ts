@@ -38,7 +38,7 @@ export async function GET(request: Request) {
 
     // Map to Frontend expected shape
     // Frontend expects: { TaskId, Title, Status, Deadline, Url, CourseTitle ... }
-    const mappedTasks = tasks.map((t: any) => ({
+    const mappedTasks = tasks.map((t) => ({
       TaskId: t.elementId,
       Title: t.title,
       Status: t.status,
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     }));
 
     return NextResponse.json(mappedTasks);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch tasks:", error);
     return NextResponse.json(
       { error: "Failed to fetch tasks" },

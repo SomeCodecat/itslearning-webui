@@ -156,7 +156,7 @@ export async function PATCH(
     });
 
     return NextResponse.json(mapUserFileForList(updated));
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to update file flags:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { getScraperForSession, isAuthSessionError } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
-import fs from "fs/promises";
 import { FileService } from "@/lib/services/FileService";
+import fs from "fs/promises";
 
 export async function GET(request: Request) {
   try {
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
             "Content-Disposition": `inline; filename="${encodeURIComponent(userFile.customName || "download")}"`,
           },
         });
-      } catch (err) {
+      } catch {
         console.warn(
           "Proxy: File missing from disk despite having DB record. Re-downloading...",
         );
@@ -80,13 +80,13 @@ export async function GET(request: Request) {
     });
 
     // 5. Stream the fresh payload back sequentially
-    return new NextResponse(fileData.buffer as any, {
+    return new NextResponse(new Uint8Array(fileData.buffer), {
       headers: {
         "Content-Type": fileData.mimeType || "application/octet-stream",
         "Content-Disposition": `inline; filename="${encodeURIComponent(fileData.filename)}"`,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("File proxy failed:", error);
     if (isAuthSessionError(error)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

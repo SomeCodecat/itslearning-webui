@@ -7,7 +7,12 @@ import { CryptoService } from "@/lib/services/CryptoService";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    let { email: itslearningUser, password, organizationUrl } = body;
+    const {
+      email: itslearningUser,
+      password,
+      organizationUrl: requestedOrganizationUrl,
+    } = body;
+    let organizationUrl = requestedOrganizationUrl;
 
     const allowCustom = process.env.ALLOW_CUSTOM_INSTANCE !== "false";
     const defaultInstance =
@@ -30,7 +35,7 @@ export async function POST(request: Request) {
     );
     try {
       await scraper.authenticate(itslearningUser, password);
-    } catch (e) {
+    } catch {
       return NextResponse.json(
         { error: "Invalid ITSLearning credentials" },
         { status: 401 },
@@ -70,7 +75,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Login failed:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

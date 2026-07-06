@@ -77,7 +77,7 @@ export async function GET(
       ...assignment,
       details,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch task details:", error);
 
     if (isAuthSessionError(error)) {

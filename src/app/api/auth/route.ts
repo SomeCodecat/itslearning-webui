@@ -30,7 +30,12 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    let { username: itslearningUser, password, organizationUrl } = body;
+    const {
+      username: itslearningUser,
+      password,
+      organizationUrl: requestedOrganizationUrl,
+    } = body;
+    let organizationUrl = requestedOrganizationUrl;
 
     const allowCustom = process.env.ALLOW_CUSTOM_INSTANCE !== "false";
     const defaultInstance =
@@ -53,7 +58,7 @@ export async function POST(request: Request) {
 
     try {
       await scraper.authenticate(itslearningUser, password);
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: "Invalid ITSLearning credentials" },
         { status: 401 },
@@ -80,7 +85,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, user: updatedUser });
-  } catch (error: any) {
+  } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"

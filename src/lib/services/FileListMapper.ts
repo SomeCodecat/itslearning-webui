@@ -1,6 +1,26 @@
 import mime from "mime-types";
 
-export function mapUserFileForList(f: any) {
+export interface UserFileForList {
+  id: number;
+  customName: string | null;
+  webUrl: string | null;
+  isExamRelevant: boolean;
+  isAP1: boolean;
+  isAP2: boolean;
+  createdAt: Date;
+  storedFile?: {
+    size?: { toString(): string } | null;
+    mimeType?: string | null;
+  } | null;
+  plan?: {
+    course: {
+      title: string;
+    };
+  } | null;
+  tags?: { id: number; name: string }[];
+}
+
+export function mapUserFileForList(f: UserFileForList) {
   const inferredMimeType = f.customName ? mime.lookup(f.customName) : false;
 
   return {
@@ -14,8 +34,6 @@ export function mapUserFileForList(f: any) {
     size: f.storedFile?.size != null ? f.storedFile.size.toString() : null,
     courseTitle: f.plan?.course.title,
     type: f.storedFile?.mimeType || inferredMimeType || null,
-    tags: Array.isArray(f.tags)
-      ? (f.tags as { id: number; name: string }[])
-      : [],
+    tags: Array.isArray(f.tags) ? f.tags : [],
   };
 }

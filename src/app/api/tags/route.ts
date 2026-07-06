@@ -19,7 +19,7 @@ export async function GET() {
     });
 
     return NextResponse.json(tags);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch tags:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(tag, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to create tag:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

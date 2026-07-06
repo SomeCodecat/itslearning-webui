@@ -47,7 +47,7 @@ export async function GET() {
     }
 
     return NextResponse.json(user);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch user:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
@@ -94,7 +94,7 @@ export async function PATCH(request: Request) {
     });
 
     return NextResponse.json(updatedUser);
-  } catch (error: any) {
+  } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2002"

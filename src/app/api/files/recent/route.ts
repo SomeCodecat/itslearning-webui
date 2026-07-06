@@ -31,7 +31,7 @@ export async function GET() {
     const files = userFiles.map(mapUserFileForList);
 
     return NextResponse.json(files);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch recent files:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

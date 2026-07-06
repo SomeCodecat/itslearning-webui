@@ -1,17 +1,38 @@
-import axios, { AxiosInstance } from "axios";
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 import * as cheerio from "cheerio";
 
-interface Course {
-  CourseId: number;
-  Title: string;
-  Url: string; // Original URL
+type ApiQueryParams = Record<string, string | number | boolean | undefined>;
+
+interface EntityArrayResponse<T> {
+  EntityArray?: T[];
 }
 
-interface Resource {
+interface RetriableRequestConfig extends InternalAxiosRequestConfig<unknown> {
+  retryCount?: number;
+  _retryAuth?: boolean;
+}
+
+interface OAuthTokenResponse {
+  access_token?: string;
+}
+
+export interface Course {
+  CourseId: number;
+  Title: string;
+  Url?: string; // Original URL
+  Code?: string | null;
+}
+
+export interface Resource {
   ElementId: number;
   Title: string;
   ElementType: string;
-  IconUrl: string;
+  IconUrl?: string;
   ContentUrl?: string; // Sometimes available
 }
 
@@ -22,6 +43,37 @@ export interface GradeItem {
   Score?: number;
   Feedback?: string;
   Url?: string;
+}
+
+export interface TaskItem {
+  TaskId: number;
+  LocationId?: number;
+  Title?: string;
+  Status?: string;
+  Deadline?: string | null;
+  Url?: string | null;
+}
+
+interface TopicResource {
+  ElementId: number;
+}
+
+export interface TopicItem {
+  TopicId: number;
+  Title?: string;
+  Name?: string | null;
+  Resources?: EntityArrayResponse<TopicResource>;
+}
+
+export interface RssItem {
+  title: string;
+  link: string;
+  description: string;
+  pubDate: string;
+}
+
+interface ResourcesResponse {
+  Resources?: EntityArrayResponse<Resource>;
 }
 
 export class ScraperService {
@@ -45,8 +97,8 @@ export class ScraperService {
     });
 
     // Rate Limiting & Auth Interceptor
-    const handleError = async (err: any) => {
-      const config = err.config;
+    const handleError = async (err: AxiosError<unknown, unknown>) => {
+      const config = err.config as RetriableRequestConfig | undefined;
       if (!config) return Promise.reject(err);
 
       if (!config.retryCount) config.retryCount = 0;
@@ -67,7 +119,7 @@ export class ScraperService {
         config._retryAuth = true;
         if (this.onAuthFailure) {
           await this.onAuthFailure();
-          config.headers.Authorization = `Bearer ${this.accessToken}`;
+          config.headers.setAuthorization(`Bearer ${this.accessToken}`);
           return this.apiClient(config);
         }
       }
@@ -102,9 +154,13 @@ export class ScraperService {
     params.append("password", password);
 
     try {
-      const res = await this.apiClient.post(tokenUrl, params, {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      });
+      const res = await this.apiClient.post<OAuthTokenResponse>(
+        tokenUrl,
+        params,
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        },
+      );
 
       if (res.data.access_token) {
         this.accessToken = res.data.access_token;
@@ -119,7 +175,10 @@ export class ScraperService {
   }
 
   // Helper for authenticated requests
-  private async apiGet(url: string, params: any = {}) {
+  private async apiGet<TData>(
+    url: string,
+    params: ApiQueryParams = {},
+  ): Promise<AxiosResponse<TData>> {
     return this.apiClient.get(url, {
       headers: {
         Authorization: `Bearer ${this.accessToken}`,
@@ -131,18 +190,21 @@ export class ScraperService {
   async getCourses(): Promise<Course[]> {
     if (!this.accessToken) throw new Error("Not authenticated");
 
-    const res = await this.apiGet("/restapi/personal/courses/v2", {
-      pageIndex: 0,
-      pageSize: 100,
-      filter: 1,
-    });
+    const res = await this.apiGet<EntityArrayResponse<Course>>(
+      "/restapi/personal/courses/v2",
+      {
+        pageIndex: 0,
+        pageSize: 100,
+        filter: 1,
+      },
+    );
     return res.data.EntityArray || [];
   }
 
   async getGrades(courseId: number): Promise<GradeItem[]> {
     if (!this.accessToken) throw new Error("Not authenticated");
 
-    const res = await this.apiGet(
+    const res = await this.apiGet<EntityArrayResponse<GradeItem>>(
       `/restapi/personal/courses/${courseId}/usergrades/v1`,
       {
         pageIndex: 0,
@@ -162,7 +224,7 @@ export class ScraperService {
       url = `/restapi/personal/courses/${courseId}/folders/${folderId}/resources/v1`;
     }
 
-    const res = await this.apiGet(url, {
+    const res = await this.apiGet<ResourcesResponse>(url, {
       pageIndex: 0,
       pageSize: 9999,
     });
@@ -197,7 +259,7 @@ export class ScraperService {
 
   // Fetch arbitrary page content for scraping (Uses API/Bearer Token)
   async getPageContent(url: string): Promise<string> {
-    const res = await this.apiClient.get(url, {
+    const res = await this.apiClient.get<string>(url, {
       headers: {
         Authorization: `Bearer ${this.accessToken}`,
       },
@@ -206,31 +268,37 @@ export class ScraperService {
   }
 
   // Fetch Assignment Settings/Details via API
-  async getAssignmentDetails(elementId: number): Promise<any> {
+  async getAssignmentDetails(
+    elementId: number,
+  ): Promise<Record<string, unknown> | null> {
     try {
       const url = `/restapi/personal/assignments/${elementId}/settings/v1`;
-      const res = await this.apiGet(url);
+      const res = await this.apiGet<Record<string, unknown>>(url);
       return res.data;
-    } catch (error: any) {
+    } catch {
       return null;
     }
   }
 
   // Calendar Events
-  async getCalendarEvents(): Promise<any[]> {
-    const res = await this.apiGet("/restapi/personal/calendar/events/v1");
+  async getCalendarEvents(): Promise<unknown[]> {
+    const res = await this.apiGet<EntityArrayResponse<unknown>>(
+      "/restapi/personal/calendar/events/v1",
+    );
     return res.data.EntityArray || [];
   }
 
   // Notifications
-  async getNotifications(): Promise<any[]> {
-    const res = await this.apiGet("/restapi/personal/notifications/v1");
+  async getNotifications(): Promise<unknown[]> {
+    const res = await this.apiGet<EntityArrayResponse<unknown>>(
+      "/restapi/personal/notifications/v1",
+    );
     return res.data.EntityArray || [];
   }
 
   // Course Bulletins (LightBulletins)
-  async getLightBulletins(courseId: number): Promise<any[]> {
-    const res = await this.apiGet(
+  async getLightBulletins(courseId: number): Promise<unknown[]> {
+    const res = await this.apiGet<EntityArrayResponse<unknown>>(
       `/restapi/personal/courses/${courseId}/bulletins/v1`,
     );
     return res.data.EntityArray || [];
@@ -239,26 +307,29 @@ export class ScraperService {
   // Get Tasks (Assignments) - Active or All
   async getTasks(
     status: "Active" | "Completed" | "All" = "Active",
-  ): Promise<any[]> {
-    const res = await this.apiGet("/restapi/personal/tasks/v1", {
-      status: status,
-      pageSize: 100,
-    });
+  ): Promise<TaskItem[]> {
+    const res = await this.apiGet<EntityArrayResponse<TaskItem>>(
+      "/restapi/personal/tasks/v1",
+      {
+        status: status,
+        pageSize: 100,
+      },
+    );
     return res.data.EntityArray || [];
   }
 
   // RSS Feed for Course Updates (NotificationRss.aspx)
-  async getCourseUpdatesRSS(courseId: number): Promise<any[]> {
+  async getCourseUpdatesRSS(courseId: number): Promise<RssItem[]> {
     try {
       const url = `${this.instanceUrl}/Rss/NotificationRss.aspx?LocationType=Course&LocationID=${courseId}`;
-      const res = await this.apiClient.get(url, {
+      const res = await this.apiClient.get<string>(url, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
         },
       });
 
       const $ = cheerio.load(res.data, { xmlMode: true });
-      const items: any[] = [];
+      const items: RssItem[] = [];
 
       $("item").each((i, el) => {
         const title = $(el).find("title").text();
@@ -270,7 +341,7 @@ export class ScraperService {
       });
 
       return items;
-    } catch (e) {
+    } catch {
       return [];
     }
   }
@@ -314,8 +385,8 @@ export class ScraperService {
   }
 
   // Topics (Plans) for a Course
-  async getTopics(courseId: number): Promise<any[]> {
-    const res = await this.apiGet(
+  async getTopics(courseId: number): Promise<TopicItem[]> {
+    const res = await this.apiGet<EntityArrayResponse<TopicItem>>(
       `/restapi/personal/courses/${courseId}/topics/v1`,
     );
     return res.data.EntityArray || [];

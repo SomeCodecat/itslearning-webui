@@ -31,7 +31,7 @@ export async function GET() {
     // Frontend uses: c.CourseId, c.Title (from previous fix).
     // Let's return the same shape to avoid frontend breakage.
 
-    const mappedCourses = courses.map((c: any) => ({
+    const mappedCourses = courses.map((c) => ({
       CourseId: c.itslearningId,
       Title: c.title,
       Code: c.code,
@@ -39,7 +39,7 @@ export async function GET() {
     }));
 
     return NextResponse.json(mappedCourses);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch courses:", error);
     return NextResponse.json(
       { error: "Failed to fetch courses" },

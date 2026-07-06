@@ -225,7 +225,7 @@ export class FileService {
   ): Promise<string | null> {
     try {
       if (mimeType === "application/pdf") {
-        // @ts-ignore - pdf-parse has weird exports
+        // @ts-expect-error - pdf-parse has weird exports
         const data = await (pdf.default || pdf)(buffer);
         return data.text.substring(0, 10000); // Cap content size
       } else if (

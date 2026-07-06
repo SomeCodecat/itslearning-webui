@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { AxiosResponse } from "axios";
 import { ScraperService } from "../ScraperService";
 
 describe("ScraperService.getGrades", () => {
@@ -22,9 +23,12 @@ describe("ScraperService.getGrades", () => {
         },
       ],
     };
+    const response = {
+      data: payload,
+    } as AxiosResponse<typeof payload>;
     const getSpy = vi
       .spyOn(scraper.apiClient, "get")
-      .mockResolvedValue({ data: payload } as any);
+      .mockResolvedValue(response);
 
     const grades = await scraper.getGrades(4273);
 

@@ -1,5 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+type MockScraper = {
+  instanceUrl: string;
+  onAuthFailure: undefined | (() => Promise<void>);
+  authenticate: ReturnType<typeof vi.fn>;
+  getAccessToken: ReturnType<typeof vi.fn>;
+  setAccessToken: ReturnType<typeof vi.fn>;
+};
+
 const {
   mockCookies,
   mockCookieGet,
@@ -16,7 +24,7 @@ const {
     },
   },
   mockDecrypt: vi.fn(),
-  mockScraperInstances: [] as any[],
+  mockScraperInstances: [] as MockScraper[],
 }));
 
 vi.mock("next/headers", () => ({

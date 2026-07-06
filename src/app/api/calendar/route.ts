@@ -10,7 +10,7 @@ export async function GET() {
     const scraperService = await getScraperForSession();
     const events = await scraperService.getCalendarEvents();
     return NextResponse.json(events);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch calendar events:", error);
     return NextResponse.json(
       { error: "Failed to fetch events" },

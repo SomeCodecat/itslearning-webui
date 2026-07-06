@@ -36,7 +36,7 @@ export async function GET() {
       },
     });
 
-    const mappedGrades = grades.map((grade: any) => ({
+    const mappedGrades = grades.map((grade) => ({
       id: grade.id,
       assignmentId: grade.assignmentId,
       assignmentElementId: grade.assignment.elementId,
@@ -51,7 +51,7 @@ export async function GET() {
     }));
 
     return NextResponse.json(mappedGrades);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch grades:", error);
 
     if (isAuthSessionError(error)) {

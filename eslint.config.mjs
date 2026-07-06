@@ -18,8 +18,6 @@ const eslintConfig = defineConfig([
     "migration_backup/**",
     "scripts/**",
     "test_db*.ts",
-    "src/app/api/**",
-    "src/lib/**",
     "next-env.d.ts",
   ]),
 ]);

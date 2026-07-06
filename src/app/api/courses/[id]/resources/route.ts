@@ -19,9 +19,9 @@ export async function GET(
     const resources = await scraperService.getResources(courseId);
 
     return NextResponse.json(resources);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch resources:", error);
-    if (error.message === "No active session") {
+    if (error instanceof Error && error.message === "No active session") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     return NextResponse.json(

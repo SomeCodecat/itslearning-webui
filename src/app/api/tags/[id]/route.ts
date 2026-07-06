@@ -39,7 +39,7 @@ export async function DELETE(
     await prisma.tag.delete({ where: { id: tagId } });
 
     return new NextResponse(null, { status: 204 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to delete tag:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

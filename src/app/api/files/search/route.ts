@@ -63,7 +63,7 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json(files);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to search files:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

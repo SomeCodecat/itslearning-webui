@@ -18,9 +18,9 @@ export async function GET(
     const bulletins = await scraperService.getLightBulletins(courseId);
 
     return NextResponse.json(bulletins);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch bulletins:", error);
-    if (error.message === "No active session") {
+    if (error instanceof Error && error.message === "No active session") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     return NextResponse.json(

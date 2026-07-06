@@ -10,7 +10,7 @@ export async function GET() {
     const notifications = await scraperService.getNotifications();
 
     return NextResponse.json(notifications);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Failed to fetch notifications:", error);
 
     if (isAuthSessionError(error)) {

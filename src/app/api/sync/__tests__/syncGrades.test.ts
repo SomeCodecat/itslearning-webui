@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+type CourseUpsertArgs = {
+  where: {
+    itslearningId: number;
+  };
+};
+
 const {
   mockCookies,
   mockCookieGet,
@@ -84,7 +90,7 @@ describe("POST /api/sync grades integration", () => {
     mockScraper.getTopics.mockResolvedValue([]);
     mockScraper.getResources.mockResolvedValue([]);
     mockScraper.getGrades.mockResolvedValue([]);
-    mockPrisma.course.upsert.mockImplementation(({ where }: any) =>
+    mockPrisma.course.upsert.mockImplementation(({ where }: CourseUpsertArgs) =>
       Promise.resolve({ id: where.itslearningId, title: "Math" }),
     );
     mockPrisma.assignment.findUnique.mockResolvedValue(null);
