@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
+import { mapUserFileForList } from "@/lib/services/FileListMapper";
 
 export async function GET() {
   try {
@@ -26,20 +27,7 @@ export async function GET() {
       },
     });
 
-    // Transform to frontend shape if needed
-    // Assuming FrontEnd expects: id, customName, webUrl, isExamRelevant, etc.
-    const files = userFiles.map((f: any) => ({
-      id: f.id,
-      customName: f.customName || "Untitled",
-      webUrl: f.webUrl || "#",
-      isExamRelevant: f.isExamRelevant,
-      isAP1: f.isAP1,
-      isAP2: f.isAP2,
-      uploadedAt: f.createdAt.toISOString(),
-      size: f.storedFile.size.toString(), // BigInt to string
-      courseTitle: f.plan?.course.title,
-      type: f.storedFile.mimeType,
-    }));
+    const files = userFiles.map(mapUserFileForList);
 
     return NextResponse.json(files);
   } catch (error: any) {

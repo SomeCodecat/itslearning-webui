@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Encrypt credentials for background syncing
-    const { encrypted, iv } = CryptoService.encrypt(password);
+    const { encrypted, iv } = CryptoService.encryptToString(password);
 
     // 3. Upsert User in Database
     const user = await prisma.user.upsert({

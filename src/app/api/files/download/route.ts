@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server";
-import { getScraperForSession } from "@/lib/userScraper";
+import { getScraperForSession, isAuthSessionError } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import fs from "fs/promises";
-import path from "path";
-import crypto from "crypto";
-
-// Helper to sanitize filenames
-function sanitize(name: string) {
-  return name.replace(/[^a-z0-9\u00a0-\uffff\-_\.]/gi, "_");
-}
+import { FileService } from "@/lib/services/FileService";
 
 export async function GET(request: Request) {
   try {
@@ -71,38 +65,21 @@ export async function GET(request: Request) {
     const scraperService = await getScraperForSession();
     const fileData = await scraperService.downloadFile(userFile.webUrl);
 
-    // 4. Hash & Save to disk
-    const filesBaseDir = path.join(process.cwd(), "storage", "files");
-    await fs.mkdir(filesBaseDir, { recursive: true });
-
-    const localPath = path.join(filesBaseDir, sanitize(fileData.filename));
-    await fs.writeFile(localPath, fileData.buffer);
-
-    const hash = crypto
-      .createHash("sha256")
-      .update(fileData.buffer)
-      .digest("hex");
-    const size = BigInt(fileData.buffer.length);
-
-    // 5. Upsert StoredFile
-    const storedFile = await prisma.storedFile.upsert({
-      where: { hash },
-      update: {},
-      create: {
-        hash,
-        size,
-        localPath: localPath,
-        mimeType: fileData.mimeType,
-      },
+    // 4. Store physical content through FileService and link this UserFile
+    const fileService = new FileService();
+    await fileService.attachDownloadedFile(userFile, fileData.buffer, {
+      customName: userFile.customName || fileData.filename,
+      webUrl: userFile.webUrl,
+      folderPath: userFile.folderPath,
+      uploader: userFile.uploader,
+      uploadedAt: userFile.uploadedAt,
+      mimeType: fileData.mimeType,
+      isExamRelevant: userFile.isExamRelevant,
+      isAP1: userFile.isAP1,
+      isAP2: userFile.isAP2,
     });
 
-    // 6. Link UserFile to the physically stored StoredFile
-    await prisma.userFile.update({
-      where: { id: userFile.id },
-      data: { storedFileId: storedFile.id },
-    });
-
-    // 7. Stream the fresh payload back sequentially
+    // 5. Stream the fresh payload back sequentially
     return new NextResponse(fileData.buffer as any, {
       headers: {
         "Content-Type": fileData.mimeType || "application/octet-stream",
@@ -111,6 +88,10 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error("File proxy failed:", error);
+    if (isAuthSessionError(error)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     return NextResponse.json(
       { error: "Failed to securely download file" },
       { status: 500 },

@@ -1,12 +1,41 @@
 import { prisma } from "@/lib/db";
+import type { StoredFile, UserFile } from "@prisma/client";
 import crypto from "crypto";
 import fs from "fs/promises";
 import path from "path";
-import mime from "mime-types";
 import * as pdf from "pdf-parse";
 import mammoth from "mammoth";
 
 const STORAGE_ROOT = "./storage/blobs";
+
+type FileMetadata = {
+  customName: string;
+  webUrl?: string | null;
+  folderPath?: string | null;
+  uploader?: string | null;
+  uploadedAt?: Date | null;
+  mimeType?: string | null;
+  isExamRelevant?: boolean;
+  isAP1?: boolean;
+  isAP2?: boolean;
+};
+
+type DownloadTarget = Pick<
+  UserFile,
+  | "id"
+  | "userId"
+  | "storedFileId"
+  | "planId"
+  | "elementId"
+  | "customName"
+  | "webUrl"
+  | "folderPath"
+  | "uploader"
+  | "uploadedAt"
+  | "isExamRelevant"
+  | "isAP1"
+  | "isAP2"
+>;
 
 export class FileService {
   constructor() {
@@ -20,49 +49,17 @@ export class FileService {
    */
   async processFile(
     buffer: Buffer,
-    metadata: {
-      customName: string;
-      webUrl?: string; // Deep link to itslearning
-      folderPath?: string;
-      uploader?: string;
-      uploadedAt?: Date;
-      mimeType?: string;
-      isExamRelevant?: boolean;
-      isAP1?: boolean;
-      isAP2?: boolean;
-    },
+    metadata: FileMetadata,
     userId: number,
     planId?: number,
   ) {
-    // 1. Calculate Hash
-    const hash = crypto.createHash("sha256").update(buffer).digest("hex");
-    const size = BigInt(buffer.length);
+    // 1. Check/Create StoredFile (Physical Layer)
+    const storedFile = await this.findOrCreateStoredFile(
+      buffer,
+      metadata.mimeType,
+    );
 
-    // 2. Check/Create StoredFile (Physical Layer)
-    let storedFile = await prisma.storedFile.findUnique({
-      where: { hash },
-    });
-
-    if (!storedFile) {
-      // New physical file. Save to disk.
-      const localPath = path.join(STORAGE_ROOT, hash);
-      await fs.writeFile(localPath, buffer);
-
-      // Extract Text for Search
-      const textContent = await this.extractText(buffer, metadata.mimeType);
-
-      storedFile = await prisma.storedFile.create({
-        data: {
-          hash,
-          size,
-          localPath,
-          mimeType: metadata.mimeType,
-          textContent,
-        },
-      });
-    }
-
-    // 3. UserFile Resolution (Logical Layer)
+    // 2. UserFile Resolution (Logical Layer)
     // Check if this user already has a file with this name in this plan/folder
     // If so, and hash is different, archive it.
 
@@ -93,7 +90,7 @@ export class FileService {
       }
     }
 
-    // 4. Create new UserFile
+    // 3. Create new UserFile
     return prisma.userFile.create({
       data: {
         userId,
@@ -111,9 +108,120 @@ export class FileService {
     });
   }
 
+  /**
+   * Attach a lazily downloaded payload to an existing UserFile stub.
+   * If the target already pointed at different content, preserve the old row as
+   * an archived version and create a fresh active row.
+   */
+  async attachDownloadedFile(
+    userFile: DownloadTarget,
+    buffer: Buffer,
+    metadata: FileMetadata,
+  ): Promise<{ userFile: UserFile; storedFile: StoredFile }> {
+    const storedFile = await this.findOrCreateStoredFile(
+      buffer,
+      metadata.mimeType,
+    );
+
+    const fileData = {
+      storedFileId: storedFile.id,
+      customName: metadata.customName || userFile.customName,
+      webUrl: metadata.webUrl ?? userFile.webUrl,
+      folderPath: metadata.folderPath ?? userFile.folderPath,
+      uploader: metadata.uploader ?? userFile.uploader,
+      uploadedAt: metadata.uploadedAt ?? userFile.uploadedAt,
+      isExamRelevant: metadata.isExamRelevant ?? userFile.isExamRelevant,
+      isAP1: metadata.isAP1 ?? userFile.isAP1,
+      isAP2: metadata.isAP2 ?? userFile.isAP2,
+    };
+
+    if (userFile.storedFileId && userFile.storedFileId !== storedFile.id) {
+      await prisma.userFile.update({
+        where: { id: userFile.id },
+        data: {
+          isArchived: true,
+          archivedAt: new Date(),
+        },
+      });
+
+      const newUserFile = await prisma.userFile.create({
+        data: {
+          userId: userFile.userId,
+          planId: userFile.planId,
+          elementId: userFile.elementId,
+          ...fileData,
+        },
+      });
+
+      return { userFile: newUserFile, storedFile };
+    }
+
+    const updatedUserFile = await prisma.userFile.update({
+      where: { id: userFile.id },
+      data: fileData,
+    });
+
+    return { userFile: updatedUserFile, storedFile };
+  }
+
+  private async findOrCreateStoredFile(
+    buffer: Buffer,
+    mimeType?: string | null,
+  ): Promise<StoredFile> {
+    const hash = crypto.createHash("sha256").update(buffer).digest("hex");
+    const size = BigInt(buffer.length);
+
+    let storedFile = await prisma.storedFile.findUnique({
+      where: { hash },
+    });
+
+    if (storedFile) {
+      if (storedFile.localPath) {
+        await this.ensureFileOnDisk(storedFile.localPath, buffer);
+      }
+
+      if (!storedFile.textContent) {
+        const textContent = await this.extractText(buffer, mimeType);
+        if (textContent) {
+          storedFile = await prisma.storedFile.update({
+            where: { id: storedFile.id },
+            data: { textContent },
+          });
+        }
+      }
+
+      return storedFile;
+    }
+
+    const localPath = path.join(STORAGE_ROOT, hash);
+    await fs.mkdir(STORAGE_ROOT, { recursive: true });
+    await fs.writeFile(localPath, buffer);
+
+    const textContent = await this.extractText(buffer, mimeType);
+
+    return prisma.storedFile.create({
+      data: {
+        hash,
+        size,
+        localPath,
+        mimeType,
+        textContent,
+      },
+    });
+  }
+
+  private async ensureFileOnDisk(localPath: string, buffer: Buffer) {
+    try {
+      await fs.access(localPath);
+    } catch {
+      await fs.mkdir(path.dirname(localPath), { recursive: true });
+      await fs.writeFile(localPath, buffer);
+    }
+  }
+
   private async extractText(
     buffer: Buffer,
-    mimeType?: string,
+    mimeType?: string | null,
   ): Promise<string | null> {
     try {
       if (mimeType === "application/pdf") {

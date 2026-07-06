@@ -4,13 +4,34 @@ import { CryptoService } from "@/lib/services/CryptoService";
 import { cookies } from "next/headers";
 
 // Remove in-memory scraperCache
+const AUTH_SESSION_ERROR = "No active session";
+
+export function isAuthSessionError(error: unknown): boolean {
+  return error instanceof Error && error.message === AUTH_SESSION_ERROR;
+}
+
+function authSessionError() {
+  return new Error(AUTH_SESSION_ERROR);
+}
+
+function decryptStoredPassword(encryptedPwd: string, iv: string): string {
+  try {
+    return CryptoService.decrypt(encryptedPwd, iv);
+  } catch (error) {
+    console.warn(
+      "Stored itslearning credentials could not be decrypted; login is required.",
+      error,
+    );
+    throw authSessionError();
+  }
+}
 
 export async function getScraperForSession(): Promise<ScraperService> {
   const cookieStore = await cookies();
   const userIdCookie = cookieStore.get("auth_session");
 
   if (!userIdCookie) {
-    throw new Error("No active session");
+    throw authSessionError();
   }
 
   const userId = parseInt(userIdCookie.value);
@@ -34,20 +55,20 @@ export async function getScraperForSession(): Promise<ScraperService> {
     !user.itslearningPwd ||
     !user.itslearningIv
   ) {
-    throw new Error("Itslearning credentials not configured");
+    throw authSessionError();
   }
 
   const scraper = new ScraperService(
     user.itslearningUrl || "https://sdu.itslearning.com",
   );
 
-  const password = CryptoService.decrypt(
-    user.itslearningPwd,
-    user.itslearningIv,
-  );
-
   scraper.onAuthFailure = async () => {
     console.log("Token expired/invalid (401). Re-authenticating...");
+    const password = decryptStoredPassword(
+      user.itslearningPwd as string,
+      user.itslearningIv as string,
+    );
+
     await scraper.authenticate(user.itslearningUser as string, password);
 
     await prisma.user.update({
