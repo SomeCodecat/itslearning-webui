@@ -15,6 +15,15 @@ interface Resource {
   ContentUrl?: string; // Sometimes available
 }
 
+export interface GradeItem {
+  ElementId: number;
+  Title?: string;
+  GradeString?: string;
+  Score?: number;
+  Feedback?: string;
+  Url?: string;
+}
+
 export class ScraperService {
   public apiClient: AxiosInstance; // For REST API and file downloads (Bearer Token)
   private accessToken: string = "";
@@ -128,6 +137,19 @@ export class ScraperService {
       filter: 1,
     });
     return res.data.EntityArray || [];
+  }
+
+  async getGrades(courseId: number): Promise<GradeItem[]> {
+    if (!this.accessToken) throw new Error("Not authenticated");
+
+    const res = await this.apiGet(
+      `/restapi/personal/courses/${courseId}/usergrades/v1`,
+      {
+        pageIndex: 0,
+        pageSize: 100,
+      },
+    );
+    return res.data?.EntityArray || [];
   }
 
   // Recursive fetching of resources

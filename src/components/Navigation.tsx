@@ -92,6 +92,7 @@ export function Navigation() {
       await mutate("/api/user"); // Refresh lastSyncedAt
       await mutate("/api/courses");
       await mutate("/api/tasks");
+      await mutate("/api/grades");
 
       setSyncStatus("success");
       setTimeout(() => setSyncStatus("idle"), 2000);
@@ -169,6 +170,12 @@ export function Navigation() {
             className={`text-sm font-medium transition-colors ${isActive("/tasks") ? "text-blue-600 font-bold" : "text-gray-700 dark:text-gray-300 hover:text-blue-600"}`}
           >
             {t("tasks")}
+          </Link>
+          <Link
+            href="/grades"
+            className={`text-sm font-medium transition-colors ${isActive("/grades") ? "text-blue-600 font-bold" : "text-gray-700 dark:text-gray-300 hover:text-blue-600"}`}
+          >
+            {t("grades")}
           </Link>
           <Link
             href="/calendar"

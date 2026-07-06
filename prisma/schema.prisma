@@ -139,6 +139,8 @@ model Assignment {
 model Grade {
   id           Int        @id @default(autoincrement())
   assignmentId Int        @unique
+  gradeString  String?
+  score        Float?
   feedback     String?
   webUrl       String?
   

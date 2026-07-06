@@ -13,6 +13,37 @@ function sanitize(name: string) {
   return name.replace(/[^a-z0-9\u00a0-\uffff\-_\.]/gi, "_");
 }
 
+function optionalText(value: unknown): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  const text = String(value).trim();
+  return text ? text : null;
+}
+
+function optionalScore(value: unknown): number | null {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : null;
+  }
+
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const normalized = value.trim().replace(",", ".");
+  const numericText = normalized.endsWith("%")
+    ? normalized.slice(0, -1)
+    : normalized;
+
+  if (!/^-?\d+(\.\d+)?$/.test(numericText)) {
+    return null;
+  }
+
+  const score = Number(numericText);
+  return Number.isFinite(score) ? score : null;
+}
+
 export async function POST() {
   try {
     const cookieStore = await cookies();
@@ -35,6 +66,7 @@ export async function POST() {
     // 2. Persist Courses and Download Files
     console.log(`Sync: Fetched ${courses.length} courses`);
     const filesBaseDir = path.join(process.cwd(), "files");
+    let skipGradesForRun = false;
 
     // Ensure base directory exists
     try {
@@ -147,6 +179,63 @@ export async function POST() {
           `Sync: Failed to fetch resources for course ${c.Title}`,
           err,
         );
+      }
+
+      // --- 2c. Fetch and Sync Grades ---
+      if (!skipGradesForRun) {
+        console.log(`Sync: Fetching grades for course ${c.Title}`);
+        try {
+          const grades = await scraperService.getGrades(c.CourseId);
+          console.log(
+            `Sync: Fetched ${grades.length} grades for course ${c.Title}`,
+          );
+
+          for (const grade of grades) {
+            const g = grade as any;
+            if (!g.ElementId) continue;
+
+            let dbAssignment = await prisma.assignment.findUnique({
+              where: { elementId: g.ElementId },
+            });
+
+            if (!dbAssignment) {
+              dbAssignment = await prisma.assignment.create({
+                data: {
+                  elementId: g.ElementId,
+                  title:
+                    optionalText(g.Title) || "Untitled Graded Assignment",
+                  courseId: dbCourse.id,
+                  status: "Completed",
+                  webUrl: optionalText(g.Url),
+                },
+              });
+            }
+
+            await prisma.grade.upsert({
+              where: { assignmentId: dbAssignment.id },
+              update: {
+                gradeString: optionalText(g.GradeString),
+                score: optionalScore(g.Score),
+                feedback: optionalText(g.Feedback),
+                webUrl: optionalText(g.Url),
+                updatedAt: new Date(),
+              },
+              create: {
+                assignmentId: dbAssignment.id,
+                gradeString: optionalText(g.GradeString),
+                score: optionalScore(g.Score),
+                feedback: optionalText(g.Feedback),
+                webUrl: optionalText(g.Url),
+              },
+            });
+          }
+        } catch (err) {
+          skipGradesForRun = true;
+          console.warn(
+            `Sync: Failed to sync grades for course ${c.Title}. Skipping grades for remaining courses in this run.`,
+            err,
+          );
+        }
       }
     }
 
