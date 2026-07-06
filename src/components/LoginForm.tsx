@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { mutate } from "swr";
 
@@ -13,6 +14,7 @@ export default function LoginForm({
   defaultInstance = "https://sdu.itslearning.com",
   allowCustom = true,
 }: LoginFormProps) {
+  const t = useTranslations("Login");
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -35,14 +37,14 @@ export default function LoginForm({
       });
 
       if (!res.ok) {
-        throw new Error("Invalid credentials");
+        throw new Error(t("invalidCredentials"));
       }
 
       await mutate("/api/user"); // Force revalidation of user session
       router.push("/dashboard");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : t("invalidCredentials"));
     } finally {
       setLoading(false);
     }
@@ -58,7 +60,7 @@ export default function LoginForm({
       <div className="rounded-md shadow-sm -space-y-px">
         <div>
           <label htmlFor="email-address" className="sr-only">
-            ITSLearning Username
+            {t("usernameLabel")}
           </label>
           <input
             id="email-address"
@@ -67,7 +69,7 @@ export default function LoginForm({
             autoComplete="username"
             required
             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-            placeholder="ITSLearning Username"
+            placeholder={t("usernamePlaceholder")}
             value={formData.email}
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
@@ -76,7 +78,7 @@ export default function LoginForm({
         </div>
         <div>
           <label htmlFor="password" className="sr-only">
-            Password
+            {t("passwordLabel")}
           </label>
           <input
             id="password"
@@ -85,7 +87,7 @@ export default function LoginForm({
             autoComplete="current-password"
             required
             className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm ${!allowCustom ? "rounded-b-md" : ""}`}
-            placeholder="Password"
+            placeholder={t("passwordPlaceholder")}
             value={formData.password}
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
@@ -95,7 +97,7 @@ export default function LoginForm({
         {allowCustom && (
           <div>
             <label htmlFor="organization-url" className="sr-only">
-              Institution URL
+              {t("institutionUrlLabel")}
             </label>
             <input
               id="organization-url"
@@ -119,7 +121,7 @@ export default function LoginForm({
           disabled={loading}
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
         >
-          {loading ? "Signing in..." : "Sign in"}
+          {loading ? t("signingIn") : t("signIn")}
         </button>
       </div>
     </form>

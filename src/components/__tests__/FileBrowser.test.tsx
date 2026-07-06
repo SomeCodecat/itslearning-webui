@@ -4,7 +4,28 @@ import { FileBrowser } from "../FileBrowser";
 
 // Mocks
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => (key: string) =>
+    (
+      {
+        ap1: "AP1",
+        ap2: "AP2",
+        examRelevant: "Exam Relevant",
+        viewInItslearning: "View in itslearning",
+        download: "Download",
+        contentMatchedBadge: "matched in content",
+        flagMenuLabel: "Toggle IHK flags",
+        flagMenuTitle: "IHK flags",
+        searchPlaceholder: "Search files...",
+        filterAll: "All",
+        filterExam: "Exam",
+        allTags: "All tags",
+        sortNewestFirst: "Newest First",
+        sortOldestFirst: "Oldest First",
+        sortNameAsc: "Name (A-Z)",
+        noMatches: "No files match your filters.",
+        unnamedFile: "Unnamed File",
+      } as Record<string, string>
+    )[key] ?? key,
 }));
 
 // FileCard uses fetch for PATCH — stub it so tests don't hit the network

@@ -8,15 +8,23 @@ import { Loader2 } from "lucide-react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+type DashboardTask = {
+  TaskId: number | string;
+  Title: string;
+  CourseTitle?: string;
+  Deadline?: string | null;
+};
+
 export default function DashboardPage() {
-  const t = useTranslations("Index");
+  const indexT = useTranslations("Index");
+  const t = useTranslations("Dashboard");
 
   // 1. Fetch Tasks (Deadlines)
   const {
     data: tasks,
     error: tasksError,
     isLoading: tasksLoading,
-  } = useSWR("/api/tasks?status=Active", fetcher);
+  } = useSWR<DashboardTask[]>("/api/tasks?status=Active", fetcher);
 
   // 2. Fetch Recent Files (from DB)
   const {
@@ -36,9 +44,11 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center mb-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                {t("title")}
+                {indexT("title")}
               </h1>
-              <p className="text-gray-500 dark:text-gray-400">{t("welcome")}</p>
+              <p className="text-gray-500 dark:text-gray-400">
+                {indexT("welcome")}
+              </p>
             </div>
           </div>
         </header>
@@ -48,19 +58,23 @@ export default function DashboardPage() {
           {/* Widget 1: Upcoming Deadlines */}
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-              Upcoming Deadlines
+              {t("upcomingDeadlines")}
             </h3>
             {tasksLoading ? (
               <div className="flex justify-center p-4">
                 <Loader2 className="animate-spin text-blue-500" />
               </div>
             ) : tasksError ? (
-              <p className="text-red-500 text-sm">Failed to load deadlines.</p>
+              <p className="text-red-500 text-sm">
+                {t("failedDeadlines")}
+              </p>
             ) : upcomingDeadlines.length === 0 ? (
-              <p className="text-gray-500 text-sm">No active deadlines.</p>
+              <p className="text-gray-500 text-sm">
+                {t("noActiveDeadlines")}
+              </p>
             ) : (
               <ul className="space-y-3">
-                {upcomingDeadlines.map((task: any) => (
+                {upcomingDeadlines.map((task) => (
                   <li
                     key={task.TaskId}
                     className="flex justify-between items-center text-sm border-b border-gray-100 dark:border-gray-700 pb-2 last:border-0"
@@ -70,7 +84,9 @@ export default function DashboardPage() {
                         {task.Title}
                       </span>
                       <div className="flex items-center gap-1 mt-0.5">
-                        <span className="text-xs text-gray-400">from</span>
+                        <span className="text-xs text-gray-400">
+                          {t("fromCourse")}
+                        </span>
                         <span className="text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
                           {task.CourseTitle}
                         </span>
@@ -79,7 +95,7 @@ export default function DashboardPage() {
                     <span className="text-blue-600 text-xs font-semibold whitespace-nowrap ml-2">
                       {task.Deadline
                         ? new Date(task.Deadline).toLocaleDateString()
-                        : "No Date"}
+                        : t("noDate")}
                     </span>
                   </li>
                 ))}
@@ -90,7 +106,7 @@ export default function DashboardPage() {
                 href="/tasks"
                 className="text-sm text-blue-600 hover:underline"
               >
-                View All &rarr;
+                {t("viewAll")} &rarr;
               </Link>
             </div>
           </div>
@@ -99,13 +115,13 @@ export default function DashboardPage() {
         <section>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {t("recentFiles")}
+              {indexT("recentFiles")}
             </h2>
             <Link
               href="/courses"
               className="text-sm text-blue-600 hover:underline"
             >
-              Browse Courses &rarr;
+              {t("browseCourses")} &rarr;
             </Link>
           </div>
 
@@ -115,15 +131,15 @@ export default function DashboardPage() {
             </div>
           ) : filesError ? (
             <div className="p-4 bg-red-50 text-red-500 rounded-lg">
-              Failed to load recent files.
+              {t("failedRecentFiles")}
             </div>
           ) : Array.isArray(recentFiles) && recentFiles.length > 0 ? (
             <FileBrowser files={recentFiles} />
           ) : (
             <div className="text-center py-10 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
-              <p className="text-gray-500">No files downloaded yet.</p>
+              <p className="text-gray-500">{t("noFilesDownloaded")}</p>
               <p className="text-sm text-gray-400 mt-1">
-                Use the "Sync Now" button to fetch course materials.
+                {t("syncHint")}
               </p>
             </div>
           )}

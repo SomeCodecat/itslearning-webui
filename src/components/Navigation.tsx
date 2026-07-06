@@ -8,18 +8,17 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import useSWR, { mutate } from "swr";
 import {
   ChevronDown,
-  Loader2,
   LogOut,
   Settings,
   User,
   RefreshCw,
-  AlertTriangle,
-  CheckCircle2,
 } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 
 export function Navigation() {
   const t = useTranslations("Index");
+  const navT = useTranslations("Navigation");
+  const relativeT = useTranslations("RelativeTime");
   const pathname = usePathname();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -56,15 +55,15 @@ export function Navigation() {
     const diffInHours = Math.floor(diffInMins / 60);
     const diffInDays = Math.floor(diffInHours / 24);
 
-    if (diffInSeconds < 30) setLastSyncedText("Just now");
-    else if (diffInMins < 1) setLastSyncedText("< 1 min ago");
-    else if (diffInMins === 1) setLastSyncedText("1 min ago");
-    else if (diffInMins < 60) setLastSyncedText(`${diffInMins} mins ago`);
-    else if (diffInHours === 1) setLastSyncedText("1 hour ago");
-    else if (diffInHours < 24) setLastSyncedText(`${diffInHours} hours ago`);
-    else if (diffInDays === 1) setLastSyncedText("Yesterday");
-    else setLastSyncedText(`${diffInDays} days ago`);
-  }, [user?.lastSyncedAt]);
+    if (diffInSeconds < 30) setLastSyncedText(relativeT("justNow"));
+    else if (diffInMins < 1) setLastSyncedText(relativeT("lessThanMinuteAgo"));
+    else if (diffInMins < 60) {
+      setLastSyncedText(relativeT("minutesAgo", { count: diffInMins }));
+    } else if (diffInHours < 24) {
+      setLastSyncedText(relativeT("hoursAgo", { count: diffInHours }));
+    } else if (diffInDays === 1) setLastSyncedText(relativeT("yesterday"));
+    else setLastSyncedText(relativeT("daysAgo", { count: diffInDays }));
+  }, [relativeT, user?.lastSyncedAt]);
 
   // Update time every minute
   useEffect(() => {
@@ -73,7 +72,7 @@ export function Navigation() {
     return () => clearInterval(interval);
   }, [updateRelativeTime]);
 
-  const handleSync = async () => {
+  const handleSync = useCallback(async () => {
     if (syncStatus === "syncing" || syncStatus === "rate_limited") return;
 
     setSyncStatus("syncing");
@@ -96,11 +95,11 @@ export function Navigation() {
 
       setSyncStatus("success");
       setTimeout(() => setSyncStatus("idle"), 2000);
-    } catch (error) {
+    } catch {
       setSyncStatus("error");
       setTimeout(() => setSyncStatus("idle"), 3000);
     }
-  };
+  }, [syncStatus]);
 
   // Countdown timer for Rate Limit
   useEffect(() => {
@@ -128,7 +127,7 @@ export function Navigation() {
       5 * 60 * 1000,
     );
     return () => clearInterval(interval);
-  }, [hideChrome]);
+  }, [handleSync, hideChrome]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -192,12 +191,15 @@ export function Navigation() {
               <div
                 className={`text-xs font-medium ${syncStatus === "rate_limited" ? "text-orange-500 font-bold" : "text-gray-500"}`}
               >
-                {syncStatus === "syncing" && "Syncing..."}
-                {syncStatus === "success" && "Synced!"}
-                {syncStatus === "error" && "Failed"}
-                {syncStatus === "rate_limited" && `Wait ${retryAfter}s`}
+                {syncStatus === "syncing" && navT("syncing")}
+                {syncStatus === "success" && navT("synced")}
+                {syncStatus === "error" && navT("failed")}
+                {syncStatus === "rate_limited" &&
+                  navT("waitSeconds", { seconds: retryAfter })}
                 {syncStatus === "idle" &&
-                  (lastSyncedText ? `Synced ${lastSyncedText}` : "Not synced")}
+                  (lastSyncedText
+                    ? navT("syncedRelative", { relative: lastSyncedText })
+                    : navT("notSynced"))}
               </div>
             </div>
 
@@ -211,7 +213,7 @@ export function Navigation() {
                   ? "bg-orange-100 text-orange-600 cursor-not-allowed"
                   : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 hover:text-blue-600"
               }`}
-              title="Sync with school"
+              title={navT("syncTitle")}
             >
               <RefreshCw
                 size={18}
@@ -235,7 +237,7 @@ export function Navigation() {
                   {isLoading ? (
                     <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
                   ) : (
-                    user?.firstName || "User"
+                    user?.firstName || navT("userFallback")
                   )}
                 </div>
               </div>
@@ -280,7 +282,7 @@ export function Navigation() {
                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 text-left"
                   >
                     <LogOut size={16} />
-                    Logout
+                    {navT("logout")}
                   </button>
                 </div>
               </div>

@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
-import { useRouter } from "@/i18n/routing";
 import useSWR, { mutate } from "swr";
 import { User, School, Save, Loader2 } from "lucide-react";
 
@@ -18,8 +17,7 @@ const fetcher = async (url: string) => {
 };
 
 export default function SettingsPage() {
-  const t = useTranslations("Index");
-  const router = useRouter();
+  const t = useTranslations("Settings");
 
   const [activeTab, setActiveTab] = useState<"profile" | "school">("profile");
 
@@ -77,14 +75,14 @@ export default function SettingsPage() {
         body: JSON.stringify(profileForm),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to update profile");
+      if (!res.ok) throw new Error(data.error || t("profileUpdateFailed"));
 
       await mutate("/api/user"); // Refresh local data
       setProfileStatus("success");
       setTimeout(() => setProfileStatus("idle"), 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setProfileStatus("error");
-      setProfileMessage(err.message || "Failed to save.");
+      setProfileMessage(err instanceof Error ? err.message : t("saveFailed"));
     }
   };
 
@@ -99,15 +97,17 @@ export default function SettingsPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Authentication failed");
+      if (!res.ok) throw new Error(data.error || t("authenticationFailed"));
 
       setSchoolStatus("success");
-      setSchoolMessage("Connected successfully!");
+      setSchoolMessage(t("connectedSuccessfully"));
       // Trigger user revalidation so header updates
       await mutate("/api/user");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setSchoolStatus("error");
-      setSchoolMessage(err.message);
+      setSchoolMessage(
+        err instanceof Error ? err.message : t("authenticationFailed"),
+      );
     }
   };
 
@@ -116,10 +116,10 @@ export default function SettingsPage() {
       <div className="max-w-5xl mx-auto">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Settings
+            {t("title")}
           </h1>
           <p className="text-gray-500 dark:text-gray-400">
-            Manage your profile and school connection.
+            {t("subtitle")}
           </p>
         </header>
 
@@ -135,7 +135,7 @@ export default function SettingsPage() {
               }`}
             >
               <User size={18} />
-              Profile
+              {t("profile")}
             </button>
             <button
               onClick={() => setActiveTab("school")}
@@ -146,7 +146,7 @@ export default function SettingsPage() {
               }`}
             >
               <School size={18} />
-              School Connection
+              {t("schoolConnection")}
             </button>
           </aside>
 
@@ -155,13 +155,13 @@ export default function SettingsPage() {
             {activeTab === "profile" && (
               <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 animate-in fade-in duration-300">
                 <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-4">
-                  Personal Information
+                  {t("personalInformation")}
                 </h2>
 
                 {userLoading ? (
                   <div className="py-10 text-center text-gray-500">
                     <Loader2 className="animate-spin h-8 w-8 mx-auto mb-2 text-blue-500" />
-                    Loading profile...
+                    {t("loadingProfile")}
                   </div>
                 ) : (
                   <form
@@ -171,7 +171,7 @@ export default function SettingsPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          First Name
+                          {t("firstName")}
                         </label>
                         <input
                           type="text"
@@ -187,7 +187,7 @@ export default function SettingsPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Last Name
+                          {t("lastName")}
                         </label>
                         <input
                           type="text"
@@ -205,7 +205,7 @@ export default function SettingsPage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Email
+                        {t("email")}
                       </label>
                       <input
                         type="email"
@@ -232,17 +232,17 @@ export default function SettingsPage() {
                           <Save size={18} />
                         )}
                         {profileStatus === "saving"
-                          ? "Saving..."
-                          : "Save Changes"}
+                          ? t("saving")
+                          : t("saveChanges")}
                       </button>
                       {profileStatus === "success" && (
                         <span className="ml-3 text-green-600 text-sm font-medium">
-                          Saved!
+                          {t("saved")}
                         </span>
                       )}
                       {profileStatus === "error" && (
                         <span className="ml-3 text-red-600 text-sm font-medium">
-                          {profileMessage || "Failed to save."}
+                          {profileMessage || t("saveFailed")}
                         </span>
                       )}
                     </div>
@@ -254,7 +254,7 @@ export default function SettingsPage() {
             {activeTab === "school" && (
               <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 animate-in fade-in duration-300">
                 <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-4">
-                  Connect to itslearning
+                  {t("connectItslearning")}
                 </h2>
 
                 <form
@@ -263,7 +263,7 @@ export default function SettingsPage() {
                 >
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      itslearning URL
+                      {t("itslearningUrl")}
                     </label>
                     <input
                       type="url"
@@ -279,13 +279,13 @@ export default function SettingsPage() {
                       }
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Is usually your organizations login page.
+                      {t("organizationUrlHint")}
                     </p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Username
+                      {t("username")}
                     </label>
                     <input
                       type="text"
@@ -303,7 +303,7 @@ export default function SettingsPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Password
+                      {t("password")}
                     </label>
                     <input
                       type="password"
@@ -337,20 +337,20 @@ export default function SettingsPage() {
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50"
                     >
                       {schoolStatus === "loading"
-                        ? "Connecting..."
-                        : "Save & Connect"}
+                        ? t("connecting")
+                        : t("saveAndConnect")}
                     </button>
                   </div>
                 </form>
 
                 <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
-                    Environment
+                    {t("environment")}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    External URL:{" "}
+                    {t("externalUrl")}{" "}
                     <code className="bg-gray-100 dark:bg-gray-900 px-1 py-0.5 rounded">
-                      {process.env.NEXT_PUBLIC_EXTERNAL_URL || "Not set"}
+                      {process.env.NEXT_PUBLIC_EXTERNAL_URL || t("notSet")}
                     </code>
                   </p>
                 </div>

@@ -16,7 +16,59 @@ const fetcher = async (url: string) => {
   return response.json();
 };
 
-function getTaskLookupId(task: any): string | null {
+type TaskView = {
+  id?: number | string | null;
+  Id?: number | string | null;
+  AssignmentId?: number | string | null;
+  AssignmentID?: number | string | null;
+  TaskRowId?: number | string | null;
+  TaskId?: number | string | null;
+  Title?: string;
+  CourseTitle?: string;
+  Status?: string;
+  Deadline?: string | null;
+  Url?: string | null;
+};
+
+type ScaleItem = {
+  AssessmentStatusItemId?: number | string | null;
+  AssessmentItemId?: number | string | null;
+  Title?: string | null;
+  Description?: string | null;
+  IsInitialStatus?: boolean;
+  IsSubmitted?: boolean;
+  IsCompleted?: boolean;
+  PercentFromAndIncl?: number;
+  PercentTo?: number;
+};
+
+type StatusScale = {
+  Title?: string | null;
+  Description?: string | null;
+  StatusItems?: ScaleItem[];
+};
+
+type AssessmentScale = {
+  Title?: string | null;
+  Description?: string | null;
+  AssessmentItems?: ScaleItem[];
+};
+
+type AssignmentSettings = {
+  StatusScale?: StatusScale;
+  AssessmentScale?: AssessmentScale;
+};
+
+type TaskDetails = TaskView &
+  AssignmentSettings & {
+    status?: string;
+    deadline?: string | null;
+    elementId?: number | string | null;
+    course?: { title?: string | null } | null;
+    details?: AssignmentSettings | null;
+  };
+
+function getTaskLookupId(task: TaskView): string | null {
   const id =
     task.id ??
     task.Id ??
@@ -28,25 +80,33 @@ function getTaskLookupId(task: any): string | null {
   return id === null || id === undefined ? null : String(id);
 }
 
-function getTaskKey(task: any): string {
+function getTaskKey(task: TaskView): string {
   return getTaskLookupId(task) ?? task.Title ?? "task";
 }
 
-function formatDate(value: any): string {
+function formatDate(value: unknown, noneLabel: string): string {
   if (!value) {
-    return "None";
+    return noneLabel;
+  }
+
+  if (
+    !(value instanceof Date) &&
+    typeof value !== "string" &&
+    typeof value !== "number"
+  ) {
+    return noneLabel;
   }
 
   const date = new Date(value);
 
   if (isNaN(date.getTime())) {
-    return "None";
+    return noneLabel;
   }
 
   return date.toLocaleString();
 }
 
-function getAssignmentSettings(taskDetails: any) {
+function getAssignmentSettings(taskDetails: TaskDetails): AssignmentSettings {
   return taskDetails?.details &&
     typeof taskDetails.details === "object" &&
     !Array.isArray(taskDetails.details)
@@ -54,7 +114,13 @@ function getAssignmentSettings(taskDetails: any) {
     : taskDetails;
 }
 
-function getAssessmentRange(item: any): string | null {
+function getAssessmentRange(
+  item: ScaleItem,
+  labels: {
+    from: (value: number) => string;
+    upTo: (value: number) => string;
+  },
+): string | null {
   const from = item.PercentFromAndIncl;
   const to = item.PercentTo;
   const hasFrom = typeof from === "number";
@@ -65,11 +131,11 @@ function getAssessmentRange(item: any): string | null {
   }
 
   if (hasFrom) {
-    return `From ${from}%`;
+    return labels.from(from);
   }
 
   if (hasTo) {
-    return `Up to ${to}%`;
+    return labels.upTo(to);
   }
 
   return null;
@@ -81,16 +147,24 @@ function TaskDetailsPanel({
   error,
   isLoading,
 }: {
-  task: any;
-  taskDetails: any;
-  error: any;
+  task: TaskView;
+  taskDetails: TaskDetails | undefined;
+  error: unknown;
   isLoading: boolean;
 }) {
+  const t = useTranslations("Tasks");
+  const formatStatus = (value: unknown) => {
+    if (value === "Active") return t("status.active");
+    if (value === "Completed") return t("status.completed");
+    if (value === "All") return t("status.all");
+    return typeof value === "string" && value ? value : t("unknown");
+  };
+
   if (isLoading) {
     return (
       <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 flex items-center gap-2 text-sm text-gray-500">
         <Loader2 size={16} className="animate-spin" />
-        Loading details...
+        {t("loadingDetails")}
       </div>
     );
   }
@@ -98,7 +172,7 @@ function TaskDetailsPanel({
   if (error) {
     return (
       <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 text-sm text-red-600">
-        Failed to load details.
+        {t("detailsFailed")}
       </div>
     );
   }
@@ -121,31 +195,35 @@ function TaskDetailsPanel({
     <div className="mt-5 border-t border-gray-100 dark:border-gray-700 pt-5 space-y-5">
       <div className="grid gap-4 md:grid-cols-4">
         <div>
-          <p className="text-xs font-medium uppercase text-gray-400">Course</p>
-          <p className="text-sm text-gray-800 dark:text-gray-100">
-            {taskDetails.course?.title || task.CourseTitle || "Unknown"}
+          <p className="text-xs font-medium uppercase text-gray-400">
+            {t("course")}
           </p>
-        </div>
-        <div>
-          <p className="text-xs font-medium uppercase text-gray-400">Status</p>
           <p className="text-sm text-gray-800 dark:text-gray-100">
-            {taskDetails.status || task.Status || "Unknown"}
+            {taskDetails.course?.title || task.CourseTitle || t("unknown")}
           </p>
         </div>
         <div>
           <p className="text-xs font-medium uppercase text-gray-400">
-            Deadline
+            {t("statusLabel")}
           </p>
           <p className="text-sm text-gray-800 dark:text-gray-100">
-            {formatDate(taskDetails.deadline || task.Deadline)}
+            {formatStatus(taskDetails.status || task.Status)}
           </p>
         </div>
         <div>
           <p className="text-xs font-medium uppercase text-gray-400">
-            Element ID
+            {t("deadlineLabel")}
           </p>
           <p className="text-sm text-gray-800 dark:text-gray-100">
-            {taskDetails.elementId || task.TaskId || "Unknown"}
+            {formatDate(taskDetails.deadline || task.Deadline, t("none"))}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs font-medium uppercase text-gray-400">
+            {t("elementId")}
+          </p>
+          <p className="text-sm text-gray-800 dark:text-gray-100">
+            {taskDetails.elementId || task.TaskId || t("unknown")}
           </p>
         </div>
       </div>
@@ -154,7 +232,7 @@ function TaskDetailsPanel({
         <section className="space-y-3">
           <div>
             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-              Status scale
+              {t("statusScale")}
             </h4>
             {statusScale?.Description && (
               <p className="text-sm text-gray-500">
@@ -172,28 +250,28 @@ function TaskDetailsPanel({
               )}
               {statusItems.length > 0 ? (
                 <ul className="space-y-2">
-                  {statusItems.map((item: any, index: number) => (
+                  {statusItems.map((item, index) => (
                     <li
                       key={item.AssessmentStatusItemId ?? index}
                       className="border-l-2 border-gray-200 dark:border-gray-700 pl-3"
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-sm text-gray-800 dark:text-gray-100">
-                          {item.Title || "Untitled status"}
+                          {item.Title || t("untitledStatus")}
                         </span>
                         {item.IsInitialStatus && (
                           <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
-                            Initial
+                            {t("initial")}
                           </span>
                         )}
                         {item.IsSubmitted && (
                           <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
-                            Submitted
+                            {t("submitted")}
                           </span>
                         )}
                         {item.IsCompleted && (
                           <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                            Completed
+                            {t("completed")}
                           </span>
                         )}
                       </div>
@@ -202,13 +280,13 @@ function TaskDetailsPanel({
                 </ul>
               ) : (
                 <p className="text-sm text-gray-500">
-                  No status items returned.
+                  {t("noStatusItems")}
                 </p>
               )}
             </div>
           ) : (
             <p className="text-sm text-gray-500">
-              No status scale returned.
+              {t("noStatusScale")}
             </p>
           )}
         </section>
@@ -216,7 +294,7 @@ function TaskDetailsPanel({
         <section className="space-y-3">
           <div>
             <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-              Assessment scale
+              {t("assessmentScale")}
             </h4>
             {assessmentScale?.Description && (
               <p className="text-sm text-gray-500">
@@ -234,8 +312,11 @@ function TaskDetailsPanel({
               )}
               {assessmentItems.length > 0 ? (
                 <ul className="space-y-2">
-                  {assessmentItems.map((item: any, index: number) => {
-                    const range = getAssessmentRange(item);
+                  {assessmentItems.map((item, index) => {
+                    const range = getAssessmentRange(item, {
+                      from: (value) => t("assessmentFrom", { value }),
+                      upTo: (value) => t("assessmentUpTo", { value }),
+                    });
 
                     return (
                       <li
@@ -244,7 +325,7 @@ function TaskDetailsPanel({
                       >
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-sm text-gray-800 dark:text-gray-100">
-                            {item.Title || "Untitled assessment"}
+                            {item.Title || t("untitledAssessment")}
                           </span>
                           {range && (
                             <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
@@ -263,13 +344,13 @@ function TaskDetailsPanel({
                 </ul>
               ) : (
                 <p className="text-sm text-gray-500">
-                  No assessment items returned.
+                  {t("noAssessmentItems")}
                 </p>
               )}
             </div>
           ) : (
             <p className="text-sm text-gray-500">
-              No assessment scale returned.
+              {t("noAssessmentScale")}
             </p>
           )}
         </section>
@@ -279,7 +360,7 @@ function TaskDetailsPanel({
 }
 
 export default function TasksPage() {
-  const t = useTranslations("Index");
+  const t = useTranslations("Tasks");
   const [status, setStatus] = useState<"Active" | "Completed" | "All">(
     "Active",
   );
@@ -289,22 +370,30 @@ export default function TasksPage() {
   );
   const [courseFilter, setCourseFilter] = useState("All");
   const [openTaskId, setOpenTaskId] = useState<string | null>(null);
+  const statusLabels = {
+    Active: t("status.active"),
+    Completed: t("status.completed"),
+    All: t("status.all"),
+  };
 
   const {
     data: tasks,
     error,
     isLoading,
-  } = useSWR(`/api/tasks?status=${status}`, fetcher);
+  } = useSWR<TaskView[]>(`/api/tasks?status=${status}`, fetcher);
   const {
     data: taskDetails,
     error: taskDetailsError,
     isLoading: isTaskDetailsLoading,
-  } = useSWR(openTaskId ? `/api/tasks/${openTaskId}` : null, fetcher);
+  } = useSWR<TaskDetails>(
+    openTaskId ? `/api/tasks/${openTaskId}` : null,
+    fetcher,
+  );
 
   // Derived state for filtering
   const filteredTasks = Array.isArray(tasks)
-    ? tasks.filter((task: any) => {
-        const matchesSearch = task.Title.toLowerCase().includes(
+    ? tasks.filter((task) => {
+        const matchesSearch = (task.Title ?? "").toLowerCase().includes(
           search.toLowerCase(),
         );
         const matchesCourse =
@@ -314,7 +403,7 @@ export default function TasksPage() {
     : [];
 
   // Derived state for sorting
-  const sortedTasks = [...filteredTasks].sort((a: any, b: any) => {
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
     const dateA = a.Deadline ? new Date(a.Deadline).getTime() : Infinity;
     const dateB = b.Deadline ? new Date(b.Deadline).getTime() : Infinity;
 
@@ -326,8 +415,8 @@ export default function TasksPage() {
     ? Array.from(
         new Set(
           tasks
-            .map((t: any) => t.CourseTitle)
-            .filter((title: any) => title && typeof title === "string"),
+            .map((task) => task.CourseTitle)
+            .filter((title): title is string => typeof title === "string"),
         ),
       ).sort()
     : [];
@@ -338,7 +427,7 @@ export default function TasksPage() {
         <header className="mb-6">
           <div className="flex justify-between items-start mb-4">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Tasks
+              {t("title")}
             </h1>
           </div>
 
@@ -357,7 +446,7 @@ export default function TasksPage() {
                       : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                   }`}
                 >
-                  {s}
+                  {statusLabels[s]}
                 </button>
               ))}
             </div>
@@ -367,7 +456,7 @@ export default function TasksPage() {
               <div className="flex-1 min-w-[250px]">
                 <input
                   type="text"
-                  placeholder="Search tasks..."
+                  placeholder={t("searchPlaceholder")}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -381,8 +470,8 @@ export default function TasksPage() {
                   value={courseFilter}
                   onChange={(e) => setCourseFilter(e.target.value)}
                 >
-                  <option value="All">All Courses</option>
-                  {courses.map((c: any) => (
+                  <option value="All">{t("allCourses")}</option>
+                  {courses.map((c) => (
                     <option key={c} value={c}>
                       {c}
                     </option>
@@ -393,10 +482,12 @@ export default function TasksPage() {
                 <select
                   className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500"
                   value={sort}
-                  onChange={(e) => setSort(e.target.value as any)}
+                  onChange={(e) =>
+                    setSort(e.target.value as "deadline_asc" | "deadline_desc")
+                  }
                 >
-                  <option value="deadline_asc">Deadline (Earliest)</option>
-                  <option value="deadline_desc">Deadline (Latest)</option>
+                  <option value="deadline_asc">{t("deadlineEarliest")}</option>
+                  <option value="deadline_desc">{t("deadlineLatest")}</option>
                 </select>
               </div>
             </div>
@@ -405,17 +496,17 @@ export default function TasksPage() {
 
         {isLoading && (
           <div className="text-gray-500 text-center py-10">
-            Loading tasks...
+            {t("loading")}
           </div>
         )}
         {error && (
           <div className="text-red-500 text-center py-10">
-            Failed to load tasks.
+            {t("loadFailed")}
           </div>
         )}
 
         <div className="space-y-4">
-          {sortedTasks.map((task: any) => {
+          {sortedTasks.map((task) => {
             const taskId = getTaskLookupId(task);
             const isOpen = taskId !== null && openTaskId === taskId;
 
@@ -458,11 +549,15 @@ export default function TasksPage() {
                               : "bg-blue-50 text-blue-700"
                           }`}
                         >
-                          {task.Status}
+                          {task.Status === "Completed"
+                            ? t("status.completed")
+                            : task.Status === "Active"
+                              ? t("status.active")
+                              : task.Status}
                         </span>
                       </span>
                       <span className="block text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        Deadline: {formatDate(task.Deadline)}
+                        {t("deadline")}: {formatDate(task.Deadline, t("none"))}
                       </span>
                     </span>
                   </button>
@@ -475,7 +570,7 @@ export default function TasksPage() {
                       className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
                     >
                       <ExternalLink size={14} />
-                      Open
+                      {t("open")}
                     </a>
                   )}
                 </div>
@@ -493,7 +588,7 @@ export default function TasksPage() {
           })}
           {!isLoading && sortedTasks.length === 0 && (
             <div className="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
-              <p className="text-gray-500">No tasks match your filters.</p>
+              <p className="text-gray-500">{t("noMatches")}</p>
             </div>
           )}
         </div>

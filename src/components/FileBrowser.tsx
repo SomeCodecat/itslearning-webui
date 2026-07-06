@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { FileCard } from "./FileCard";
-import { Filter, Search, ArrowUpDown, Loader2 } from "lucide-react";
+import { Search, ArrowUpDown, Loader2 } from "lucide-react";
 
 interface TagItem {
   id: number;
@@ -155,6 +155,13 @@ export function FileBrowser({
     const dateB = new Date(b.uploadedAt || 0).getTime();
     return sort === "date_asc" ? dateA - dateB : dateB - dateA;
   });
+  const contentMatchCount = searchResults.filter((r) => r.contentMatch).length;
+  const filterLabels = {
+    All: t("filterAll"),
+    Exam: t("filterExam"),
+    AP1: t("ap1"),
+    AP2: t("ap2"),
+  };
 
   return (
     <div className="space-y-4">
@@ -166,7 +173,7 @@ export function FileBrowser({
           <input
             id="file-search-input"
             type="text"
-            placeholder="Search files…"
+            placeholder={t("searchPlaceholder")}
             className="w-full pl-9 pr-9 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -189,7 +196,7 @@ export function FileBrowser({
                   : "text-gray-500 dark:text-gray-400 hover:text-gray-700"
               }`}
             >
-              {ft}
+              {filterLabels[ft]}
             </button>
           ))}
         </div>
@@ -204,7 +211,7 @@ export function FileBrowser({
               setFilterTagId(e.target.value === "" ? null : Number(e.target.value))
             }
           >
-            <option value="">All tags</option>
+            <option value="">{t("allTags")}</option>
             {allTags.map((tag) => (
               <option key={tag.id} value={tag.id}>
                 {tag.name}
@@ -219,20 +226,26 @@ export function FileBrowser({
           <select
             className="px-2 py-2 border border-border rounded-md text-sm bg-background"
             value={sort}
-            onChange={(e) => setSort(e.target.value as any)}
+            onChange={(e) =>
+              setSort(e.target.value as "date_desc" | "date_asc" | "name_asc")
+            }
           >
-            <option value="date_desc">Newest First</option>
-            <option value="date_asc">Oldest First</option>
-            <option value="name_asc">Name (A-Z)</option>
+            <option value="date_desc">{t("sortNewestFirst")}</option>
+            <option value="date_asc">{t("sortOldestFirst")}</option>
+            <option value="name_asc">{t("sortNameAsc")}</option>
           </select>
         </div>
       </div>
 
       {/* Content search indicator */}
-      {search.length >= 2 && !searchLoading && searchResults.length > 0 && (
+      {search.length >= 2 && !searchLoading && searchError && (
+        <p className="text-xs text-red-500 dark:text-red-400 px-1">
+          {t("searchError")}
+        </p>
+      )}
+      {search.length >= 2 && !searchLoading && contentMatchCount > 0 && (
         <p className="text-xs text-gray-500 dark:text-gray-400 px-1">
-          {searchResults.filter((r) => r.contentMatch).length > 0 &&
-            `${searchResults.filter((r) => r.contentMatch).length} result(s) matched in file content.`}
+          {t("contentMatches", { count: contentMatchCount })}
         </p>
       )}
 
@@ -244,7 +257,7 @@ export function FileBrowser({
           <FileCard
             key={file.id}
             id={file.id}
-            fileName={file.customName || "Unnamed File"}
+            fileName={file.customName || t("unnamedFile")}
             webUrl={file.webUrl || "#"}
             isExamRelevant={file.isExamRelevant}
             isAP1={file.isAP1}
@@ -265,7 +278,7 @@ export function FileBrowser({
             persistable={persistable}
             contentMatch={file.contentMatch ?? false}
             onFlagsChange={(updated) => onFileFlagsChange?.(file.id, updated)}
-            onTagsChange={(updatedTags) => {
+            onTagsChange={() => {
               // no-op here: FileBrowser could mutate SWR cache if needed
               // but for simplicity FileCard manages its own tag state
             }}
@@ -273,7 +286,7 @@ export function FileBrowser({
         ))}
         {sorted.length === 0 && (
           <div className="text-center py-10 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500">
-            No files match your filters.
+            {t("noMatches")}
           </div>
         )}
       </div>

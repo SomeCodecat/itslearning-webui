@@ -6,25 +6,38 @@ import { Navigation } from "@/components/Navigation";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+type CalendarEvent = {
+  EventId: number | string;
+  Title: string;
+  Description?: string | null;
+  From: string;
+  To: string;
+};
+
 export default function CalendarPage() {
-  const { data: events, error, isLoading } = useSWR("/api/calendar", fetcher);
+  const t = useTranslations("Calendar");
+  const {
+    data: events,
+    error,
+    isLoading,
+  } = useSWR<CalendarEvent[]>("/api/calendar", fetcher);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
       <div className="max-w-4xl mx-auto">
         <header className="mb-4">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Calendar
+            {t("title")}
           </h1>
           <Navigation />
         </header>
 
-        {isLoading && <div className="text-gray-500">Loading events...</div>}
-        {error && <div className="text-red-500">Failed to load events.</div>}
+        {isLoading && <div className="text-gray-500">{t("loading")}</div>}
+        {error && <div className="text-red-500">{t("loadFailed")}</div>}
 
         <div className="space-y-4">
           {Array.isArray(events) &&
-            events.map((event: any) => (
+            events.map((event) => (
               <div
                 key={event.EventId}
                 className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-l-4 border-l-blue-500 border-gray-200 dark:border-gray-700"
@@ -41,8 +54,8 @@ export default function CalendarPage() {
                 </div>
               </div>
             ))}
-          {(!Array.isArray(events) || events.length === 0) && (
-            <p className="text-gray-500 text-center">No upcoming events.</p>
+          {!isLoading && !error && (!Array.isArray(events) || events.length === 0) && (
+            <p className="text-gray-500 text-center">{t("empty")}</p>
           )}
         </div>
       </div>

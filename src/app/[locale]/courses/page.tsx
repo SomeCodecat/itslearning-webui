@@ -6,9 +6,19 @@ import { Link } from "@/i18n/routing";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+type Course = {
+  CourseId: number | string;
+  Title: string;
+  Code?: string | null;
+};
+
 export default function CoursesPage() {
-  const t = useTranslations("Index");
-  const { data: courses, error, isLoading } = useSWR("/api/courses", fetcher);
+  const t = useTranslations("Courses");
+  const {
+    data: courses,
+    error,
+    isLoading,
+  } = useSWR<Course[]>("/api/courses", fetcher);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
@@ -19,16 +29,16 @@ export default function CoursesPage() {
           </h1>
         </header>
 
-        {isLoading && <div className="text-gray-500">Loading courses...</div>}
+        {isLoading && <div className="text-gray-500">{t("loading")}</div>}
         {error && (
           <div className="text-red-500">
-            Failed to load courses. Ensure you are logged in.
+            {t("loadFailed")}
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.isArray(courses) &&
-            courses.map((course: any) => (
+            courses.map((course) => (
               <Link
                 key={course.CourseId}
                 href={`/courses/${course.CourseId}`}
@@ -38,17 +48,17 @@ export default function CoursesPage() {
                   {course.Title}
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                  {course.Code || "No code"}
+                  {course.Code || t("noCode")}
                 </p>
                 <div className="mt-4 flex justify-end">
                   <span className="text-blue-600 text-sm font-medium">
-                    View Resources &rarr;
+                    {t("viewResources")} &rarr;
                   </span>
                 </div>
               </Link>
             ))}
           {!isLoading && !Array.isArray(courses) && (
-            <div className="text-gray-500">No courses available.</div>
+            <div className="text-gray-500">{t("empty")}</div>
           )}
         </div>
       </div>

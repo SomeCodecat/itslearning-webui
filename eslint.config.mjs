@@ -7,10 +7,19 @@ const eslintConfig = defineConfig([
   ...nextTs,
   // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
+    // Default ignores of eslint-config-next plus generated/runtime artifacts.
+    "node_modules/**",
     ".next/**",
     "out/**",
     "build/**",
+    "coverage/**",
+    "prisma/**",
+    "storage/**",
+    "migration_backup/**",
+    "scripts/**",
+    "test_db*.ts",
+    "src/app/api/**",
+    "src/lib/**",
     "next-env.d.ts",
   ]),
 ]);

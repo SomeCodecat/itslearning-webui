@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./Badge";
-import { Tag, Plus, X } from "lucide-react";
+import { Tag, Plus } from "lucide-react";
 
 interface TagItem {
   id: number;
@@ -245,7 +245,7 @@ export function FileCard({
               <Badge key={tag.id} label={tag.name} color="yellow" />
             ))}
             {contentMatch && (
-              <Badge label="matched in content" color="gray" />
+              <Badge label={t("contentMatchedBadge")} color="gray" />
             )}
           </div>
           {date && (
@@ -267,8 +267,8 @@ export function FileCard({
           <div className="relative">
             <button
               id={`flag-menu-btn-${id}`}
-              aria-label="Toggle IHK flags"
-              title="IHK flags"
+              aria-label={t("flagMenuLabel")}
+              title={t("flagMenuTitle")}
               onClick={handleMenuOpen}
               disabled={saving}
               className={`p-2 rounded-md transition-colors ${
@@ -296,7 +296,7 @@ export function FileCard({
                 >
                   {/* IHK Flags section */}
                   <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                    IHK Flags
+                    {t("ihkFlags")}
                   </div>
                   {flagItems.map(({ key, label, color }) => (
                     <button
@@ -348,13 +348,13 @@ export function FileCard({
                   {/* Tags section */}
                   <div className="mt-1 border-t border-gray-100 dark:border-gray-700 pt-1">
                     <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                      Tags
+                      {t("tags")}
                     </div>
 
                     {/* Existing tags list */}
                     {allTags.length === 0 && tagsLoaded && (
                       <p className="px-3 py-1.5 text-xs text-gray-400 dark:text-gray-500">
-                        No tags yet
+                        {t("noTagsYet")}
                       </p>
                     )}
                     {allTags.map((tag) => {
@@ -401,7 +401,7 @@ export function FileCard({
                       <input
                         id={`new-tag-input-${id}`}
                         type="text"
-                        placeholder="New tag…"
+                        placeholder={t("newTagPlaceholder")}
                         value={newTagName}
                         onChange={(e) => setNewTagName(e.target.value)}
                         onKeyDown={(e) => {
@@ -416,7 +416,7 @@ export function FileCard({
                         id={`new-tag-btn-${id}`}
                         onClick={createAndAssignTag}
                         disabled={!newTagName.trim() || creatingTag}
-                        aria-label="Create tag"
+                        aria-label={t("createTagLabel")}
                         className="p-1.5 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40 transition-colors"
                       >
                         <Plus className="w-3 h-3" />
@@ -433,7 +433,7 @@ export function FileCard({
           href={`/api/files/download?id=${id}`}
           className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
         >
-          {t("download") || "Download"}
+          {t("download")}
           <svg
             className="w-4 h-4"
             fill="none"

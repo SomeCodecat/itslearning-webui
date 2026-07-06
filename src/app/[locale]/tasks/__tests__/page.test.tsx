@@ -12,7 +12,50 @@ import TasksPage from "../page";
 const mockFetch = vi.fn();
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => {
+    const messages: Record<string, string> = {
+      "status.active": "Active",
+      "status.completed": "Completed",
+      "status.all": "All",
+      title: "Tasks",
+      searchPlaceholder: "Search tasks...",
+      allCourses: "All Courses",
+      deadlineEarliest: "Deadline (Earliest)",
+      deadlineLatest: "Deadline (Latest)",
+      loading: "Loading tasks...",
+      loadFailed: "Failed to load tasks.",
+      loadingDetails: "Loading details...",
+      detailsFailed: "Failed to load details.",
+      course: "Course",
+      statusLabel: "Status",
+      deadlineLabel: "Deadline",
+      elementId: "Element ID",
+      unknown: "Unknown",
+      none: "None",
+      statusScale: "Status scale",
+      untitledStatus: "Untitled status",
+      initial: "Initial",
+      submitted: "Submitted",
+      completed: "Completed",
+      noStatusItems: "No status items returned.",
+      noStatusScale: "No status scale returned.",
+      assessmentScale: "Assessment scale",
+      assessmentFrom: "From {value}%",
+      assessmentUpTo: "Up to {value}%",
+      untitledAssessment: "Untitled assessment",
+      noAssessmentItems: "No assessment items returned.",
+      noAssessmentScale: "No assessment scale returned.",
+      deadline: "Deadline",
+      open: "Open",
+      noMatches: "No tasks match your filters.",
+    };
+
+    return (key: string, values?: Record<string, number>) =>
+      (messages[key] ?? key).replace(
+        /\{(\w+)\}/g,
+        (_, name) => String(values?.[name] ?? `{${name}}`),
+      );
+  },
 }));
 
 function renderWithSWR() {
