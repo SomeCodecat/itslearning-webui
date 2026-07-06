@@ -134,6 +134,8 @@
     "loadingBulletins": "Loading bulletins...",
     "bulletinsFailed": "Failed to load bulletins.",
     "noBulletins": "No bulletins for this course.",
+    "showMore": "Show more",
+    "showLess": "Show less",
     "loadingCourse": "Loading Course...",
     "preparingResources": "Preparing your resources...",
     "resourceType": {

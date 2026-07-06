@@ -134,6 +134,8 @@
     "loadingBulletins": "Mitteilungen werden geladen...",
     "bulletinsFailed": "Mitteilungen konnten nicht geladen werden.",
     "noBulletins": "Keine Mitteilungen für diesen Kurs.",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
     "loadingCourse": "Kurs wird geladen...",
     "preparingResources": "Materialien werden vorbereitet...",
     "resourceType": {

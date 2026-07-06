@@ -46,6 +46,21 @@ export default function CoursePage({
   const t = useTranslations("CourseDetail");
   const format = useFormatter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedBulletins, setExpandedBulletins] = useState<Set<string>>(
+    new Set(),
+  );
+
+  const toggleBulletin = (key: string) => {
+    setExpandedBulletins((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
   const {
     data: resources,
     error,
@@ -165,22 +180,54 @@ export default function CoursePage({
               )}
 
               <div className="space-y-3">
-                {bulletins.map((b, i) => (
+                {bulletins.map((b, i) => {
+                  const bulletinKey = String(b.BulletinId ?? i);
+                  const isBulletinExpanded = expandedBulletins.has(bulletinKey);
+                  // Only offer the toggle when the text is likely clamped.
+                  const isTogglable =
+                    !!b.Text &&
+                    (b.Text.length > 240 || b.Text.split("\n").length > 4);
+
+                  return (
                   <div
-                    key={b.BulletinId ?? i}
+                    key={bulletinKey}
                     className="bg-gray-50 dark:bg-gray-900/40 rounded-lg border border-gray-100 dark:border-gray-800 p-4 shadow-sm"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         {b.Title && (
-                          <h3 className="font-medium text-gray-900 dark:text-white mb-1 truncate">
+                          <h3
+                            className={`font-medium text-gray-900 dark:text-white mb-1 ${isBulletinExpanded ? "" : "truncate"}`}
+                          >
                             {b.Title}
                           </h3>
                         )}
                         {b.Text && (
-                          <p className="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-line line-clamp-4">
+                          <p
+                            className={`text-sm text-gray-600 dark:text-gray-300 whitespace-pre-line ${isBulletinExpanded ? "" : "line-clamp-4"}`}
+                          >
                             {b.Text}
                           </p>
+                        )}
+                        {isTogglable && (
+                          <button
+                            type="button"
+                            onClick={() => toggleBulletin(bulletinKey)}
+                            aria-expanded={isBulletinExpanded}
+                            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                          >
+                            {isBulletinExpanded ? (
+                              <>
+                                {t("showLess")}
+                                <ChevronUp className="w-3.5 h-3.5" />
+                              </>
+                            ) : (
+                              <>
+                                {t("showMore")}
+                                <ChevronDown className="w-3.5 h-3.5" />
+                              </>
+                            )}
+                          </button>
                         )}
                       </div>
                       <div className="text-right shrink-0 text-xs text-gray-400 dark:text-gray-500 space-y-0.5">
@@ -195,7 +242,8 @@ export default function CoursePage({
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </aside>
