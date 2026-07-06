@@ -7,8 +7,12 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
 
+// FileCard uses fetch for PATCH — stub it so tests don't hit the network
+vi.stubGlobal("fetch", vi.fn());
+
 afterEach(() => {
   cleanup();
+  vi.clearAllMocks();
 });
 
 describe("FileBrowser", () => {
@@ -34,5 +38,21 @@ describe("FileBrowser", () => {
 
     expect(screen.getByRole("heading", { name: "AP1 File" })).toBeDefined();
     expect(screen.queryByRole("heading", { name: "AP2 File" })).toBeNull();
+  });
+
+  it("hides flag toggle buttons when persistable=false", () => {
+    render(<FileBrowser files={mockFiles} persistable={false} />);
+
+    // No flag-menu buttons should be rendered
+    const flagBtns = screen.queryAllByRole("button", { name: /IHK flags/i });
+    expect(flagBtns).toHaveLength(0);
+  });
+
+  it("shows flag toggle buttons when persistable=true (default)", () => {
+    render(<FileBrowser files={mockFiles} />);
+
+    const flagBtns = screen.queryAllByRole("button", { name: /IHK flags/i });
+    // One button per file
+    expect(flagBtns).toHaveLength(mockFiles.length);
   });
 });

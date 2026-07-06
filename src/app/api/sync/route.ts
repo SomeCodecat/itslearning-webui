@@ -133,7 +133,6 @@ export async function POST() {
                     customName: res.Title,
                     webUrl: res.ContentUrl,
                     planId: planId || null,
-                    isExamRelevant: false,
                     uploader: "System",
                   },
                 });

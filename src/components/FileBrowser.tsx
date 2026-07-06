@@ -5,9 +5,20 @@ import { Filter, Search, ArrowUpDown } from "lucide-react";
 
 interface FileBrowserProps {
   files: any[]; // Replace with proper type from Prisma/API
+  /** When false, all FileCards are rendered without the flag toggle (e.g. live-scraped course resources) */
+  persistable?: boolean;
+  /** Optional callback fired after a flag is toggled, allowing the parent to mutate SWR cache */
+  onFileFlagsChange?: (
+    fileId: number,
+    updated: { isExamRelevant: boolean; isAP1: boolean; isAP2: boolean },
+  ) => void;
 }
 
-export function FileBrowser({ files }: FileBrowserProps) {
+export function FileBrowser({
+  files,
+  persistable = true,
+  onFileFlagsChange,
+}: FileBrowserProps) {
   const t = useTranslations("FileBrowser");
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"All" | "AP1" | "AP2" | "Exam">(
@@ -117,6 +128,8 @@ export function FileBrowser({ files }: FileBrowserProps) {
                 ? new Date(file.uploadedAt).toLocaleDateString()
                 : undefined
             }
+            persistable={persistable}
+            onFlagsChange={(updated) => onFileFlagsChange?.(file.id, updated)}
           />
         ))}
         {sorted.length === 0 && (
