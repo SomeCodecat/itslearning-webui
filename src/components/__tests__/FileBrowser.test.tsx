@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import { FileBrowser } from "../FileBrowser";
 
 // Mocks
@@ -24,6 +24,10 @@ vi.mock("next-intl", () => ({
         sortNameAsc: "Name (A-Z)",
         noMatches: "No files match your filters.",
         unnamedFile: "Unnamed File",
+        groupingFlat: "Flat",
+        groupingTopic: "By topic",
+        groupingCourse: "By course",
+        ungrouped: "Ungrouped",
       } as Record<string, string>
     )[key] ?? key,
   useFormatter: () => ({
@@ -78,5 +82,43 @@ describe("FileBrowser", () => {
     const flagBtns = screen.queryAllByRole("button", { name: /IHK flags/i });
     // One button per file
     expect(flagBtns).toHaveLength(mockFiles.length);
+  });
+
+  it("toggles grouping to 'By topic', renders group headers, and collapsing hides files", () => {
+    const mockGroupFiles = [
+      { id: 1, customName: "File A", topic: "Topic 1" },
+      { id: 2, customName: "File B", topic: "Topic 1" },
+      { id: 3, customName: "File C", topic: "Topic 2" },
+    ];
+
+    render(<FileBrowser files={mockGroupFiles} />);
+
+    // By default, it's "flat" grouping, so no group headers should be visible
+    expect(screen.queryByRole("button", { name: /Topic 1/ })).toBeNull();
+
+    // Find the grouping button for topic
+    const topicBtn = screen.getByRole("button", { name: "By topic" });
+    expect(topicBtn).toBeDefined();
+
+    // Click it to switch to topic grouping
+    fireEvent.click(topicBtn);
+
+    // Group headers should now exist
+    const group1Header = screen.getByRole("button", { name: /Topic 1/ });
+    const group2Header = screen.getByRole("button", { name: /Topic 2/ });
+    expect(group1Header).toBeDefined();
+    expect(group2Header).toBeDefined();
+
+    // The files should be visible
+    expect(screen.getByRole("heading", { name: "File A" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "File B" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "File C" })).toBeDefined();
+
+    // Now let's collapse Topic 2
+    fireEvent.click(group2Header);
+
+    // Check that the container is collapsed (contains hidden class)
+    const group2Content = screen.getByRole("heading", { name: "File C" }).closest("[id^='group-content-']");
+    expect(group2Content?.className).toContain("hidden");
   });
 });

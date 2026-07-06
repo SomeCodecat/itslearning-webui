@@ -80,7 +80,12 @@
     "downloadZip": "Download all (ZIP)",
     "downloadZipAriaLabel": "Download all visible files as a ZIP archive",
     "zipError": "Failed to download ZIP file.",
-    "zipSkipped": "{count, plural, one {# file skipped} other {# files skipped}}"
+    "zipSkipped": "{count, plural, one {# file skipped} other {# files skipped}}",
+    "groupingLabel": "Group files",
+    "groupingFlat": "Flat",
+    "groupingTopic": "By topic",
+    "groupingCourse": "By course",
+    "ungrouped": "Ungrouped"
   },
   "Dashboard": {
     "upcomingDeadlines": "Upcoming Deadlines",

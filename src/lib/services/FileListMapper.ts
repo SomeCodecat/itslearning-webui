@@ -13,10 +13,13 @@ export interface UserFileForList {
     mimeType?: string | null;
   } | null;
   plan?: {
+    title?: string;
+    topic?: string | null;
     course: {
       title: string;
     };
   } | null;
+  folderPath?: string | null;
   tags?: { id: number; name: string }[];
 }
 
@@ -33,6 +36,9 @@ export function mapUserFileForList(f: UserFileForList) {
     uploadedAt: f.createdAt.toISOString(),
     size: f.storedFile?.size != null ? f.storedFile.size.toString() : null,
     courseTitle: f.plan?.course.title,
+    folderPath: f.folderPath || null,
+    topic: f.plan?.topic || null,
+    planTitle: f.plan?.title || null,
     type: f.storedFile?.mimeType || inferredMimeType || null,
     tags: Array.isArray(f.tags) ? f.tags : [],
   };

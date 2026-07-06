@@ -80,7 +80,12 @@
     "downloadZip": "Alle herunterladen (ZIP)",
     "downloadZipAriaLabel": "Alle sichtbaren Dateien als ZIP-Archiv herunterladen",
     "zipError": "ZIP-Datei konnte nicht heruntergeladen werden.",
-    "zipSkipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}"
+    "zipSkipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}",
+    "groupingLabel": "Dateien gruppieren",
+    "groupingFlat": "Liste",
+    "groupingTopic": "Nach Thema",
+    "groupingCourse": "Nach Kurs",
+    "ungrouped": "Nicht gruppiert"
   },
   "Dashboard": {
     "upcomingDeadlines": "Anstehende Abgaben",

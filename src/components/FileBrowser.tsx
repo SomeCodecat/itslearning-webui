@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslations, useFormatter } from "next-intl";
 import { useSWRConfig } from "swr";
 import { FileCard } from "./FileCard";
-import { Search, ArrowUpDown, Loader2, Download } from "lucide-react";
+import { Search, ArrowUpDown, Loader2, Download, ChevronDown, ChevronUp } from "lucide-react";
+import { groupFiles } from "@/lib/groupFiles";
 
 interface TagItem {
   id: number;
@@ -24,6 +25,9 @@ interface FileItem {
   webUrl?: string;
   tags?: TagItem[];
   contentMatch?: boolean;
+  folderPath?: string | null;
+  topic?: string | null;
+  planTitle?: string | null;
 }
 
 interface FileBrowserProps {
@@ -39,6 +43,7 @@ interface FileBrowserProps {
     fileId: number,
     updated: { isExamRelevant: boolean; isAP1: boolean; isAP2: boolean },
   ) => void;
+  allowCourseGrouping?: boolean;
 }
 
 /** Merge two file arrays by id, preferring the second array's entries */
@@ -54,6 +59,7 @@ export function FileBrowser({
   cacheKey,
   persistable = true,
   onFileFlagsChange,
+  allowCourseGrouping = false,
 }: FileBrowserProps) {
   const t = useTranslations("FileBrowser");
   const format = useFormatter();
@@ -86,6 +92,53 @@ export function FileBrowser({
       }
     };
   }, []);
+
+  const [groupingMode, setGroupingMode] = useState<"flat" | "topic" | "course">("flat");
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+
+  const storageKey = allowCourseGrouping
+    ? "itslearning-file-grouping-global"
+    : "itslearning-file-grouping-course";
+
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      typeof localStorage !== "undefined" &&
+      typeof localStorage.getItem === "function"
+    ) {
+      const stored = localStorage.getItem(storageKey);
+      if (
+        stored === "flat" ||
+        stored === "topic" ||
+        (stored === "course" && allowCourseGrouping)
+      ) {
+        setGroupingMode(stored as "flat" | "topic" | "course");
+      }
+    }
+  }, [storageKey, allowCourseGrouping]);
+
+  const handleGroupingChange = (mode: "flat" | "topic" | "course") => {
+    setGroupingMode(mode);
+    if (
+      typeof window !== "undefined" &&
+      typeof localStorage !== "undefined" &&
+      typeof localStorage.setItem === "function"
+    ) {
+      localStorage.setItem(storageKey, mode);
+    }
+  };
+
+  const hasGroupingData = React.useMemo(() => {
+    return files.some(
+      (f) =>
+        !!f.topic ||
+        !!f.planTitle ||
+        !!f.folderPath ||
+        !!f.courseTitle
+    );
+  }, [files]);
+
+  const showGroupingToggle = hasGroupingData && cacheKey !== "/api/files/recent";
 
   const handleFlagsChange = useCallback(
     (fileId: number, updatedFlags: { isExamRelevant: boolean; isAP1: boolean; isAP2: boolean }) => {
@@ -232,6 +285,11 @@ export function FileBrowser({
     const dateB = new Date(b.uploadedAt || 0).getTime();
     return sort === "date_asc" ? dateA - dateB : dateB - dateA;
   });
+
+  const groups = React.useMemo(() => {
+    return groupFiles(sorted, groupingMode, t("ungrouped"));
+  }, [sorted, groupingMode, t]);
+
   const contentMatchCount = searchResults.filter((r) => r.contentMatch).length;
 
   async function handleZipDownload() {
@@ -312,6 +370,50 @@ export function FileBrowser({
           ))}
         </div>
 
+        {/* Grouping Toggle */}
+        {showGroupingToggle && (
+          <div className="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-md" aria-label={t("groupingLabel")}>
+            <button
+              id="group-flat-btn"
+              type="button"
+              onClick={() => handleGroupingChange("flat")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                groupingMode === "flat"
+                  ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700"
+              }`}
+            >
+              {t("groupingFlat")}
+            </button>
+            <button
+              id="group-topic-btn"
+              type="button"
+              onClick={() => handleGroupingChange("topic")}
+              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                groupingMode === "topic"
+                  ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700"
+              }`}
+            >
+              {t("groupingTopic")}
+            </button>
+            {allowCourseGrouping && (
+              <button
+                id="group-course-btn"
+                type="button"
+                onClick={() => handleGroupingChange("course")}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  groupingMode === "course"
+                    ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm"
+                    : "text-gray-500 dark:text-gray-400 hover:text-gray-700"
+                }`}
+              >
+                {t("groupingCourse")}
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Tag filter */}
         {allTags.length > 0 && (
           <select
@@ -389,42 +491,119 @@ export function FileBrowser({
         </p>
       )}
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 gap-2">
-        {" "}
-        {/* Keeping list view style for now, or could be grid-cols-2 lg:grid-cols-3 */}
-        {sorted.map((file) => (
-          <FileCard
-            key={file.id}
-            id={file.id}
-            fileName={file.customName || t("unnamedFile")}
-            webUrl={file.webUrl || "#"}
-            isExamRelevant={file.isExamRelevant}
-            isAP1={file.isAP1}
-            isAP2={file.isAP2}
-            fileSize={
-              file.size != null && !isNaN(Number(file.size))
-                ? String(file.size)
-                : undefined
-            }
-            courseTitle={file.courseTitle ?? undefined}
-            fileType={file.type ?? undefined}
-            date={
-              file.uploadedAt
-                ? format.dateTime(new Date(file.uploadedAt), { dateStyle: "medium" })
-                : undefined
-            }
-            tags={file.tags ?? []}
-            persistable={persistable}
-            contentMatch={file.contentMatch ?? false}
-            onFlagsChange={(updated) => {
-              handleFlagsChange(file.id, updated);
-            }}
-            onTagsChange={(updatedTags) => {
-              handleTagsChange(file.id, updatedTags);
-            }}
-          />
-        ))}
+      {/* Grid / Groups */}
+      <div className="space-y-4">
+        {groupingMode === "flat" ? (
+          <div className="grid grid-cols-1 gap-2">
+            {sorted.map((file) => (
+              <FileCard
+                key={file.id}
+                id={file.id}
+                fileName={file.customName || t("unnamedFile")}
+                webUrl={file.webUrl || "#"}
+                isExamRelevant={file.isExamRelevant}
+                isAP1={file.isAP1}
+                isAP2={file.isAP2}
+                fileSize={
+                  file.size != null && !isNaN(Number(file.size))
+                    ? String(file.size)
+                    : undefined
+                }
+                courseTitle={file.courseTitle ?? undefined}
+                fileType={file.type ?? undefined}
+                date={
+                  file.uploadedAt
+                    ? format.dateTime(new Date(file.uploadedAt), { dateStyle: "medium" })
+                    : undefined
+                }
+                tags={file.tags ?? []}
+                persistable={persistable}
+                contentMatch={file.contentMatch ?? false}
+                onFlagsChange={(updated) => {
+                  handleFlagsChange(file.id, updated);
+                }}
+                onTagsChange={(updatedTags) => {
+                  handleTagsChange(file.id, updatedTags);
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {groups.map((group) => {
+              const isCollapsed = !!collapsedGroups[group.key];
+              const contentId = `group-content-${group.key}`;
+              return (
+                <div key={group.key} className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCollapsedGroups((prev) => ({
+                        ...prev,
+                        [group.key]: !prev[group.key],
+                      }));
+                    }}
+                    aria-expanded={!isCollapsed}
+                    aria-controls={contentId}
+                    className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/40 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors text-left font-medium text-gray-700 dark:text-gray-300 text-sm cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      {group.label}
+                      <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                        {group.files.length}
+                      </span>
+                    </span>
+                    {isCollapsed ? (
+                      <ChevronDown className="w-4 h-4 text-gray-500" />
+                    ) : (
+                      <ChevronUp className="w-4 h-4 text-gray-500" />
+                    )}
+                  </button>
+
+                  <div
+                    id={contentId}
+                    className={`grid grid-cols-1 gap-2 pl-2 border-l border-gray-200 dark:border-gray-800 ${
+                      isCollapsed ? "hidden" : "block"
+                    }`}
+                  >
+                    {group.files.map((file) => (
+                      <FileCard
+                        key={file.id}
+                        id={file.id}
+                        fileName={file.customName || t("unnamedFile")}
+                        webUrl={file.webUrl || "#"}
+                        isExamRelevant={file.isExamRelevant}
+                        isAP1={file.isAP1}
+                        isAP2={file.isAP2}
+                        fileSize={
+                          file.size != null && !isNaN(Number(file.size))
+                            ? String(file.size)
+                            : undefined
+                        }
+                        courseTitle={file.courseTitle ?? undefined}
+                        fileType={file.type ?? undefined}
+                        date={
+                          file.uploadedAt
+                            ? format.dateTime(new Date(file.uploadedAt), { dateStyle: "medium" })
+                            : undefined
+                        }
+                        tags={file.tags ?? []}
+                        persistable={persistable}
+                        contentMatch={file.contentMatch ?? false}
+                        onFlagsChange={(updated) => {
+                          handleFlagsChange(file.id, updated);
+                        }}
+                        onTagsChange={(updatedTags) => {
+                          handleTagsChange(file.id, updatedTags);
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
         {sorted.length === 0 && (
           <div className="text-center py-10 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500">
             {t("noMatches")}

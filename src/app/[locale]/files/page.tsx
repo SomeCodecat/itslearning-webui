@@ -41,7 +41,7 @@ export default function FilesPage() {
             <p className="text-sm">{t("loadFailedHint")}</p>
           </div>
         ) : (
-          <FileBrowser files={files || []} cacheKey="/api/files/all" />
+          <FileBrowser files={files || []} cacheKey="/api/files/all" allowCourseGrouping />
         )}
       </PageContainer>
     </div>
