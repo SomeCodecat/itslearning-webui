@@ -84,7 +84,11 @@ function getTaskKey(task: TaskView): string {
   return getTaskLookupId(task) ?? task.Title ?? "task";
 }
 
-function formatDate(value: unknown, noneLabel: string, format: any): string {
+function formatDate(
+  value: unknown,
+  noneLabel: string,
+  format: ReturnType<typeof useFormatter>,
+): string {
   if (!value) {
     return noneLabel;
   }

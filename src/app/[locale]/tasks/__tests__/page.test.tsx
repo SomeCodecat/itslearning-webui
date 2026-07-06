@@ -56,6 +56,9 @@ vi.mock("next-intl", () => ({
         (_, name) => String(values?.[name] ?? `{${name}}`),
       );
   },
+  useFormatter: () => ({
+    dateTime: (date: Date) => date.toLocaleString("en"),
+  }),
 }));
 
 function renderWithSWR() {

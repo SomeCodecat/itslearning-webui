@@ -160,8 +160,8 @@ export function FileBrowser({
       } else {
         setSearchResults(await res.json());
       }
-    } catch (err: any) {
-      if (err.name === "AbortError" || (err instanceof DOMException && err.name === "AbortError")) {
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") {
         return;
       }
       setSearchResults([]);

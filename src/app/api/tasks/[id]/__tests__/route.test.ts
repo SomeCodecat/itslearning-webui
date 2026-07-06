@@ -41,7 +41,11 @@ describe("GET /api/tasks/[id]", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     mockCookies.mockResolvedValue({ get: mockCookieGet });
     mockCookieGet.mockReturnValue({ value: "42" });
-    mockPrisma.assignment.findFirst.mockImplementation(async ({ where }: any) => {
+    mockPrisma.assignment.findFirst.mockImplementation(async ({
+      where,
+    }: {
+      where?: { id?: number; elementId?: number; userId?: number };
+    }) => {
       if (where && where.id === 7) {
         return {
           id: 7,

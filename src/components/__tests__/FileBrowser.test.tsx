@@ -26,6 +26,9 @@ vi.mock("next-intl", () => ({
         unnamedFile: "Unnamed File",
       } as Record<string, string>
     )[key] ?? key,
+  useFormatter: () => ({
+    dateTime: (date: Date) => date.toLocaleDateString("en"),
+  }),
 }));
 
 // FileCard uses fetch for PATCH — stub it so tests don't hit the network
