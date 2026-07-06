@@ -32,8 +32,20 @@ export interface Resource {
   ElementId: number;
   Title: string;
   ElementType: string;
+  LearningToolId?: number;
   IconUrl?: string;
   ContentUrl?: string; // Sometimes available
+}
+
+// 5009 = File tool, 5006 = uploaded audio; verified against live instance 2026-07.
+export const FILE_LEARNING_TOOL_IDS = new Set([5009, 5006]);
+
+export function isFileResource(res: Resource): boolean {
+  return (
+    res.ElementType === "LearningToolElement" &&
+    res.LearningToolId !== undefined &&
+    FILE_LEARNING_TOOL_IDS.has(res.LearningToolId)
+  );
 }
 
 export interface GradeItem {
@@ -245,6 +257,7 @@ export class ScraperService {
         ElementId: item.ElementId,
         Title: item.Title,
         ElementType: item.ElementType,
+        LearningToolId: item.LearningToolId,
         IconUrl: item.IconUrl,
         // Sync depends on ContentUrl to create UserFile stubs — keep it mapped.
         ContentUrl: item.ContentUrl,

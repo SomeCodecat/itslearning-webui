@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
+import { isFileResource } from "@/lib/services/ScraperService";
 import { getScraperForSession } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
@@ -137,7 +138,7 @@ export async function POST() {
         await fs.mkdir(courseDir, { recursive: true });
 
         for (const res of resources) {
-          if (res.ContentUrl && res.ElementType === "File") {
+          if (res.ContentUrl && isFileResource(res)) {
             try {
               // Determine Plan
               const planId = elementToPlanMap.get(res.ElementId);

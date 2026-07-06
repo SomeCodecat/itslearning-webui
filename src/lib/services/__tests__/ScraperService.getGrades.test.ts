@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AxiosResponse } from "axios";
-import { ScraperService } from "../ScraperService";
+import { isFileResource, ScraperService } from "../ScraperService";
 
 describe("ScraperService.getGrades", () => {
   let scraper: ScraperService;
@@ -117,5 +117,86 @@ describe("ScraperService.getCalendarEvents", () => {
       },
     );
     expect(events).toEqual(payload.EntityArray);
+  });
+});
+
+describe("ScraperService.getResources", () => {
+  let scraper: ScraperService;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    scraper = new ScraperService("https://school.example");
+    scraper.setAccessToken("test-token");
+  });
+
+  it("maps LearningToolId from resource API items", async () => {
+    const payload = {
+      Resources: {
+        EntityArray: [
+          {
+            ElementId: 317614,
+            Title: "ESL-Brains-1162.pdf",
+            ElementType: "LearningToolElement",
+            IconUrl: "https://school.example/icon.png",
+            ContentUrl:
+              "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317614",
+            LearningToolId: 5009,
+          },
+        ],
+      },
+    };
+    vi.spyOn(scraper.apiClient, "get").mockResolvedValue({
+      data: payload,
+    } as AxiosResponse<typeof payload>);
+
+    await expect(scraper.getResources(4349)).resolves.toEqual([
+      {
+        ElementId: 317614,
+        Title: "ESL-Brains-1162.pdf",
+        ElementType: "LearningToolElement",
+        IconUrl: "https://school.example/icon.png",
+        ContentUrl:
+          "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317614",
+        LearningToolId: 5009,
+      },
+    ]);
+  });
+});
+
+describe("isFileResource", () => {
+  it.each([5009, 5006])(
+    "accepts LearningToolElement resources with file learning tool id %i",
+    (LearningToolId) => {
+      expect(
+        isFileResource({
+          ElementId: 1,
+          Title: "Course file",
+          ElementType: "LearningToolElement",
+          LearningToolId,
+        }),
+      ).toBe(true);
+    },
+  );
+
+  it("rejects folders", () => {
+    expect(
+      isFileResource({
+        ElementId: 2,
+        Title: "Folder",
+        ElementType: "Folder",
+        LearningToolId: 0,
+      }),
+    ).toBe(false);
+  });
+
+  it("rejects non-file learning tool ids", () => {
+    expect(
+      isFileResource({
+        ElementId: 3,
+        Title: "Note",
+        ElementType: "LearningToolElement",
+        LearningToolId: 5,
+      }),
+    ).toBe(false);
   });
 });

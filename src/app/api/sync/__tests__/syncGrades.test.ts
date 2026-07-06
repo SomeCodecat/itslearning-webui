@@ -149,6 +149,71 @@ describe("POST /api/sync grades integration", () => {
     });
   });
 
+  it("creates user file stubs for uploaded file learning tool resources", async () => {
+    mockScraper.getResources.mockResolvedValue([
+      {
+        ElementId: 317614,
+        Title: "ESL-Brains-1162.pdf",
+        ElementType: "LearningToolElement",
+        ContentUrl:
+          "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317614",
+        LearningToolId: 5009,
+      },
+      {
+        ElementId: 317615,
+        Title: "Uploaded audio.mp3",
+        ElementType: "LearningToolElement",
+        ContentUrl:
+          "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317615",
+        LearningToolId: 5006,
+      },
+      {
+        ElementId: 317616,
+        Title: "Note",
+        ElementType: "LearningToolElement",
+        ContentUrl:
+          "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317616",
+        LearningToolId: 5,
+      },
+      {
+        ElementId: 317617,
+        Title: "Folder",
+        ElementType: "Folder",
+        ContentUrl:
+          "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317617",
+        LearningToolId: 0,
+      },
+    ]);
+    mockPrisma.userFile.findFirst.mockResolvedValue(null);
+
+    const response = await POST();
+
+    expect(response.status).toBe(200);
+    expect(mockPrisma.userFile.create).toHaveBeenCalledTimes(2);
+    expect(mockPrisma.userFile.create).toHaveBeenNthCalledWith(1, {
+      data: {
+        userId: 42,
+        elementId: 317614,
+        customName: "ESL-Brains-1162.pdf",
+        webUrl:
+          "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317614",
+        planId: null,
+        uploader: "System",
+      },
+    });
+    expect(mockPrisma.userFile.create).toHaveBeenNthCalledWith(2, {
+      data: {
+        userId: 42,
+        elementId: 317615,
+        customName: "Uploaded audio.mp3",
+        webUrl:
+          "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317615",
+        planId: null,
+        uploader: "System",
+      },
+    });
+  });
+
   it("logs a generic grades failure for one course and continues remaining courses", async () => {
     mockScraper.getCourses.mockResolvedValue([
       { CourseId: 100, Title: "Math" },
