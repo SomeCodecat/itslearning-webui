@@ -7,13 +7,7 @@ import {
 } from "@/lib/userScraper";
 
 function assignmentOwnershipWhere(userId: number) {
-  return {
-    course: {
-      users: {
-        some: { id: userId },
-      },
-    },
-  };
+  return { userId };
 }
 
 async function findAssignmentForUser(assignmentId: number, userId: number) {

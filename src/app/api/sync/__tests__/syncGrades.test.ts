@@ -120,6 +120,7 @@ describe("POST /api/sync grades integration", () => {
     expect(mockPrisma.assignment.create).toHaveBeenCalledWith({
       data: {
         elementId: 999,
+        userId: 42,
         title: "Calculus Exam",
         courseId: 100,
         status: "Completed",

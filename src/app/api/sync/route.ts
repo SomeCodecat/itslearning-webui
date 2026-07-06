@@ -143,7 +143,7 @@ export async function POST() {
 
               // Upsert UserFile stub (no download yet)
               const userFile = await prisma.userFile.findFirst({
-                where: { userId, elementId: res.ElementId },
+                where: { userId, elementId: res.ElementId, isArchived: false },
               });
 
               if (userFile) {
@@ -192,13 +192,16 @@ export async function POST() {
             if (!grade.ElementId) continue;
 
             let dbAssignment = await prisma.assignment.findUnique({
-              where: { elementId: grade.ElementId },
+              where: {
+                elementId_userId: { elementId: grade.ElementId, userId },
+              },
             });
 
             if (!dbAssignment) {
               dbAssignment = await prisma.assignment.create({
                 data: {
                   elementId: grade.ElementId,
+                  userId,
                   title:
                     optionalText(grade.Title) || "Untitled Graded Assignment",
                   courseId: dbCourse.id,
@@ -247,7 +250,9 @@ export async function POST() {
 
       if (course) {
         await prisma.assignment.upsert({
-          where: { elementId: task.TaskId },
+          where: {
+            elementId_userId: { elementId: task.TaskId, userId },
+          },
           update: {
             title: task.Title || "Untitled Task",
             status: task.Status,
@@ -257,6 +262,7 @@ export async function POST() {
           },
           create: {
             elementId: task.TaskId,
+            user: { connect: { id: userId } },
             title: task.Title || "Untitled Task",
             status: task.Status,
             deadline: task.Deadline ? new Date(task.Deadline) : null,

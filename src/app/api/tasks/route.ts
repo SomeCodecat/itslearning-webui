@@ -33,11 +33,7 @@ export async function GET(request: Request) {
     }
 
     const where: Prisma.AssignmentWhereInput = {
-      course: {
-        users: {
-          some: { id: userId },
-        },
-      },
+      userId,
       ...(status !== "All" ? { status } : {}),
       ...(courseDbId !== null ? { courseId: courseDbId } : {}),
     };

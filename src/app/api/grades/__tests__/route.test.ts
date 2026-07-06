@@ -65,11 +65,7 @@ describe("GET /api/grades", () => {
     expect(mockPrisma.grade.findMany).toHaveBeenCalledWith({
       where: {
         assignment: {
-          course: {
-            users: {
-              some: { id: 42 },
-            },
-          },
+          userId: 42,
         },
       },
       include: {

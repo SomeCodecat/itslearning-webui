@@ -90,11 +90,7 @@ describe("GET /api/tasks/[id]", () => {
     expect(mockPrisma.assignment.findFirst).toHaveBeenNthCalledWith(1, {
       where: {
         elementId: 7,
-        course: {
-          users: {
-            some: { id: 42 },
-          },
-        },
+        userId: 42,
       },
       include: { course: true },
     });
@@ -146,7 +142,7 @@ describe("GET /api/tasks/[id]", () => {
     expect(mockPrisma.assignment.findFirst).toHaveBeenNthCalledWith(2, {
       where: {
         id: 7,
-        course: { users: { some: { id: 42 } } },
+        userId: 42,
       },
       include: { course: true },
     });
@@ -181,7 +177,7 @@ describe("GET /api/tasks/[id]", () => {
     expect(mockPrisma.assignment.findFirst).toHaveBeenCalledWith({
       where: {
         elementId: 9,
-        course: { users: { some: { id: 42 } } },
+        userId: 42,
       },
       include: { course: true },
     });

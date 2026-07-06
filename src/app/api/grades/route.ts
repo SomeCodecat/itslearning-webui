@@ -30,11 +30,7 @@ export async function GET(request: Request) {
 
     const where: Prisma.GradeWhereInput = {
       assignment: {
-        course: {
-          users: {
-            some: { id: userId },
-          },
-        },
+        userId,
         ...(courseDbId !== null ? { courseId: courseDbId } : {}),
       },
     };

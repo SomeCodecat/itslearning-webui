@@ -27,6 +27,7 @@ model User {
   files          UserFile[]
   courses        Course[]   // [NEW] Enrolled courses
   tags           Tag[]
+  assignments    Assignment[]
   
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
@@ -124,16 +125,22 @@ model UserFile {
 
 model Assignment {
   id        Int       @id @default(autoincrement())
-  elementId Int       @unique
+  elementId Int
+  userId    Int
   courseId  Int
   title     String
   webUrl    String?
   deadline  DateTime?
   status    String?   // NotStarted, InProgress, Completed
-  
+
   grade     Grade?
 
+  user      User      @relation(fields: [userId], references: [id])
   course    Course    @relation(fields: [courseId], references: [id])
+
+  // Assignments are synced per user: status and grade are user-specific,
+  // so the same ITSLearning element gets one row per enrolled user.
+  @@unique([elementId, userId])
 }
 
 model Grade {
