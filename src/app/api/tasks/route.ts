@@ -32,9 +32,18 @@ export async function GET(request: Request) {
       courseDbId = course ? course.id : courseId;
     }
 
+    // ITSLearning stores task status as NotStarted/InProgress/Completed.
+    // The UI's default "Active" filter means "not completed yet".
+    const statusFilter: Prisma.AssignmentWhereInput =
+      status === "All"
+        ? {}
+        : status === "Active"
+          ? { status: { in: ["NotStarted", "InProgress"] } }
+          : { status };
+
     const where: Prisma.AssignmentWhereInput = {
       userId,
-      ...(status !== "All" ? { status } : {}),
+      ...statusFilter,
       ...(courseDbId !== null ? { courseId: courseDbId } : {}),
     };
 

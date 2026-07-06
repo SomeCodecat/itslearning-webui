@@ -239,6 +239,8 @@ export class ScraperService {
         Title: item.Title,
         ElementType: item.ElementType,
         IconUrl: item.IconUrl,
+        // Sync depends on ContentUrl to create UserFile stubs — keep it mapped.
+        ContentUrl: item.ContentUrl,
       };
 
       results.push(resource);

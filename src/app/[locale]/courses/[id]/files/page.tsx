@@ -17,6 +17,7 @@ export default function CourseFilesPage({
 }) {
   const { id } = use(params);
   const t = useTranslations("Files");
+  const tCourse = useTranslations("CourseDetail");
 
   const cacheKey = `/api/files/all?courseId=${id}`;
   const { data: files, error, isLoading } = useSWR(cacheKey, fetcher);
@@ -25,6 +26,10 @@ export default function CourseFilesPage({
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <PageContainer className="py-6 md:py-10">
         <CourseNav courseId={id} />
+
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          {tCourse("files")}
+        </h2>
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
