@@ -20,22 +20,23 @@ async function findAssignmentForUser(assignmentId: number, userId: number) {
   const ownershipWhere = assignmentOwnershipWhere(userId);
   const include = { course: true };
 
-  const assignment = await prisma.assignment.findFirst({
+  // The list route exposes TaskId as elementId, so match that first.
+  // Only fall back to the primary key id when no elementId row is found.
+  const byElementId = await prisma.assignment.findFirst({
     where: {
-      id: assignmentId,
+      elementId: assignmentId,
       ...ownershipWhere,
     },
     include,
   });
 
-  if (assignment) {
-    return assignment;
+  if (byElementId) {
+    return byElementId;
   }
 
-  // The existing list route exposes TaskId as elementId, not the local row id.
   return prisma.assignment.findFirst({
     where: {
-      elementId: assignmentId,
+      id: assignmentId,
       ...ownershipWhere,
     },
     include,

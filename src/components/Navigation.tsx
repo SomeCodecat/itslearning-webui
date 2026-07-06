@@ -112,7 +112,9 @@ export function Navigation() {
 
       await mutate("/api/user"); // Refresh lastSyncedAt
       await mutate("/api/courses");
-      await mutate("/api/tasks");
+      // Revalidate all /api/tasks and /api/files cache entries (handles query-string variants)
+      await mutate((key) => typeof key === "string" && key.startsWith("/api/tasks"));
+      await mutate((key) => typeof key === "string" && key.startsWith("/api/files"));
       await mutate("/api/grades");
 
       setSyncStatus("success");

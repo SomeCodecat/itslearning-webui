@@ -24,6 +24,10 @@
     "daysAgo": "{count, plural, one {Vor # Tag} other {Vor # Tagen}}"
   },
   "Navigation": {
+    "mainMenu": "Hauptmenü",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "userMenuLabel": "Benutzermenü",
     "syncing": "Wird synchronisiert...",
     "synced": "Synchronisiert!",
     "failed": "Fehlgeschlagen",
@@ -66,6 +70,10 @@
     "sortOldestFirst": "Älteste zuerst",
     "sortNameAsc": "Name (A-Z)",
     "searchError": "Die Suche ist fehlgeschlagen. Versuche es erneut.",
+    "patchError": "Aktualisierung fehlgeschlagen. Bitte erneut versuchen.",
+    "searchLabel": "Dateien suchen",
+    "filterTagLabel": "Nach Schlagwort filtern",
+    "sortLabel": "Dateien sortieren",
     "contentMatches": "{count, plural, one {# Treffer im Dateiinhalt.} other {# Treffer im Dateiinhalt.}}",
     "unnamedFile": "Unbenannte Datei",
     "noMatches": "Keine Dateien passen zu deinen Filtern."
@@ -158,7 +166,8 @@
     "noAssessmentScale": "Keine Bewertungsskala erhalten.",
     "deadline": "Abgabe",
     "open": "Öffnen",
-    "noMatches": "Keine Aufgaben passen zu deinen Filtern."
+    "noMatches": "Keine Aufgaben passen zu deinen Filtern.",
+    "opensInNewTab": "öffnet in neuem Tab"
   },
   "Settings": {
     "title": "Einstellungen",
@@ -184,6 +193,8 @@
     "connectedSuccessfully": "Erfolgreich verbunden!",
     "connecting": "Verbindet...",
     "saveAndConnect": "Speichern und verbinden",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort ausblenden",
     "environment": "Umgebung",
     "externalUrl": "Externe URL:",
     "notSet": "Nicht gesetzt"
@@ -204,7 +215,9 @@
     "confirmPasswordLabel": "Passwort bestätigen",
     "confirmPasswordPlaceholder": "Passwort bestätigen",
     "creatingAccount": "Konto wird erstellt...",
-    "createAccount": "Konto erstellen"
+    "createAccount": "Konto erstellen",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort ausblenden"
   },
   "Login": {
     "signIn": "Anmelden",
@@ -216,7 +229,9 @@
     "passwordPlaceholder": "Passwort",
     "institutionUrlLabel": "Institutions-URL",
     "signingIn": "Anmeldung läuft...",
-    "institutionUrlPlaceholder": "Institutions-URL"
+    "institutionUrlPlaceholder": "Institutions-URL",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort ausblenden"
   },
   "Grades": {
     "title": "Noten",
@@ -226,6 +241,8 @@
     "unknownCourse": "Unbekannter Kurs",
     "noFeedback": "Keine Rückmeldung",
     "gradeUnavailable": "Note nicht verfügbar",
+    "openInNewTab": "{title} in neuem Tab öffnen",
+    "opensInNewTab": "öffnet in neuem Tab",
     "open": "Öffnen"
   }
 }

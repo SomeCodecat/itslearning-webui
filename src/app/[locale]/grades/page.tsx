@@ -125,6 +125,7 @@ export default function GradesPage() {
                           >
                             {t("open")}
                             <ExternalLink size={14} />
+                            <span className="sr-only"> ({t("opensInNewTab")})</span>
                           </a>
                         )}
                       </div>

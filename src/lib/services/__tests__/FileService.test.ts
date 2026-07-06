@@ -10,6 +10,7 @@ const { mockPrisma } = vi.hoisted(() => ({
     },
     userFile: {
       findFirst: vi.fn(),
+      findUnique: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
     },
@@ -210,6 +211,59 @@ describe("FileService", () => {
         planId: userFile.planId,
         elementId: userFile.elementId,
         storedFileId: storedFile.id,
+      }),
+    });
+  });
+
+  it("carries tags over to the replacement row when archiving", async () => {
+    const buffer = Buffer.from("tagged version");
+    const storedFile = {
+      id: 302,
+      hash: "tagged-hash",
+      localPath: "./storage/blobs/tagged-hash",
+      textContent: "indexed",
+    };
+    const userFile = {
+      id: 30,
+      userId: 1,
+      storedFileId: 200, // different from storedFile.id → triggers archive path
+      planId: 5,
+      elementId: 125,
+      customName: "tagged.txt",
+      webUrl: "http://example.com/tagged",
+      folderPath: null,
+      uploader: null,
+      uploadedAt: null,
+      isExamRelevant: false,
+      isAP1: false,
+      isAP2: false,
+    };
+
+    mockPrisma.storedFile.findUnique.mockResolvedValue(storedFile);
+    // findUnique returns the old row with tags
+    mockPrisma.userFile.findUnique.mockResolvedValue({
+      tags: [{ id: 7 }, { id: 13 }],
+    });
+    mockPrisma.userFile.update.mockResolvedValue({
+      ...userFile,
+      isArchived: true,
+    });
+    mockPrisma.userFile.create.mockResolvedValue({
+      ...userFile,
+      id: 31,
+      storedFileId: storedFile.id,
+    });
+
+    await fileService.attachDownloadedFile(userFile, buffer, {
+      customName: userFile.customName,
+      webUrl: userFile.webUrl,
+      mimeType: "text/plain",
+    });
+
+    // Tags must be connected on the new row
+    expect(mockPrisma.userFile.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        tags: { connect: [{ id: 7 }, { id: 13 }] },
       }),
     });
   });

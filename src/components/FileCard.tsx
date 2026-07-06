@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./Badge";
 import { Tag, Plus } from "lucide-react";
@@ -70,10 +70,52 @@ export function FileCard({
   const [newTagName, setNewTagName] = useState("");
   const [creatingTag, setCreatingTag] = useState(false);
 
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const errorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const showError = (msg: string) => {
+    if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    setErrorMsg(msg);
+    errorTimeoutRef.current = setTimeout(() => {
+      setErrorMsg(null);
+    }, 4000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
+
   // Sync props → state when parent refreshes
   useEffect(() => {
     setTags(initialTags);
   }, [initialTags]);
+
+  useEffect(() => {
+    setFlags({
+      isExamRelevant: initialExamRelevant,
+      isAP1: initialAP1,
+      isAP2: initialAP2,
+    });
+  }, [initialExamRelevant, initialAP1, initialAP2]);
 
   async function toggleFlag(key: "isExamRelevant" | "isAP1" | "isAP2") {
     if (!persistable || saving) return;
@@ -91,6 +133,7 @@ export function FileCard({
         // Rollback on error
         setFlags(flags);
         console.error("Failed to update flag", await res.text());
+        showError(t("patchError"));
       } else {
         const updated = await res.json();
         const final = {
@@ -104,6 +147,7 @@ export function FileCard({
     } catch (err) {
       setFlags(flags);
       console.error("Network error updating flag", err);
+      showError(t("patchError"));
     } finally {
       setSaving(false);
     }
@@ -147,6 +191,7 @@ export function FileCard({
       if (!res.ok) {
         setTags(tags); // rollback
         console.error("Failed to update tags", await res.text());
+        showError(t("patchError"));
       } else {
         const updated = await res.json();
         const newTags: TagItem[] = updated.tags ?? [];
@@ -156,6 +201,7 @@ export function FileCard({
     } catch (err) {
       setTags(tags);
       console.error("Network error updating tags", err);
+      showError(t("patchError"));
     } finally {
       setSaving(false);
     }
@@ -174,6 +220,7 @@ export function FileCard({
       });
       if (!res.ok && res.status !== 409) {
         console.error("Failed to create tag", await res.text());
+        showError(t("patchError"));
         return;
       }
       const newTag: TagItem = await res.json();
@@ -188,6 +235,7 @@ export function FileCard({
       }
     } catch (err) {
       console.error("Network error creating tag", err);
+      showError(t("patchError"));
     } finally {
       setCreatingTag(false);
     }
@@ -258,6 +306,11 @@ export function FileCard({
               {[courseTitle, fileType, fileSize].filter(Boolean).join(" · ")}
             </span>
           )}
+          {errorMsg && (
+            <span className="text-xs text-red-500 dark:text-red-400 mt-1 block font-medium">
+              {errorMsg}
+            </span>
+          )}
         </div>
       </div>
 
@@ -266,8 +319,11 @@ export function FileCard({
         {persistable && (
           <div className="relative">
             <button
+              ref={triggerRef}
               id={`flag-menu-btn-${id}`}
               aria-label={t("flagMenuLabel")}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
               title={t("flagMenuTitle")}
               onClick={handleMenuOpen}
               disabled={saving}
@@ -302,6 +358,8 @@ export function FileCard({
                     <button
                       key={key}
                       id={`flag-toggle-${id}-${key}`}
+                      role="checkbox"
+                      aria-checked={flags[key]}
                       onClick={() => {
                         toggleFlag(key);
                         setMenuOpen(false);

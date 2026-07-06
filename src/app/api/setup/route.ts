@@ -21,15 +21,6 @@ function normalizeOptionalText(value: unknown): string | null | undefined {
 
 export async function POST(request: Request) {
   try {
-    const existingUsers = await prisma.user.count();
-
-    if (existingUsers > 0) {
-      return NextResponse.json(
-        { error: "Setup already completed" },
-        { status: 409 },
-      );
-    }
-
     const body = await request.json();
     const email = typeof body.email === "string" ? body.email.trim() : "";
     const password =
@@ -49,15 +40,32 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        passwordHash: await hashPassword(password),
-        firstName: normalizeOptionalText(body.firstName),
-        lastName: normalizeOptionalText(body.lastName),
-      },
-      select: { id: true },
+    const passwordHash = await hashPassword(password);
+
+    const user = await prisma.$transaction(async (tx) => {
+      const existingUsers = await tx.user.count();
+
+      if (existingUsers > 0) {
+        return null;
+      }
+
+      return tx.user.create({
+        data: {
+          email,
+          passwordHash,
+          firstName: normalizeOptionalText(body.firstName),
+          lastName: normalizeOptionalText(body.lastName),
+        },
+        select: { id: true },
+      });
     });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Setup already completed" },
+        { status: 409 },
+      );
+    }
 
     const cookieStore = await cookies();
     cookieStore.set("auth_session", user.id.toString(), {

@@ -67,7 +67,7 @@ export default function DashboardPage() {
                 <Loader2 className="animate-spin text-blue-500" />
               </div>
             ) : tasksError ? (
-              <p className="text-red-500 text-sm">
+              <p className="text-red-500 dark:text-red-400 text-sm">
                 {t("failedDeadlines")}
               </p>
             ) : upcomingDeadlines.length === 0 ? (

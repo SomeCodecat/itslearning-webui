@@ -120,6 +120,18 @@ export function NotificationBell() {
   const relativeT = useTranslations("RelativeTime");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" && isOpen) {
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
   const {
     data: notifications,
     error,
@@ -153,10 +165,12 @@ export function NotificationBell() {
   return (
     <div className="relative mr-3" ref={dropdownRef}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setIsOpen((current) => !current)}
         className="relative p-2 rounded-full text-gray-500 hover:text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
         aria-label={t("ariaLabel")}
+        aria-haspopup="true"
         aria-expanded={isOpen}
       >
         <Bell size={18} />

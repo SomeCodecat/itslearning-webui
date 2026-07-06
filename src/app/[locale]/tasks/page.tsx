@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import useSWR from "swr";
 import { useState } from "react";
 import { ChevronDown, ChevronRight, ExternalLink, Loader2 } from "lucide-react";
@@ -84,7 +84,7 @@ function getTaskKey(task: TaskView): string {
   return getTaskLookupId(task) ?? task.Title ?? "task";
 }
 
-function formatDate(value: unknown, noneLabel: string): string {
+function formatDate(value: unknown, noneLabel: string, format: any): string {
   if (!value) {
     return noneLabel;
   }
@@ -103,7 +103,7 @@ function formatDate(value: unknown, noneLabel: string): string {
     return noneLabel;
   }
 
-  return date.toLocaleString();
+  return format.dateTime(date, { dateStyle: "medium", timeStyle: "short" });
 }
 
 function getAssignmentSettings(taskDetails: TaskDetails): AssignmentSettings {
@@ -153,6 +153,7 @@ function TaskDetailsPanel({
   isLoading: boolean;
 }) {
   const t = useTranslations("Tasks");
+  const format = useFormatter();
   const formatStatus = (value: unknown) => {
     if (value === "Active") return t("status.active");
     if (value === "Completed") return t("status.completed");
@@ -215,7 +216,7 @@ function TaskDetailsPanel({
             {t("deadlineLabel")}
           </p>
           <p className="text-sm text-gray-800 dark:text-gray-100">
-            {formatDate(taskDetails.deadline || task.Deadline, t("none"))}
+            {formatDate(taskDetails.deadline || task.Deadline, t("none"), format)}
           </p>
         </div>
         <div>
@@ -361,6 +362,7 @@ function TaskDetailsPanel({
 
 export default function TasksPage() {
   const t = useTranslations("Tasks");
+  const format = useFormatter();
   const [status, setStatus] = useState<"Active" | "Completed" | "All">(
     "Active",
   );
@@ -557,7 +559,7 @@ export default function TasksPage() {
                         </span>
                       </span>
                       <span className="block text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        {t("deadline")}: {formatDate(task.Deadline, t("none"))}
+                        {t("deadline")}: {formatDate(task.Deadline, t("none"), format)}
                       </span>
                     </span>
                   </button>
@@ -571,6 +573,7 @@ export default function TasksPage() {
                     >
                       <ExternalLink size={14} />
                       {t("open")}
+                      <span className="sr-only"> ({t("opensInNewTab")})</span>
                     </a>
                   )}
                 </div>

@@ -136,6 +136,13 @@ export class FileService {
     };
 
     if (userFile.storedFileId && userFile.storedFileId !== storedFile.id) {
+      // Read the old row's tags so we can carry them over to the replacement.
+      const oldRow = await prisma.userFile.findUnique({
+        where: { id: userFile.id },
+        select: { tags: { select: { id: true } } },
+      });
+      const tagConnections = (oldRow?.tags ?? []).map((t) => ({ id: t.id }));
+
       await prisma.userFile.update({
         where: { id: userFile.id },
         data: {
@@ -150,6 +157,7 @@ export class FileService {
           planId: userFile.planId,
           elementId: userFile.elementId,
           ...fileData,
+          tags: tagConnections.length > 0 ? { connect: tagConnections } : undefined,
         },
       });
 

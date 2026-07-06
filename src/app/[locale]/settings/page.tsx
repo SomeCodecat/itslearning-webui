@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from "swr";
-import { User, School, Save, Loader2 } from "lucide-react";
+import { User, School, Save, Loader2, Eye, EyeOff } from "lucide-react";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -44,6 +44,7 @@ export default function SettingsPage() {
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [schoolMessage, setSchoolMessage] = useState("");
+  const [showSchoolPassword, setShowSchoolPassword] = useState(false);
 
   // Populate form on user load
   useEffect(() => {
@@ -170,11 +171,14 @@ export default function SettingsPage() {
                   >
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label htmlFor="settings-first-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           {t("firstName")}
                         </label>
                         <input
+                          id="settings-first-name"
                           type="text"
+                          disabled={profileStatus === "saving"}
+                          autoComplete="given-name"
                           value={profileForm.firstName}
                           onChange={(e) =>
                             setProfileForm({
@@ -182,15 +186,18 @@ export default function SettingsPage() {
                               firstName: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label htmlFor="settings-last-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           {t("lastName")}
                         </label>
                         <input
+                          id="settings-last-name"
                           type="text"
+                          disabled={profileStatus === "saving"}
+                          autoComplete="family-name"
                           value={profileForm.lastName}
                           onChange={(e) =>
                             setProfileForm({
@@ -198,17 +205,20 @@ export default function SettingsPage() {
                               lastName: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="settings-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t("email")}
                       </label>
                       <input
+                        id="settings-email"
                         type="email"
+                        disabled={profileStatus === "saving"}
+                        autoComplete="email"
                         value={profileForm.email}
                         onChange={(e) =>
                           setProfileForm({
@@ -216,7 +226,7 @@ export default function SettingsPage() {
                             email: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                       />
                     </div>
 
@@ -236,12 +246,12 @@ export default function SettingsPage() {
                           : t("saveChanges")}
                       </button>
                       {profileStatus === "success" && (
-                        <span className="ml-3 text-green-600 text-sm font-medium">
+                        <span className="ml-3 text-green-600 dark:text-green-400 text-sm font-medium">
                           {t("saved")}
                         </span>
                       )}
                       {profileStatus === "error" && (
-                        <span className="ml-3 text-red-600 text-sm font-medium">
+                        <span className="ml-3 text-red-600 dark:text-red-400 text-sm font-medium">
                           {profileMessage || t("saveFailed")}
                         </span>
                       )}
@@ -257,78 +267,103 @@ export default function SettingsPage() {
                   {t("connectItslearning")}
                 </h2>
 
-                <form
-                  onSubmit={handleSchoolSubmit}
-                  className="space-y-6 max-w-lg"
-                >
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      {t("itslearningUrl")}
-                    </label>
-                    <input
-                      type="url"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
-                      placeholder="https://sso.itslearning.com"
-                      value={schoolForm.organizationUrl}
-                      onChange={(e) =>
-                        setSchoolForm({
-                          ...schoolForm,
-                          organizationUrl: e.target.value,
-                        })
-                      }
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      {t("organizationUrlHint")}
-                    </p>
+                {userLoading ? (
+                  <div className="py-10 text-center text-gray-500">
+                    <Loader2 className="animate-spin h-8 w-8 mx-auto mb-2 text-blue-500" />
+                    {t("loadingProfile")}
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      {t("username")}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
-                      value={schoolForm.username}
-                      onChange={(e) =>
-                        setSchoolForm({
-                          ...schoolForm,
-                          username: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      {t("password")}
-                    </label>
-                    <input
-                      type="password"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
-                      value={schoolForm.password}
-                      onChange={(e) =>
-                        setSchoolForm({
-                          ...schoolForm,
-                          password: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-
-                  {schoolStatus === "error" && (
-                    <div className="p-3 bg-red-100 text-red-700 rounded-md text-sm">
-                      {schoolMessage}
+                ) : (
+                  <form
+                    onSubmit={handleSchoolSubmit}
+                    className="space-y-6 max-w-lg"
+                  >
+                    <div>
+                      <label htmlFor="settings-itslearning-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        {t("itslearningUrl")}
+                      </label>
+                      <input
+                        id="settings-itslearning-url"
+                        type="url"
+                        required
+                        disabled={schoolStatus === "loading"}
+                        autoComplete="url"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        placeholder="https://sso.itslearning.com"
+                        value={schoolForm.organizationUrl}
+                        onChange={(e) =>
+                          setSchoolForm({
+                            ...schoolForm,
+                            organizationUrl: e.target.value,
+                          })
+                        }
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        {t("organizationUrlHint")}
+                      </p>
                     </div>
-                  )}
-                  {schoolStatus === "success" && (
-                    <div className="p-3 bg-green-100 text-green-700 rounded-md text-sm">
-                      {schoolMessage}
+
+                    <div>
+                      <label htmlFor="settings-username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        {t("username")}
+                      </label>
+                      <input
+                        id="settings-username"
+                        type="text"
+                        required
+                        disabled={schoolStatus === "loading"}
+                        autoComplete="username"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        value={schoolForm.username}
+                        onChange={(e) =>
+                          setSchoolForm({
+                            ...schoolForm,
+                            username: e.target.value,
+                          })
+                        }
+                      />
                     </div>
-                  )}
+
+                    <div>
+                      <label htmlFor="settings-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        {t("password")}
+                      </label>
+                      <div className="relative">
+                        <input
+                          id="settings-password"
+                          type={showSchoolPassword ? "text" : "password"}
+                          required
+                          disabled={schoolStatus === "loading"}
+                          autoComplete="current-password"
+                          className="w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          value={schoolForm.password}
+                          onChange={(e) =>
+                            setSchoolForm({
+                              ...schoolForm,
+                              password: e.target.value,
+                            })
+                          }
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowSchoolPassword(!showSchoolPassword)}
+                          aria-label={showSchoolPassword ? t("hidePassword") : t("showPassword")}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none"
+                        >
+                          {showSchoolPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {schoolStatus === "error" && (
+                      <div className="p-3 bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400 rounded-md text-sm">
+                        {schoolMessage}
+                      </div>
+                    )}
+                    {schoolStatus === "success" && (
+                      <div className="p-3 bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400 rounded-md text-sm">
+                        {schoolMessage}
+                      </div>
+                    )}
 
                   <div className="pt-2">
                     <button
@@ -342,6 +377,7 @@ export default function SettingsPage() {
                     </button>
                   </div>
                 </form>
+                )}
 
                 <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2">

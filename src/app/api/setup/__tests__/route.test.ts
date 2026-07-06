@@ -1,17 +1,26 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { mockCookies, mockCookieSet, mockPrisma, mockHashPassword } =
-  vi.hoisted(() => ({
-    mockCookies: vi.fn(),
-    mockCookieSet: vi.fn(),
-    mockPrisma: {
+  vi.hoisted(() => {
+    type TxClient = {
+      user: { count: ReturnType<typeof vi.fn>; create: ReturnType<typeof vi.fn> };
+    };
+    const prismaMock: TxClient & {
+      $transaction: ReturnType<typeof vi.fn>;
+    } = {
       user: {
         count: vi.fn(),
         create: vi.fn(),
       },
-    },
-    mockHashPassword: vi.fn(),
-  }));
+      $transaction: vi.fn(<T>(cb: (tx: TxClient) => Promise<T>) => cb(prismaMock)),
+    };
+    return {
+      mockCookies: vi.fn(),
+      mockCookieSet: vi.fn(),
+      mockPrisma: prismaMock,
+      mockHashPassword: vi.fn(),
+    };
+  });
 
 vi.mock("next/headers", () => ({
   cookies: mockCookies,

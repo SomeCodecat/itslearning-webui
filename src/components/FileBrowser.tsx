@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
+import { useSWRConfig } from "swr";
 import { FileCard } from "./FileCard";
 import { Search, ArrowUpDown, Loader2 } from "lucide-react";
 
@@ -27,6 +28,10 @@ interface FileItem {
 
 interface FileBrowserProps {
   files: FileItem[];
+  /** SWR cache key used by the parent (e.g. "/api/files/all"). After a flag or
+   * tag change the browser calls mutate(cacheKey) so the parent cache reflects
+   * the new state without a full page reload. */
+  cacheKey?: string;
   /** When false, all FileCards are rendered without the flag toggle (e.g. live-scraped course resources) */
   persistable?: boolean;
   /** Optional callback fired after a flag is toggled, allowing the parent to mutate SWR cache */
@@ -46,10 +51,13 @@ function mergeDedup(base: FileItem[], extra: FileItem[]): FileItem[] {
 
 export function FileBrowser({
   files,
+  cacheKey,
   persistable = true,
   onFileFlagsChange,
 }: FileBrowserProps) {
   const t = useTranslations("FileBrowser");
+  const format = useFormatter();
+  const { mutate } = useSWRConfig();
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"All" | "AP1" | "AP2" | "Exam">(
     "All",
@@ -64,6 +72,52 @@ export function FileBrowser({
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  const handleFlagsChange = useCallback(
+    (fileId: number, updatedFlags: { isExamRelevant: boolean; isAP1: boolean; isAP2: boolean }) => {
+      onFileFlagsChange?.(fileId, updatedFlags);
+      if (cacheKey) {
+        mutate(
+          cacheKey,
+          (currentData: FileItem[] | undefined) => {
+            if (!currentData) return currentData;
+            return currentData.map((f) =>
+              f.id === fileId ? { ...f, ...updatedFlags } : f
+            );
+          },
+          { revalidate: false }
+        );
+      }
+    },
+    [cacheKey, onFileFlagsChange, mutate]
+  );
+
+  const handleTagsChange = useCallback(
+    (fileId: number, updatedTags: TagItem[]) => {
+      if (cacheKey) {
+        mutate(
+          cacheKey,
+          (currentData: FileItem[] | undefined) => {
+            if (!currentData) return currentData;
+            return currentData.map((f) =>
+              f.id === fileId ? { ...f, tags: updatedTags } : f
+            );
+          },
+          { revalidate: false }
+        );
+      }
+    },
+    [cacheKey, mutate]
+  );
 
   // Collect all unique tags from the files list for the tag filter dropdown
   const allTags: TagItem[] = React.useMemo(() => {
@@ -86,11 +140,19 @@ export function FileBrowser({
       setSearchError(false);
       return;
     }
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setSearchLoading(true);
     setSearchError(false);
     try {
       const res = await fetch(
         `/api/files/search?q=${encodeURIComponent(q)}`,
+        { signal: controller.signal }
       );
       if (!res.ok) {
         setSearchResults([]);
@@ -98,11 +160,16 @@ export function FileBrowser({
       } else {
         setSearchResults(await res.json());
       }
-    } catch {
+    } catch (err: any) {
+      if (err.name === "AbortError" || (err instanceof DOMException && err.name === "AbortError")) {
+        return;
+      }
       setSearchResults([]);
       setSearchError(true);
     } finally {
-      setSearchLoading(false);
+      if (abortControllerRef.current === controller) {
+        setSearchLoading(false);
+      }
     }
   }, []);
 
@@ -174,6 +241,7 @@ export function FileBrowser({
             id="file-search-input"
             type="text"
             placeholder={t("searchPlaceholder")}
+            aria-label={t("searchLabel")}
             className="w-full pl-9 pr-9 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -205,7 +273,8 @@ export function FileBrowser({
         {allTags.length > 0 && (
           <select
             id="tag-filter-select"
-            className="px-2 py-2 border border-border rounded-md text-sm bg-background"
+            aria-label={t("filterTagLabel")}
+            className="px-2 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md text-sm"
             value={filterTagId ?? ""}
             onChange={(e) =>
               setFilterTagId(e.target.value === "" ? null : Number(e.target.value))
@@ -224,7 +293,8 @@ export function FileBrowser({
         <div className="flex items-center gap-2">
           <ArrowUpDown className="w-4 h-4 text-gray-400" />
           <select
-            className="px-2 py-2 border border-border rounded-md text-sm bg-background"
+            aria-label={t("sortLabel")}
+            className="px-2 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md text-sm"
             value={sort}
             onChange={(e) =>
               setSort(e.target.value as "date_desc" | "date_asc" | "name_asc")
@@ -271,16 +341,17 @@ export function FileBrowser({
             fileType={file.type ?? undefined}
             date={
               file.uploadedAt
-                ? new Date(file.uploadedAt).toLocaleDateString()
+                ? format.dateTime(new Date(file.uploadedAt), { dateStyle: "medium" })
                 : undefined
             }
             tags={file.tags ?? []}
             persistable={persistable}
             contentMatch={file.contentMatch ?? false}
-            onFlagsChange={(updated) => onFileFlagsChange?.(file.id, updated)}
-            onTagsChange={() => {
-              // no-op here: FileBrowser could mutate SWR cache if needed
-              // but for simplicity FileCard manages its own tag state
+            onFlagsChange={(updated) => {
+              handleFlagsChange(file.id, updated);
+            }}
+            onTagsChange={(updatedTags) => {
+              handleTagsChange(file.id, updatedTags);
             }}
           />
         ))}
