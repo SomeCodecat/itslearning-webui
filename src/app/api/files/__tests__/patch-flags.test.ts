@@ -28,6 +28,7 @@ vi.mock("mime-types", () => ({
   default: { lookup: () => false },
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { PATCH } from "../[id]/route";
 
 const baseUserFile = {
@@ -54,8 +55,9 @@ const baseUserFile = {
 describe("PATCH /api/files/[id]", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
     mockPrisma.userFile.findUnique.mockResolvedValue(baseUserFile);
     mockPrisma.userFile.update.mockResolvedValue({
       ...baseUserFile,

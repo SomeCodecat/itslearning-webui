@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
@@ -9,14 +9,11 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(url);
     const status = searchParams.get("status") || "Active";
 
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
+    const userId = await getSessionUserId();
 
-    if (!userIdCookie) {
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const userId = parseInt(userIdCookie.value);
 
     // Helper to map status string to DB query if needed.
     // Currently DB stores status string directly from API.

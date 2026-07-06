@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 import { Prisma } from "@prisma/client";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,14 +21,11 @@ function normalizeOptionalText(value: unknown): string | null | undefined {
 // GET: Fetch current user profile
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
+    const userId = await getSessionUserId();
 
-    if (!userIdCookie) {
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const userId = parseInt(userIdCookie.value);
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -59,14 +56,11 @@ export async function GET() {
 // PATCH: Update user profile
 export async function PATCH(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
+    const userId = await getSessionUserId();
 
-    if (!userIdCookie) {
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const userId = parseInt(userIdCookie.value);
     const body = await request.json();
 
     const email = normalizeOptionalText(body.email);

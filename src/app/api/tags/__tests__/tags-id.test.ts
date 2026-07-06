@@ -19,6 +19,7 @@ vi.mock("@/lib/db", () => ({
   prisma: mockPrisma,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { DELETE } from "../[id]/route";
 
 const baseTag = { id: 7, userId: 1, name: "lecture" };
@@ -26,8 +27,9 @@ const baseTag = { id: 7, userId: 1, name: "lecture" };
 describe("DELETE /api/tags/[id]", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
     mockPrisma.tag.findUnique.mockResolvedValue(baseTag);
     mockPrisma.tag.delete.mockResolvedValue(baseTag);
   });

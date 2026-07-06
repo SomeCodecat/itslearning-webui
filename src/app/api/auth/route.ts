@@ -1,22 +1,15 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { ScraperService } from "@/lib/services/ScraperService";
 import { CryptoService } from "@/lib/services/CryptoService";
+import { getSessionUserId } from "@/lib/session";
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
+    const userId = await getSessionUserId();
 
-    if (!userIdCookie) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = parseInt(userIdCookie.value, 10);
-
-    if (!Number.isInteger(userId)) {
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

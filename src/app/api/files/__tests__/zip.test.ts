@@ -46,13 +46,15 @@ vi.mock("archiver", () => {
   };
 });
 
+import { signSessionValue } from "@/lib/session";
 import { POST } from "../zip/route";
 
 describe("POST /api/files/zip", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
 

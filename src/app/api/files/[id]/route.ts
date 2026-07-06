@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 import { mapUserFileForList } from "@/lib/services/FileListMapper";
 
 export async function PATCH(
@@ -15,12 +15,10 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid file ID" }, { status: 400 });
     }
 
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
-    if (!userIdCookie) {
+    const userId = await getSessionUserId();
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = parseInt(userIdCookie.value);
 
     // Parse and validate body
     let body: Record<string, unknown>;

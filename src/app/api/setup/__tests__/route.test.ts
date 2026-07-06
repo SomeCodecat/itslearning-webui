@@ -34,11 +34,13 @@ vi.mock("@/lib/passwordHash", () => ({
   hashPassword: mockHashPassword,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { POST } from "../route";
 
 describe("POST /api/setup", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ set: mockCookieSet });
     mockPrisma.user.count.mockResolvedValue(0);
     mockPrisma.user.create.mockResolvedValue({ id: 7 });
@@ -71,7 +73,7 @@ describe("POST /api/setup", () => {
       },
       select: { id: true },
     });
-    expect(mockCookieSet).toHaveBeenCalledWith("auth_session", "7", {
+    expect(mockCookieSet).toHaveBeenCalledWith("auth_session", signSessionValue(7), {
       httpOnly: true,
       secure: false,
       maxAge: 60 * 60 * 24 * 7,

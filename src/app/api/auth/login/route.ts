@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
 import { ScraperService } from "@/lib/services/ScraperService";
 import { CryptoService } from "@/lib/services/CryptoService";
 import { verifyPassword } from "@/lib/passwordHash";
+import { getSessionUserId, setSessionCookie } from "@/lib/session";
 
 export async function POST(request: Request) {
   try {
@@ -48,13 +48,7 @@ export async function POST(request: Request) {
       }
 
       // Issue session cookie and return — ITSLearning can be linked later via Settings.
-      const cookieStore = await cookies();
-      cookieStore.set("auth_session", localUser.id.toString(), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 7,
-        path: "/",
-      });
+      await setSessionCookie(localUser.id);
 
       return NextResponse.json({ success: true });
     }
@@ -92,44 +86,35 @@ export async function POST(request: Request) {
     let userId: number;
 
     // Step 1: Active session cookie → link to that user
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("auth_session");
-    if (sessionCookie) {
-      const sessionUserId = parseInt(sessionCookie.value, 10);
-      if (Number.isInteger(sessionUserId)) {
-        const sessionUser = await prisma.user.findUnique({
-          where: { id: sessionUserId },
+    const sessionUserId = await getSessionUserId();
+    if (sessionUserId !== null) {
+      const sessionUser = await prisma.user.findUnique({
+        where: { id: sessionUserId },
+        select: { id: true },
+      });
+      if (sessionUser) {
+        // Verify the itslearningUser isn't already owned by a DIFFERENT user
+        const existingOwner = await prisma.user.findUnique({
+          where: { itslearningUser },
           select: { id: true },
         });
-        if (sessionUser) {
-          // Verify the itslearningUser isn't already owned by a DIFFERENT user
-          const existingOwner = await prisma.user.findUnique({
-            where: { itslearningUser },
-            select: { id: true },
-          });
-          if (existingOwner && existingOwner.id !== sessionUserId) {
-            return NextResponse.json(
-              {
-                error:
-                  "This ITSLearning account is already linked to a different user",
-              },
-              { status: 409 },
-            );
-          }
-          await prisma.user.update({
-            where: { id: sessionUserId },
-            data: itslearningData,
-          });
-          userId = sessionUserId;
-
-          cookieStore.set("auth_session", userId.toString(), {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 60 * 24 * 7,
-            path: "/",
-          });
-          return NextResponse.json({ success: true });
+        if (existingOwner && existingOwner.id !== sessionUserId) {
+          return NextResponse.json(
+            {
+              error:
+                "This ITSLearning account is already linked to a different user",
+            },
+            { status: 409 },
+          );
         }
+        await prisma.user.update({
+          where: { id: sessionUserId },
+          data: itslearningData,
+        });
+        userId = sessionUserId;
+
+        await setSessionCookie(userId);
+        return NextResponse.json({ success: true });
       }
     }
 
@@ -172,12 +157,7 @@ export async function POST(request: Request) {
     }
 
     // 4. Set session cookie
-    cookieStore.set("auth_session", userId.toString(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-    });
+    await setSessionCookie(userId);
 
     return NextResponse.json({ success: true });
   } catch (error) {

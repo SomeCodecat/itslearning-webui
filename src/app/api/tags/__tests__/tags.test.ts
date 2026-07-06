@@ -21,13 +21,15 @@ vi.mock("@/lib/db", () => ({
   prisma: mockPrisma,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { GET, POST } from "../route";
 
 describe("GET /api/tags", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
     mockPrisma.tag.findMany.mockResolvedValue([
       { id: 1, name: "important" },
       { id: 2, name: "revision" },
@@ -54,8 +56,9 @@ describe("GET /api/tags", () => {
 describe("POST /api/tags", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
     mockPrisma.tag.findUnique.mockResolvedValue(null);
     mockPrisma.tag.create.mockResolvedValue({ id: 3, name: "new-tag" });
   });

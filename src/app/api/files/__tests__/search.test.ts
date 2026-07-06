@@ -22,6 +22,7 @@ vi.mock("mime-types", () => ({
   default: { lookup: () => false },
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { GET } from "../search/route";
 
 function makeUserFile(overrides: Record<string, unknown> = {}) {
@@ -52,8 +53,9 @@ function makeUserFile(overrides: Record<string, unknown> = {}) {
 describe("GET /api/files/search", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
     mockPrisma.userFile.findMany.mockResolvedValue([]);
   });
 
@@ -118,7 +120,7 @@ describe("GET /api/files/search", () => {
   });
 
   it("scopes search results to the current user", async () => {
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
 
     const res = await GET(makeRequest("notes"));
 

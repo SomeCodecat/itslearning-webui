@@ -58,11 +58,13 @@ vi.mock("@/lib/passwordHash", () => ({
   verifyPassword: mockVerifyPassword,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { POST } from "../login/route";
 
 describe("POST /api/auth/login", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet, set: mockCookieSet });
     mockCookieGet.mockReturnValue(undefined); // no active session by default
     mockAuthenticate.mockResolvedValue(undefined);
@@ -107,7 +109,7 @@ describe("POST /api/auth/login", () => {
     expect(mockAuthenticate).not.toHaveBeenCalled();
     expect(mockCookieSet).toHaveBeenCalledWith(
       "auth_session",
-      "7",
+      signSessionValue(7),
       expect.objectContaining({ httpOnly: true }),
     );
   });
@@ -142,7 +144,7 @@ describe("POST /api/auth/login", () => {
       .mockResolvedValueOnce(null) // email lookup → no local user
       .mockResolvedValueOnce({ id: 42 }) // session user exists
       .mockResolvedValueOnce(null); // no existing owner of itslearningUser
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
 
     const response = await POST(
       new Request("http://localhost/api/auth/login", {
@@ -168,7 +170,7 @@ describe("POST /api/auth/login", () => {
       .mockResolvedValueOnce(null) // email lookup
       .mockResolvedValueOnce({ id: 42 }) // session user
       .mockResolvedValueOnce({ id: 99 }); // existing owner — different user
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
 
     const response = await POST(
       new Request("http://localhost/api/auth/login", {
@@ -272,7 +274,7 @@ describe("POST /api/auth/login", () => {
     });
     expect(mockCookieSet).toHaveBeenCalledWith(
       "auth_session",
-      "99",
+      signSessionValue(99),
       expect.objectContaining({ httpOnly: true }),
     );
   });

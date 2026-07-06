@@ -55,14 +55,16 @@ vi.mock("@/lib/services/ScraperService", () => ({
   }),
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { getScraperForSession } from "../../userScraper";
 
 describe("getScraperForSession", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockScraperInstances.length = 0;
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
   });
 
   afterEach(() => {

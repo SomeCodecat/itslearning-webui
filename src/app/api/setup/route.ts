@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { hashPassword } from "@/lib/passwordHash";
+import { setSessionCookie } from "@/lib/session";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -67,13 +67,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const cookieStore = await cookies();
-    cookieStore.set("auth_session", user.id.toString(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-    });
+    await setSessionCookie(user.id);
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { isFileResource } from "@/lib/services/ScraperService";
 import { getScraperForSession } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 import fs from "fs/promises";
 import path from "path";
 
@@ -47,14 +47,11 @@ function optionalScore(value: unknown): number | null {
 
 export async function POST() {
   try {
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
+    const userId = await getSessionUserId();
 
-    if (!userIdCookie) {
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const userId = parseInt(userIdCookie.value);
 
     const scraperService = await getScraperForSession();
 

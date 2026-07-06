@@ -19,8 +19,9 @@ export default function middleware(request: NextRequest) {
     return intlMiddleware(request);
   }
 
-  // 2. Check for Session Cookie
-  const hasSession = request.cookies.has("auth_session");
+  // 2. Check for Session Cookie. API routes verify the HMAC signature authoritatively.
+  const sessionCookie = request.cookies.get("auth_session")?.value;
+  const hasSession = Boolean(sessionCookie && sessionCookie.includes("."));
 
   if (!hasSession) {
     // Redirect to login

@@ -46,13 +46,15 @@ vi.mock("@/lib/services/CryptoService", () => ({
   },
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { POST } from "../route";
 
 describe("POST /api/auth", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
     mockPrisma.user.findUnique.mockResolvedValue({ id: 42 });
     mockPrisma.user.update.mockResolvedValue({
       itslearningUrl: "https://school.example",

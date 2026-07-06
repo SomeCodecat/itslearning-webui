@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 import { mapUserFileForList } from "@/lib/services/FileListMapper";
 
 /**
@@ -14,13 +14,11 @@ import { mapUserFileForList } from "@/lib/services/FileListMapper";
  */
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
+    const userId = await getSessionUserId();
 
-    if (!userIdCookie) {
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = parseInt(userIdCookie.value);
 
     const { searchParams } = new URL(request.url);
     const q = searchParams.get("q") ?? "";

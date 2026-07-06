@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getScraperForSession, isAuthSessionError } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 import { FileService } from "@/lib/services/FileService";
 import fs from "fs/promises";
 
@@ -15,12 +15,10 @@ export async function GET(request: Request) {
     }
     const userFileId = parseInt(idParam);
 
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
-    if (!userIdCookie) {
+    const userId = await getSessionUserId();
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = parseInt(userIdCookie.value);
 
     // 1. Find UserFile in DB
     const userFile = await prisma.userFile.findUnique({

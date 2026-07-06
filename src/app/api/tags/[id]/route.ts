@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 
 /** DELETE /api/tags/[id] — delete own tag; disconnects from files automatically */
 export async function DELETE(
@@ -15,12 +15,10 @@ export async function DELETE(
       return NextResponse.json({ error: "Invalid tag ID" }, { status: 400 });
     }
 
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
-    if (!userIdCookie) {
+    const userId = await getSessionUserId();
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = parseInt(userIdCookie.value);
 
     // Verify ownership
     const tag = await prisma.tag.findUnique({

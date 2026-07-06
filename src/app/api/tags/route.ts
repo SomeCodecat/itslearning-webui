@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 
 /** GET /api/tags — list all tags belonging to the session user */
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
-    if (!userIdCookie) {
+    const userId = await getSessionUserId();
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = parseInt(userIdCookie.value);
 
     const tags = await prisma.tag.findMany({
       where: { userId },
@@ -31,12 +29,10 @@ export async function GET() {
 /** POST /api/tags — create a tag (trim, non-empty, dedupe by name per user) */
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
-    if (!userIdCookie) {
+    const userId = await getSessionUserId();
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = parseInt(userIdCookie.value);
 
     let body: Record<string, unknown>;
     try {

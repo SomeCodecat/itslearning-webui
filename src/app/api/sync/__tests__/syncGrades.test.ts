@@ -70,6 +70,7 @@ vi.mock("@/lib/userScraper", () => ({
   getScraperForSession: mockGetScraperForSession,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { POST } from "../route";
 
 describe("POST /api/sync grades integration", () => {
@@ -79,8 +80,9 @@ describe("POST /api/sync grades integration", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
 
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
     mockFsMkdir.mockResolvedValue(undefined);
     mockGetScraperForSession.mockResolvedValue(mockScraper);
     mockScraper.getCourses.mockResolvedValue([

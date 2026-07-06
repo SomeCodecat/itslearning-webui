@@ -50,6 +50,7 @@ vi.mock("@/lib/services/FileService", () => ({
   }),
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { GET } from "../download/route";
 
 describe("GET /api/files/download", () => {
@@ -72,8 +73,9 @@ describe("GET /api/files/download", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "1" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(1) });
     mockPrisma.userFile.findUnique.mockResolvedValue(userFile);
     mockGetScraperForSession.mockResolvedValue({
       downloadFile: mockDownloadFile,

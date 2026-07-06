@@ -24,14 +24,16 @@ vi.mock("@/lib/userScraper", () => ({
   isAuthSessionError: mockIsAuthSessionError,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { GET } from "../route";
 
 describe("GET /api/grades", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     vi.spyOn(console, "error").mockImplementation(() => {});
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
     mockIsAuthSessionError.mockReturnValue(false);
     mockPrisma.grade.findMany.mockResolvedValue([
       {
@@ -114,7 +116,7 @@ describe("GET /api/grades", () => {
     const response = await GET(new Request("http://localhost/api/grades"));
 
     expect(response.status).toBe(401);
-    expect(mockIsAuthSessionError).toHaveBeenCalledWith(error);
+    expect(mockIsAuthSessionError).not.toHaveBeenCalled();
     expect(await response.json()).toEqual({ error: "Unauthorized" });
   });
 });

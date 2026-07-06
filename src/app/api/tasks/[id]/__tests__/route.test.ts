@@ -33,14 +33,16 @@ vi.mock("@/lib/userScraper", () => ({
   isAuthSessionError: mockIsAuthSessionError,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { GET } from "../route";
 
 describe("GET /api/tasks/[id]", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     vi.spyOn(console, "error").mockImplementation(() => {});
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
     mockPrisma.assignment.findFirst.mockImplementation(async ({
       where,
     }: {

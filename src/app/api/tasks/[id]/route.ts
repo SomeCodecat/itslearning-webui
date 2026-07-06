@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 import {
   getScraperForSession,
   isAuthSessionError,
@@ -49,14 +49,11 @@ export async function GET(
       return NextResponse.json({ error: "Invalid task ID" }, { status: 400 });
     }
 
-    const cookieStore = await cookies();
-    const userIdCookie = cookieStore.get("auth_session");
+    const userId = await getSessionUserId();
 
-    if (!userIdCookie) {
+    if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const userId = parseInt(userIdCookie.value, 10);
     const assignment = await findAssignmentForUser(assignmentId, userId);
 
     if (!assignment?.elementId) {

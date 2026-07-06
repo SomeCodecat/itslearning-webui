@@ -1,7 +1,7 @@
 import { ScraperService } from "@/lib/services/ScraperService";
 import { prisma } from "@/lib/db";
 import { CryptoService } from "@/lib/services/CryptoService";
-import { cookies } from "next/headers";
+import { getSessionUserId } from "@/lib/session";
 
 // Remove in-memory scraperCache
 const AUTH_SESSION_ERROR = "No active session";
@@ -27,14 +27,11 @@ function decryptStoredPassword(encryptedPwd: string, iv: string): string {
 }
 
 export async function getScraperForSession(): Promise<ScraperService> {
-  const cookieStore = await cookies();
-  const userIdCookie = cookieStore.get("auth_session");
+  const userId = await getSessionUserId();
 
-  if (!userIdCookie) {
+  if (userId === null) {
     throw authSessionError();
   }
-
-  const userId = parseInt(userIdCookie.value);
 
   // Load from DB
   const user = await prisma.user.findUnique({

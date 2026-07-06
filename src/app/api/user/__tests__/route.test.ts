@@ -20,13 +20,15 @@ vi.mock("@/lib/db", () => ({
   prisma: mockPrisma,
 }));
 
+import { signSessionValue } from "@/lib/session";
 import { GET, PATCH } from "../route";
 
 describe("/api/user", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SESSION_SECRET = "test-session-secret";
     mockCookies.mockResolvedValue({ get: mockCookieGet });
-    mockCookieGet.mockReturnValue({ value: "42" });
+    mockCookieGet.mockReturnValue({ value: signSessionValue(42) });
   });
 
   it("includes email in the current user profile", async () => {
