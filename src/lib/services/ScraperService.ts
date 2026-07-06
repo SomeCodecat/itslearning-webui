@@ -343,6 +343,50 @@ export class ScraperService {
     return res.data.EntityArray || [];
   }
 
+  // Unread/unseen counts for nav badges. Each endpoint returns a bare integer.
+  // A subsystem the account cannot use (e.g. instant messages) returns 403/404
+  // and is counted as 0; genuine auth/other errors propagate to the caller.
+  async getUnreadCounts(): Promise<{
+    unreadNotifications: number;
+    unseenNotifications: number;
+    unreadMessages: number;
+  }> {
+    const readCount = async (url: string): Promise<number> => {
+      try {
+        const res = await this.apiGet<number | { Count?: number }>(url);
+        const data = res.data as unknown;
+        if (typeof data === "number") return data;
+        if (
+          data &&
+          typeof data === "object" &&
+          typeof (data as { Count?: unknown }).Count === "number"
+        ) {
+          return (data as { Count: number }).Count;
+        }
+        return 0;
+      } catch (err) {
+        if (
+          axios.isAxiosError(err) &&
+          (err.response?.status === 403 || err.response?.status === 404)
+        ) {
+          return 0;
+        }
+        throw err;
+      }
+    };
+
+    const [unreadNotifications, unseenNotifications, unreadMessages] =
+      await Promise.all([
+        readCount("/restapi/personal/notifications/unread/count/v1"),
+        readCount("/restapi/personal/notifications/unseen/count/v1"),
+        readCount(
+          "/restapi/personal/instantmessages/messagethreads/unread/count/v1",
+        ),
+      ]);
+
+    return { unreadNotifications, unseenNotifications, unreadMessages };
+  }
+
   // Course Bulletins (LightBulletins)
   async getLightBulletins(courseId: number): Promise<unknown[]> {
     const res = await this.apiGet<EntityArrayResponse<unknown>>(
