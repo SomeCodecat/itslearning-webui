@@ -3,7 +3,10 @@
 import { useFormatter, useTranslations } from "next-intl";
 import useSWR from "swr";
 import { PageContainer } from "@/components/PageContainer";
-import { Download } from "lucide-react";
+import { CalendarDays, Download } from "lucide-react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorState } from "@/components/ui/ErrorState";
+import { LoadingState } from "@/components/ui/LoadingState";
 import { buildIcs } from "@/lib/exportIcs";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -15,6 +18,20 @@ type CalendarEvent = {
   From: string;
   To: string;
 };
+
+function getEventDotClass(event: CalendarEvent): string {
+  const text = `${event.Title} ${event.Description ?? ""}`.toLowerCase();
+
+  if (text.includes("exam") || text.includes("prüfung") || text.includes("ap1") || text.includes("ap2")) {
+    return "bg-error";
+  }
+
+  if (text.includes("due") || text.includes("abgabe") || text.includes("deadline")) {
+    return "bg-warning";
+  }
+
+  return "bg-accent";
+}
 
 export default function CalendarPage() {
   const t = useTranslations("Calendar");
@@ -52,60 +69,68 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <PageContainer className="py-6 md:py-10">
-        <header className="mb-6 flex items-center justify-between gap-4">
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-6">
+        <header className="mb-[18px] flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-xl font-bold text-text-primary md:text-2xl">
               {t("title")}
             </h1>
           </div>
           <button
             onClick={handleExportIcs}
             disabled={!events || events.length === 0}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 rounded-control border border-line-strong bg-elevated px-3 py-[7px] text-xs font-semibold text-text-secondary transition-colors hover:bg-elevated-strong disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={t("exportAriaLabel")}
           >
-            <Download size={16} />
+            <Download size={13} />
             <span>{t("exportLabel")}</span>
           </button>
         </header>
 
-        {isLoading && <div className="text-gray-500">{t("loading")}</div>}
+        {isLoading && <LoadingState label={t("loading")} />}
         {error && (
-          <div className="text-red-500 dark:text-red-400">
-            {t("loadFailed")}
-          </div>
+          <ErrorState message={t("loadFailed")} />
         )}
 
-        <div className="space-y-4">
+        <div className="flex flex-col gap-2.5">
           {Array.isArray(events) &&
-            events.map((event) => (
-              <div
-                key={event.EventId}
-                className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-l-4 border-l-blue-500 border-gray-200 dark:border-gray-700"
-              >
-                <h3 className="font-semibold text-gray-900 dark:text-white">
-                  {event.Title}
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {event.Description}
-                </p>
-                <div className="mt-2 text-xs text-gray-400">
-                  {format.dateTime(new Date(event.From), {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}{" "}
-                  -{" "}
-                  {format.dateTime(new Date(event.To), {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
-                </div>
-              </div>
-            ))}
+            events.map((event) => {
+              const from = new Date(event.From);
+              const to = new Date(event.To);
+
+              return (
+                <article
+                  key={event.EventId}
+                  className="flex items-center gap-3.5 rounded-card border border-line bg-card px-[15px] py-[13px]"
+                >
+                  <div className="w-[46px] flex-none text-center">
+                    <div className="font-mono text-xl font-bold leading-none text-accent-text">
+                      {format.dateTime(from, { day: "2-digit" })}
+                    </div>
+                    <div className="font-mono text-[10px] font-semibold uppercase text-text-tertiary">
+                      {format.dateTime(from, { month: "short" })}
+                    </div>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-sm font-semibold text-text-primary">
+                      {event.Title}
+                    </h3>
+                    <p className="truncate text-[11px] font-medium text-text-tertiary">
+                      {[event.Description, `${format.dateTime(from, { timeStyle: "short" })}-${format.dateTime(to, { timeStyle: "short" })}`]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className={`h-[9px] w-[9px] flex-none rounded-[3px] ${getEventDotClass(event)}`}
+                  />
+                </article>
+              );
+            })}
           {!isLoading && !error && (!Array.isArray(events) || events.length === 0) && (
-            <p className="text-gray-500 text-center">{t("empty")}</p>
+            <EmptyState icon={<CalendarDays size={20} />} title={t("empty")} />
           )}
         </div>
       </PageContainer>

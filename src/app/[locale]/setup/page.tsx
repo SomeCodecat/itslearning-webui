@@ -5,6 +5,10 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { Eye, EyeOff } from "lucide-react";
 
+const fieldClass =
+  "relative block w-full rounded-control border border-line-strong bg-elevated px-3 py-[10px] text-sm text-text-primary outline-none transition-colors placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50";
+const labelClass = "mb-1.5 block text-sm font-medium text-text-secondary";
+
 export default function SetupPage() {
   const t = useTranslations("Setup");
   const router = useRouter();
@@ -58,27 +62,27 @@ export default function SetupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10 text-foreground">
+      <div className="w-full max-w-md rounded-card border border-line bg-background p-8 shadow-panel">
         <div className="text-center">
-          <h2 className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white">
+          <h2 className="text-display text-text-primary">
             {t("title")}
           </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-3 text-sm text-text-secondary">
             {t("subtitle")}
           </p>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 text-red-500 dark:bg-red-950/40 dark:text-red-400 p-3 rounded-md text-sm text-center">
+            <div className="rounded-control border border-error/30 bg-error-subtle p-3 text-center text-sm text-error">
               {error}
             </div>
           )}
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="email" className={labelClass}>
                 {t("emailLabel")}
               </label>
               <input
@@ -88,7 +92,7 @@ export default function SetupPage() {
                 autoComplete="email"
                 required
                 disabled={loading}
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className={fieldClass}
                 placeholder={t("emailPlaceholder")}
                 value={formData.email}
                 onChange={(e) =>
@@ -97,7 +101,7 @@ export default function SetupPage() {
               />
             </div>
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="firstName" className={labelClass}>
                 {t("firstNameLabel")}
               </label>
               <input
@@ -106,7 +110,7 @@ export default function SetupPage() {
                 type="text"
                 autoComplete="given-name"
                 disabled={loading}
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className={fieldClass}
                 placeholder={t("firstNamePlaceholder")}
                 value={formData.firstName}
                 onChange={(e) =>
@@ -115,7 +119,7 @@ export default function SetupPage() {
               />
             </div>
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="lastName" className={labelClass}>
                 {t("lastNameLabel")}
               </label>
               <input
@@ -124,7 +128,7 @@ export default function SetupPage() {
                 type="text"
                 autoComplete="family-name"
                 disabled={loading}
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className={fieldClass}
                 placeholder={t("lastNamePlaceholder")}
                 value={formData.lastName}
                 onChange={(e) =>
@@ -134,7 +138,7 @@ export default function SetupPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="password" className={labelClass}>
                 {t("passwordLabel")}
               </label>
               <div className="relative">
@@ -145,7 +149,7 @@ export default function SetupPage() {
                   autoComplete="new-password"
                   required
                   disabled={loading}
-                  className="appearance-none rounded-md relative block w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  className={`${fieldClass} pr-10`}
                   placeholder={t("passwordPlaceholder")}
                   value={formData.password}
                   onChange={(e) =>
@@ -156,7 +160,7 @@ export default function SetupPage() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? t("hidePassword") : t("showPassword")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary transition-colors hover:text-text-secondary focus:outline-none"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -164,7 +168,7 @@ export default function SetupPage() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="confirmPassword" className={labelClass}>
                 {t("confirmPasswordLabel")}
               </label>
               <div className="relative">
@@ -175,7 +179,7 @@ export default function SetupPage() {
                   autoComplete="new-password"
                   required
                   disabled={loading}
-                  className="appearance-none rounded-md relative block w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  className={`${fieldClass} pr-10`}
                   placeholder={t("confirmPasswordPlaceholder")}
                   value={formData.confirmPassword}
                   onChange={(e) =>
@@ -186,7 +190,7 @@ export default function SetupPage() {
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   aria-label={showConfirmPassword ? t("hidePassword") : t("showPassword")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary transition-colors hover:text-text-secondary focus:outline-none"
                 >
                   {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -198,7 +202,7 @@ export default function SetupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              className="flex w-full justify-center rounded-control border border-transparent bg-accent px-4 py-[11px] text-sm font-semibold text-white transition-colors hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? t("creatingAccount") : t("createAccount")}
             </button>

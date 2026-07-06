@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from "swr";
 import { User, School, Save, Loader2, Eye, EyeOff } from "lucide-react";
+import { PageContainer } from "@/components/PageContainer";
+import { LoadingState } from "@/components/ui/LoadingState";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -15,6 +17,10 @@ const fetcher = async (url: string) => {
 
   return data;
 };
+
+const fieldClass =
+  "w-full rounded-control border border-line-strong bg-elevated px-3 py-[9px] text-sm text-text-primary outline-none transition-colors placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50";
+const labelClass = "mb-1.5 block text-sm font-medium text-text-secondary";
 
 export default function SettingsPage() {
   const t = useTranslations("Settings");
@@ -113,65 +119,64 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
-      <div className="max-w-5xl mx-auto">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-6">
+        <header className="mb-[18px]">
+          <h1 className="mb-1 text-xl font-bold text-text-primary md:text-2xl">
             {t("title")}
           </h1>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-text-secondary">
             {t("subtitle")}
           </p>
         </header>
 
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar Navigation */}
-          <aside className="w-full md:w-64 space-y-2">
+        <div>
+          {/* Segmented Navigation */}
+          <div className="mb-5 flex w-fit gap-1.5 rounded-control bg-elevated p-1">
             <button
+              type="button"
               onClick={() => setActiveTab("profile")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 rounded-[7px] px-4 py-[7px] text-xs transition-colors ${
                 activeTab === "profile"
-                  ? "bg-white dark:bg-gray-800 text-blue-600 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  ? "bg-card text-accent-text shadow-card font-semibold"
+                  : "text-text-secondary hover:text-text-primary font-medium"
               }`}
             >
-              <User size={18} />
+              <User size={15} />
               {t("profile")}
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("school")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 rounded-[7px] px-4 py-[7px] text-xs transition-colors ${
                 activeTab === "school"
-                  ? "bg-white dark:bg-gray-800 text-blue-600 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  ? "bg-card text-accent-text shadow-card font-semibold"
+                  : "text-text-secondary hover:text-text-primary font-medium"
               }`}
             >
-              <School size={18} />
+              <School size={15} />
               {t("schoolConnection")}
             </button>
-          </aside>
+          </div>
 
           {/* Main Content Area */}
-          <div className="flex-1">
+          <div>
             {activeTab === "profile" && (
-              <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 animate-in fade-in duration-300">
-                <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-4">
+              <div className="animate-in fade-in flex flex-col rounded-card border border-line bg-card p-[22px] duration-300">
+                <h2 className="mb-[18px] text-sm font-semibold text-text-primary">
                   {t("personalInformation")}
                 </h2>
 
                 {userLoading ? (
-                  <div className="py-10 text-center text-gray-500">
-                    <Loader2 className="animate-spin h-8 w-8 mx-auto mb-2 text-blue-500" />
-                    {t("loadingProfile")}
-                  </div>
+                  <LoadingState label={t("loadingProfile")} />
                 ) : (
                   <form
                     onSubmit={handleProfileSubmit}
-                    className="space-y-6 max-w-lg"
+                    className="max-w-2xl space-y-5"
                   >
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2">
                       <div>
-                        <label htmlFor="settings-first-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label htmlFor="settings-first-name" className={labelClass}>
                           {t("firstName")}
                         </label>
                         <input
@@ -186,11 +191,11 @@ export default function SettingsPage() {
                               firstName: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className={fieldClass}
                         />
                       </div>
                       <div>
-                        <label htmlFor="settings-last-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label htmlFor="settings-last-name" className={labelClass}>
                           {t("lastName")}
                         </label>
                         <input
@@ -205,13 +210,13 @@ export default function SettingsPage() {
                               lastName: e.target.value,
                             })
                           }
-                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className={fieldClass}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label htmlFor="settings-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="settings-email" className={labelClass}>
                         {t("email")}
                       </label>
                       <input
@@ -226,32 +231,32 @@ export default function SettingsPage() {
                             email: e.target.value,
                           })
                         }
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        className={fieldClass}
                       />
                     </div>
 
-                    <div className="pt-2">
+                    <div className="flex items-center justify-end gap-3 pt-1">
                       <button
                         type="submit"
                         disabled={profileStatus === "saving"}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 rounded-control bg-accent px-[18px] py-[9px] text-xs font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {profileStatus === "saving" ? (
-                          <Loader2 className="animate-spin" size={18} />
+                          <Loader2 className="animate-spin" size={14} />
                         ) : (
-                          <Save size={18} />
+                          <Save size={14} />
                         )}
                         {profileStatus === "saving"
                           ? t("saving")
                           : t("saveChanges")}
                       </button>
                       {profileStatus === "success" && (
-                        <span className="ml-3 text-green-600 dark:text-green-400 text-sm font-medium">
+                        <span className="text-sm font-medium text-success">
                           {t("saved")}
                         </span>
                       )}
                       {profileStatus === "error" && (
-                        <span className="ml-3 text-red-600 dark:text-red-400 text-sm font-medium">
+                        <span className="text-sm font-medium text-error">
                           {profileMessage || t("saveFailed")}
                         </span>
                       )}
@@ -262,23 +267,20 @@ export default function SettingsPage() {
             )}
 
             {activeTab === "school" && (
-              <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 animate-in fade-in duration-300">
-                <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-4">
+              <div className="animate-in fade-in flex flex-col rounded-card border border-line bg-card p-[22px] duration-300">
+                <h2 className="mb-[18px] text-sm font-semibold text-text-primary">
                   {t("connectItslearning")}
                 </h2>
 
                 {userLoading ? (
-                  <div className="py-10 text-center text-gray-500">
-                    <Loader2 className="animate-spin h-8 w-8 mx-auto mb-2 text-blue-500" />
-                    {t("loadingProfile")}
-                  </div>
+                  <LoadingState label={t("loadingProfile")} />
                 ) : (
                   <form
                     onSubmit={handleSchoolSubmit}
-                    className="space-y-6 max-w-lg"
+                    className="max-w-2xl space-y-5"
                   >
                     <div>
-                      <label htmlFor="settings-itslearning-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="settings-itslearning-url" className={labelClass}>
                         {t("itslearningUrl")}
                       </label>
                       <input
@@ -287,7 +289,7 @@ export default function SettingsPage() {
                         required
                         disabled={schoolStatus === "loading"}
                         autoComplete="url"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        className={fieldClass}
                         placeholder="https://sso.itslearning.com"
                         value={schoolForm.organizationUrl}
                         onChange={(e) =>
@@ -297,13 +299,13 @@ export default function SettingsPage() {
                           })
                         }
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="mt-1 text-xs text-text-tertiary">
                         {t("organizationUrlHint")}
                       </p>
                     </div>
 
                     <div>
-                      <label htmlFor="settings-username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="settings-username" className={labelClass}>
                         {t("username")}
                       </label>
                       <input
@@ -312,7 +314,7 @@ export default function SettingsPage() {
                         required
                         disabled={schoolStatus === "loading"}
                         autoComplete="username"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                        className={fieldClass}
                         value={schoolForm.username}
                         onChange={(e) =>
                           setSchoolForm({
@@ -324,7 +326,7 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="settings-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="settings-password" className={labelClass}>
                         {t("password")}
                       </label>
                       <div className="relative">
@@ -334,7 +336,7 @@ export default function SettingsPage() {
                           required
                           disabled={schoolStatus === "loading"}
                           autoComplete="current-password"
-                          className="w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          className={`${fieldClass} pr-10`}
                           value={schoolForm.password}
                           onChange={(e) =>
                             setSchoolForm({
@@ -347,7 +349,7 @@ export default function SettingsPage() {
                           type="button"
                           onClick={() => setShowSchoolPassword(!showSchoolPassword)}
                           aria-label={showSchoolPassword ? t("hidePassword") : t("showPassword")}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary transition-colors hover:text-text-secondary focus:outline-none"
                         >
                           {showSchoolPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
@@ -355,21 +357,21 @@ export default function SettingsPage() {
                     </div>
 
                     {schoolStatus === "error" && (
-                      <div className="p-3 bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400 rounded-md text-sm">
+                      <div className="rounded-control border border-error/30 bg-error-subtle p-3 text-sm text-error">
                         {schoolMessage}
                       </div>
                     )}
                     {schoolStatus === "success" && (
-                      <div className="p-3 bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400 rounded-md text-sm">
+                      <div className="rounded-control border border-success/30 bg-success-subtle p-3 text-sm text-success">
                         {schoolMessage}
                       </div>
                     )}
 
-                  <div className="pt-2">
+                  <div className="flex justify-end pt-1">
                     <button
                       type="submit"
                       disabled={schoolStatus === "loading"}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+                      className="rounded-control bg-accent px-[18px] py-[9px] text-xs font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {schoolStatus === "loading"
                         ? t("connecting")
@@ -379,13 +381,13 @@ export default function SettingsPage() {
                 </form>
                 )}
 
-                <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                <div className="mt-8 border-t border-line pt-6">
+                  <h3 className="mb-2 text-sm font-medium text-text-primary">
                     {t("environment")}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-text-secondary">
                     {t("externalUrl")}{" "}
-                    <code className="bg-gray-100 dark:bg-gray-900 px-1 py-0.5 rounded">
+                    <code className="rounded bg-elevated px-1 py-0.5 font-mono text-text-tertiary">
                       {process.env.NEXT_PUBLIC_EXTERNAL_URL || t("notSet")}
                     </code>
                   </p>
@@ -394,7 +396,7 @@ export default function SettingsPage() {
             )}
           </div>
         </div>
-      </div>
+      </PageContainer>
     </div>
   );
 }

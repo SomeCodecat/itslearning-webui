@@ -9,11 +9,11 @@ export default function GradesPage() {
   const t = useTranslations("Grades");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <PageContainer className="py-6 md:py-10">
-        <header className="mb-8">
-          <h1 className="flex items-center gap-3 text-3xl font-bold text-gray-900 dark:text-white">
-            <GraduationCap className="text-blue-600 dark:text-blue-400" />
+    <div className="min-h-screen bg-background text-foreground">
+      <PageContainer className="px-4 py-4 md:px-10 md:py-6">
+        <header className="mb-[18px]">
+          <h1 className="flex items-center gap-2 text-xl font-bold text-text-primary md:text-2xl">
+            <GraduationCap className="h-5 w-5 text-accent-text" />
             {t("title")}
           </h1>
         </header>
