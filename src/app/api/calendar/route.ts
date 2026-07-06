@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { getScraperForSession } from "@/lib/userScraper";
+import {
+  getScraperForSession,
+  isAuthSessionError,
+} from "@/lib/userScraper";
 
 export async function GET() {
   try {
@@ -12,6 +15,11 @@ export async function GET() {
     return NextResponse.json(events);
   } catch (error) {
     console.error("Failed to fetch calendar events:", error);
+
+    if (isAuthSessionError(error)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     return NextResponse.json(
       { error: "Failed to fetch events" },
       { status: 500 },
