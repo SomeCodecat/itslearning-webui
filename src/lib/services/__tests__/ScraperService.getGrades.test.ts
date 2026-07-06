@@ -51,3 +51,49 @@ describe("ScraperService.getGrades", () => {
     await expect(scraper.getGrades(4273)).rejects.toThrow("Not authenticated");
   });
 });
+
+describe("ScraperService.getCalendarEvents", () => {
+  let scraper: ScraperService;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    scraper = new ScraperService("https://school.example");
+  });
+
+  it("calls the calendar events endpoint with fromDate, toDate, and PageSize params", async () => {
+    scraper.setAccessToken("test-token");
+    const payload = {
+      EntityArray: [
+        {
+          EventId: 123,
+          Title: "Project kickoff",
+        },
+      ],
+    };
+    const response = {
+      data: payload,
+    } as AxiosResponse<typeof payload>;
+    const getSpy = vi
+      .spyOn(scraper.apiClient, "get")
+      .mockResolvedValue(response);
+
+    const fromDate = new Date("2026-07-06T00:00:00.000Z");
+    const toDate = new Date("2026-09-04T00:00:00.000Z");
+    const events = await scraper.getCalendarEvents(fromDate, toDate);
+
+    expect(getSpy).toHaveBeenCalledWith(
+      "/restapi/personal/calendar/events/v1",
+      {
+        headers: {
+          Authorization: "Bearer test-token",
+        },
+        params: {
+          fromDate: "2026-07-06T00:00:00.000Z",
+          toDate: "2026-09-04T00:00:00.000Z",
+          PageSize: 100,
+        },
+      },
+    );
+    expect(events).toEqual(payload.EntityArray);
+  });
+});

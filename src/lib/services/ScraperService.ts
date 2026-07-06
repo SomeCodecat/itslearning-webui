@@ -283,9 +283,22 @@ export class ScraperService {
   }
 
   // Calendar Events
-  async getCalendarEvents(): Promise<unknown[]> {
+  async getCalendarEvents(fromDate?: Date, toDate?: Date): Promise<unknown[]> {
+    const effectiveFromDate = fromDate ?? new Date();
+    if (!fromDate) {
+      effectiveFromDate.setUTCHours(0, 0, 0, 0);
+    }
+    const effectiveToDate =
+      toDate ??
+      new Date(effectiveFromDate.getTime() + 60 * 24 * 60 * 60 * 1000);
+
     const res = await this.apiGet<EntityArrayResponse<unknown>>(
       "/restapi/personal/calendar/events/v1",
+      {
+        fromDate: effectiveFromDate.toISOString(),
+        toDate: effectiveToDate.toISOString(),
+        PageSize: 100,
+      },
     );
     return res.data.EntityArray || [];
   }
