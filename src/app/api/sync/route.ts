@@ -61,6 +61,23 @@ export async function POST() {
       scraperService.getTasks("All"),
     ]);
 
+    // Favourite (starred) state lives on the cards endpoints, not courses/vN.
+    // Best-effort: a failure here must not abort the whole sync.
+    const favouriteByCourseId = new Map<number, boolean>();
+    try {
+      const cards = await scraperService.getCourseCards();
+      for (const card of cards) {
+        if (typeof card.CourseId === "number") {
+          favouriteByCourseId.set(
+            card.CourseId,
+            card.IsFavouriteCourse ?? false,
+          );
+        }
+      }
+    } catch (err) {
+      console.warn("Sync: Failed to fetch course cards (favourites)", err);
+    }
+
     // 2. Persist Courses and Download Files
     console.log(`Sync: Fetched ${courses.length} courses`);
     const filesBaseDir = path.join(process.cwd(), "files");
@@ -74,12 +91,24 @@ export async function POST() {
     for (const course of courses) {
       if (!course.CourseId) continue;
 
+      // Enrichment from courses/v3 + cards (all optional / defaulted).
+      const isStarred = favouriteByCourseId.get(course.CourseId) ?? false;
+      const enrichment = {
+        friendlyName: course.FriendlyName || null,
+        color: course.CourseColor || null,
+        fillColor: course.CourseFillColor || null,
+        taskCount:
+          typeof course.TaskCount === "number" ? course.TaskCount : null,
+        isStarred,
+      };
+
       // Upsert Course
       const dbCourse = await prisma.course.upsert({
         where: { itslearningId: course.CourseId },
         update: {
           title: course.Title || "Untitled Course",
           code: course.Code || null,
+          ...enrichment,
           users: { connect: { id: userId } },
           updatedAt: new Date(),
         },
@@ -87,6 +116,7 @@ export async function POST() {
           itslearningId: course.CourseId,
           title: course.Title || "Untitled Course",
           code: course.Code || null,
+          ...enrichment,
           users: { connect: { id: userId } },
         },
       });

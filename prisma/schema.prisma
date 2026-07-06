@@ -39,11 +39,19 @@ model Course {
   itslearningId Int          @unique
   title         String
   code          String?
-  
+
+  // Enrichment from courses/v3 + cards endpoints (all optional / defaulted).
+  friendlyName  String?      // Short display name (FriendlyName)
+  color         String?      // Theme colour hex (CourseColor)
+  fillColor     String?      // Secondary/fill colour hex (CourseFillColor)
+  taskCount     Int?         // Open task count (TaskCount)
+  isStarred     Boolean      @default(false) // Favourite (IsFavouriteCourse)
+  lastVisitedAt DateTime?    // Last time the user opened this course in-app
+
   plans         Plan[]
   assignments   Assignment[]
   users         User[]       // [NEW] Enrolled users
-  
+
   updatedAt     DateTime     @updatedAt
 }
 

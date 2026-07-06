@@ -38,6 +38,30 @@ export interface Course {
   Title: string;
   Url?: string; // Original URL
   Code?: string | null;
+  // Richer fields from courses/v3 (optional; absent on older endpoints).
+  FriendlyName?: string | null;
+  CourseColor?: string | null;
+  CourseFillColor?: string | null;
+  TaskCount?: number;
+  FollowUpTaskCount?: number;
+  Role?: string | null;
+}
+
+// A course "card" as returned by courses/cards/{starred,unstarred}/v1.
+// Best source for the favourite flag plus card imagery. Field names differ
+// from courses/vN (e.g. CourseColorClass, NumberOfTasks, IsFavouriteCourse).
+export interface CourseCard {
+  CourseId: number;
+  Title: string;
+  FriendlyName?: string | null;
+  TeacherName?: string | null;
+  CourseColorClass?: string | null;
+  NumberOfAnnouncements?: number;
+  NumberOfTasks?: number;
+  NumberOfFollowUpTasks?: number;
+  CourseCardImageUrl?: string | null;
+  LastUpdated?: string | null;
+  IsFavouriteCourse?: boolean;
 }
 
 export interface Resource {
@@ -214,15 +238,98 @@ export class ScraperService {
   async getCourses(): Promise<Course[]> {
     if (!this.accessToken) throw new Error("Not authenticated");
 
-    const res = await this.apiGet<EntityArrayResponse<Course>>(
-      "/restapi/personal/courses/v2",
-      {
-        pageIndex: 0,
-        pageSize: 100,
-        filter: 1,
-      },
+    // v3 is the richest course list: v2 fields plus per-course TaskCount /
+    // FollowUpTaskCount / Role (v4 drops the counts). Fall back to v2 if the
+    // instance does not expose v3.
+    try {
+      const res = await this.apiGet<EntityArrayResponse<Course>>(
+        "/restapi/personal/courses/v3",
+        {
+          pageIndex: 0,
+          pageSize: 100,
+          filter: 1,
+        },
+      );
+      return res.data.EntityArray || [];
+    } catch (err) {
+      if (
+        axios.isAxiosError(err) &&
+        (err.response?.status === 404 || err.response?.status === 400)
+      ) {
+        const res = await this.apiGet<EntityArrayResponse<Course>>(
+          "/restapi/personal/courses/v2",
+          {
+            pageIndex: 0,
+            pageSize: 100,
+            filter: 1,
+          },
+        );
+        return res.data.EntityArray || [];
+      }
+      throw err;
+    }
+  }
+
+  // Course cards (starred + unstarred) with imagery and the favourite flag.
+  // Each card carries IsFavouriteCourse; we also tag it from the list it came
+  // from so callers do not have to trust a possibly-missing field.
+  async getCourseCards(): Promise<CourseCard[]> {
+    if (!this.accessToken) throw new Error("Not authenticated");
+
+    const fetchCards = async (
+      url: string,
+      favourite: boolean,
+    ): Promise<CourseCard[]> => {
+      try {
+        const res = await this.apiGet<EntityArrayResponse<CourseCard>>(url, {
+          pageIndex: 0,
+          pageSize: 100,
+        });
+        return (res.data.EntityArray || []).map((c) => ({
+          ...c,
+          IsFavouriteCourse: c.IsFavouriteCourse ?? favourite,
+        }));
+      } catch (err) {
+        if (
+          axios.isAxiosError(err) &&
+          (err.response?.status === 403 || err.response?.status === 404)
+        ) {
+          return [];
+        }
+        throw err;
+      }
+    };
+
+    const [starred, unstarred] = await Promise.all([
+      fetchCards("/restapi/personal/courses/cards/starred/v1", true),
+      fetchCards("/restapi/personal/courses/cards/unstarred/v1", false),
+    ]);
+    return [...starred, ...unstarred];
+  }
+
+  // Toggle a course's favourite (starred) state. The endpoint is a stateful
+  // flip returning 200 with an empty body, so callers must know the current
+  // state to reach a desired one. Verified live against courses/{id}/toggleFavorite/v1.
+  async toggleCourseFavorite(courseId: number): Promise<void> {
+    if (!this.accessToken) throw new Error("Not authenticated");
+
+    await this.apiClient.put(
+      `/restapi/personal/courses/${courseId}/toggleFavorite/v1`,
+      undefined,
+      { headers: { Authorization: `Bearer ${this.accessToken}` } },
     );
-    return res.data.EntityArray || [];
+  }
+
+  // Ensure a course ends up in the desired favourite state. Because the API
+  // only offers a toggle, we read the current cards first and flip only when
+  // needed (idempotent from the caller's perspective).
+  async setCourseFavorite(courseId: number, favourite: boolean): Promise<void> {
+    const cards = await this.getCourseCards();
+    const card = cards.find((c) => c.CourseId === courseId);
+    const current = card?.IsFavouriteCourse ?? false;
+    if (current !== favourite) {
+      await this.toggleCourseFavorite(courseId);
+    }
   }
 
   async getGrades(courseId: number): Promise<GradeItem[]> {

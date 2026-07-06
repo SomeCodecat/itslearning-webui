@@ -32,7 +32,14 @@ export async function GET() {
       CourseId: c.itslearningId,
       Title: c.title,
       Code: c.code,
-      // ... add other fields if necessary
+      // Enrichment (populated by sync from courses/v3 + cards). May be null on
+      // courses synced before these columns existed; re-sync to backfill.
+      FriendlyName: c.friendlyName,
+      Color: c.color,
+      FillColor: c.fillColor,
+      TaskCount: c.taskCount,
+      IsStarred: c.isStarred,
+      LastVisitedAt: c.lastVisitedAt,
     }));
 
     return NextResponse.json(mappedCourses);
