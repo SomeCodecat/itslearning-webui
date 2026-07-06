@@ -26,6 +26,11 @@ export default function LoginForm({
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const inputClassName =
+    "relative block w-full appearance-none rounded-control border border-line-strong bg-elevated px-3 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary outline-none transition-colors focus:border-accent focus:ring-3 focus:ring-accent-subtle disabled:cursor-not-allowed disabled:opacity-60";
+  const labelClassName =
+    "mb-1.5 block text-sm font-medium text-text-secondary";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -53,15 +58,15 @@ export default function LoginForm({
   };
 
   return (
-    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+    <form className="w-full space-y-5" onSubmit={handleSubmit}>
       {error && (
-        <div className="bg-red-50 text-red-500 dark:bg-red-950/40 dark:text-red-400 p-3 rounded-md text-sm text-center">
+        <div className="rounded-control border border-error/50 bg-error-subtle px-3 py-2.5 text-center text-sm font-medium text-error">
           {error}
         </div>
       )}
-      <div className="space-y-4">
+      <div className="flex flex-col gap-3.5">
         <div>
-          <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="email-address" className={labelClassName}>
             {t("usernameLabel")}
           </label>
           <input
@@ -71,7 +76,7 @@ export default function LoginForm({
             autoComplete="username"
             required
             disabled={loading}
-            className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            className={inputClassName}
             placeholder={t("usernamePlaceholder")}
             value={formData.email}
             onChange={(e) =>
@@ -80,7 +85,7 @@ export default function LoginForm({
           />
         </div>
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="password" className={labelClassName}>
             {t("passwordLabel")}
           </label>
           <div className="relative">
@@ -91,7 +96,7 @@ export default function LoginForm({
               autoComplete="current-password"
               required
               disabled={loading}
-              className="appearance-none rounded-md relative block w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+              className={`${inputClassName} pr-10`}
               placeholder={t("passwordPlaceholder")}
               value={formData.password}
               onChange={(e) =>
@@ -102,15 +107,15 @@ export default function LoginForm({
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? t("hidePassword") : t("showPassword")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary transition-colors hover:text-accent-text focus:outline-none"
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
         </div>
         {allowCustom && (
           <div>
-            <label htmlFor="organization-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label htmlFor="organization-url" className={labelClassName}>
               {t("institutionUrlLabel")}
             </label>
             <input
@@ -120,7 +125,7 @@ export default function LoginForm({
               autoComplete="url"
               required
               disabled={loading}
-              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+              className={inputClassName}
               placeholder={defaultInstance}
               value={formData.organizationUrl}
               onChange={(e) =>
@@ -135,7 +140,7 @@ export default function LoginForm({
         <button
           type="submit"
           disabled={loading}
-          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          className="relative mt-1.5 flex w-full justify-center rounded-control bg-accent px-4 py-[11px] text-sm font-semibold text-white transition-colors hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? t("signingIn") : t("signIn")}
         </button>

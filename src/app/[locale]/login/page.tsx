@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { BookOpen } from "lucide-react";
 import LoginForm from "@/components/LoginForm";
 
 export default async function LoginPage() {
@@ -9,14 +10,20 @@ export default async function LoginPage() {
   const allowCustom = process.env.ALLOW_CUSTOM_INSTANCE !== "false";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-        <div className="text-center">
-          <h2 className="mt-2 text-3xl font-extrabold text-gray-900 dark:text-white">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+      <div className="flex min-h-[440px] w-full max-w-[400px] flex-col items-center justify-center rounded-card border border-line-strong bg-background px-8 py-11 shadow-popover sm:px-10">
+        <div className="mb-6 flex w-full flex-col items-center text-center">
+          <div className="mb-5 flex h-[52px] w-[52px] items-center justify-center rounded-card bg-accent text-white">
+            <BookOpen aria-hidden="true" size={26} strokeWidth={2.2} />
+          </div>
+          <h1 className="mb-2 text-[22px] font-bold leading-tight text-text-primary">
             {organizationName
               ? t("signInTo", { organization: organizationName })
               : t("signIn")}
-          </h2>
+          </h1>
+          <p className="max-w-full truncate font-mono text-xs font-medium text-text-secondary">
+            {defaultInstance}
+          </p>
         </div>
         <LoginForm
           defaultInstance={defaultInstance}
