@@ -64,6 +64,19 @@ export interface CourseCard {
   IsFavouriteCourse?: boolean;
 }
 
+// notifications/v2 item.
+export interface Notification {
+  NotificationId: number;
+  Text: string;
+  PublishedDate?: string | null;
+  PublishedBy?: string | null;
+  Type?: string | null;
+  Url?: string | null;
+  ContentUrl?: string | null;
+  IsRead?: boolean;
+  IsAnonymous?: boolean;
+}
+
 export interface Resource {
   ElementId: number;
   Title: string;
@@ -443,11 +456,40 @@ export class ScraperService {
   }
 
   // Notifications
-  async getNotifications(): Promise<unknown[]> {
-    const res = await this.apiGet<EntityArrayResponse<unknown>>(
-      "/restapi/personal/notifications/v1",
+  // notifications/v2 carries per-item read state and type (v1 does not), which
+  // the UI needs to render read/unread styling. Falls back to v1 on 404/400.
+  async getNotifications(): Promise<Notification[]> {
+    try {
+      const res = await this.apiGet<EntityArrayResponse<Notification>>(
+        "/restapi/personal/notifications/v2",
+        { pageSize: 50 },
+      );
+      return res.data.EntityArray || [];
+    } catch (err) {
+      if (
+        axios.isAxiosError(err) &&
+        (err.response?.status === 404 || err.response?.status === 400)
+      ) {
+        const res = await this.apiGet<EntityArrayResponse<Notification>>(
+          "/restapi/personal/notifications/v1",
+        );
+        return res.data.EntityArray || [];
+      }
+      throw err;
+    }
+  }
+
+  // Mark all notifications as seen (clears the "unseen" nav badge). This is a
+  // benign, non-destructive write; the API returns 2xx with no meaningful body,
+  // so we assert nothing about the response shape.
+  async markAllNotificationsSeen(): Promise<void> {
+    if (!this.accessToken) throw new Error("Not authenticated");
+
+    await this.apiClient.post(
+      "/restapi/personal/notifications/seenmark/all/v1",
+      undefined,
+      { headers: { Authorization: `Bearer ${this.accessToken}` } },
     );
-    return res.data.EntityArray || [];
   }
 
   // Unread/unseen counts for nav badges. Each endpoint returns a bare integer.
