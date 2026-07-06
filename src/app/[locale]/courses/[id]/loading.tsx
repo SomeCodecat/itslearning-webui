@@ -1,12 +1,13 @@
 import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
+import { PageContainer } from "@/components/PageContainer";
 
 export default function Loading() {
   const t = useTranslations("CourseDetail");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <PageContainer className="py-6 md:py-10">
         <header className="mb-4">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 animate-pulse">
             {t("loadingCourse")}
@@ -20,7 +21,7 @@ export default function Loading() {
             {t("preparingResources")}
           </p>
         </div>
-      </div>
+      </PageContainer>
     </div>
   );
 }

@@ -42,12 +42,7 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            {/* Global Header */}
-            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-              <div className="max-w-[1600px] mx-auto px-6 md:px-10 pt-4">
-                <Navigation />
-              </div>
-            </div>
+            <Navigation />
 
             {/* Main Content */}
             <main>{children}</main>

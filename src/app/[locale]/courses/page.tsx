@@ -3,6 +3,8 @@
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
 import { Link } from "@/i18n/routing";
+import { PageContainer } from "@/components/PageContainer";
+import { Loader2 } from "lucide-react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -21,17 +23,22 @@ export default function CoursesPage() {
   } = useSWR<Course[]>("/api/courses", fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <PageContainer className="py-6 md:py-10">
         <header className="mb-4">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             {t("title")}
           </h1>
         </header>
 
-        {isLoading && <div className="text-gray-500">{t("loading")}</div>}
+        {isLoading && (
+          <div className="flex items-center gap-2 text-gray-500">
+            <Loader2 className="animate-spin w-5 h-5 text-blue-500" />
+            {t("loading")}
+          </div>
+        )}
         {error && (
-          <div className="text-red-500">
+          <div className="text-red-500 dark:text-red-400">
             {t("loadFailed")}
           </div>
         )}
@@ -57,11 +64,13 @@ export default function CoursesPage() {
                 </div>
               </Link>
             ))}
-          {!isLoading && !Array.isArray(courses) && (
+          {!isLoading &&
+            !error &&
+            (!Array.isArray(courses) || courses.length === 0) && (
             <div className="text-gray-500">{t("empty")}</div>
           )}
         </div>
-      </div>
+      </PageContainer>
     </div>
   );
 }

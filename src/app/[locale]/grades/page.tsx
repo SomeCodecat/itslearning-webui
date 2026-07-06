@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
 import { ExternalLink, GraduationCap, Loader2 } from "lucide-react";
+import { PageContainer } from "@/components/PageContainer";
 
 type GradeView = {
   id: number;
@@ -57,8 +58,8 @@ export default function GradesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
-      <div className="max-w-[1200px] mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <PageContainer className="py-6 md:py-10">
         <header className="mb-8">
           <h1 className="flex items-center gap-3 text-3xl font-bold text-gray-900 dark:text-white">
             <GraduationCap className="text-blue-600 dark:text-blue-400" />
@@ -117,6 +118,9 @@ export default function GradesPage() {
                             href={grade.webUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label={t("openInNewTab", {
+                              title: grade.assignmentTitle,
+                            })}
                             className="inline-flex items-center gap-1 rounded-md border border-gray-200 px-3 py-1 text-sm font-medium text-gray-700 transition-colors hover:border-blue-300 hover:text-blue-700 dark:border-gray-700 dark:text-gray-300 dark:hover:border-blue-500 dark:hover:text-blue-300"
                           >
                             {t("open")}
@@ -131,7 +135,7 @@ export default function GradesPage() {
             </section>
           ))}
         </div>
-      </div>
+      </PageContainer>
     </div>
   );
 }

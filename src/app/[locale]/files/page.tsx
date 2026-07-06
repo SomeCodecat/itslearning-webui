@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
 import { FileBrowser } from "@/components/FileBrowser";
+import { PageContainer } from "@/components/PageContainer";
 import { Loader2, FileText } from "lucide-react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -13,8 +14,8 @@ export default function FilesPage() {
   const { data: files, error, isLoading } = useSWR("/api/files/all", fetcher);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
-      <div className="max-w-[1600px] mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <PageContainer className="py-6 md:py-10">
         <header className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
@@ -40,9 +41,9 @@ export default function FilesPage() {
             <p className="text-sm">{t("loadFailedHint")}</p>
           </div>
         ) : (
-          <FileBrowser files={files || []} />
+          <FileBrowser files={files || []} cacheKey="/api/files/all" />
         )}
-      </div>
+      </PageContainer>
     </div>
   );
 }

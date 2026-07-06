@@ -1,11 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import useSWR from "swr";
-import { Navigation } from "@/components/Navigation";
 import { Loader2, Megaphone } from "lucide-react";
 import { use } from "react";
 import dynamic from "next/dynamic";
+import { PageContainer } from "@/components/PageContainer";
 
 const FileBrowser = dynamic(
   () => import("@/components/FileBrowser").then((mod) => mod.FileBrowser),
@@ -43,6 +43,7 @@ export default function CoursePage({
 }) {
   const { id } = use(params); // Unwrap params in Client Component
   const t = useTranslations("CourseDetail");
+  const format = useFormatter();
   const {
     data: resources,
     error,
@@ -80,19 +81,25 @@ export default function CoursePage({
     : [];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <PageContainer className="py-6 md:py-10">
         <header className="mb-4">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             {t("title")}
           </h1>
-          <Navigation />
         </header>
 
         {isLoading && (
-          <div className="text-gray-500">{t("loadingResources")}</div>
+          <div className="flex items-center gap-2 text-gray-500">
+            <Loader2 className="animate-spin w-5 h-5 text-blue-500" />
+            {t("loadingResources")}
+          </div>
         )}
-        {error && <div className="text-red-500">{t("resourcesFailed")}</div>}
+        {error && (
+          <div className="text-red-500 dark:text-red-400">
+            {t("resourcesFailed")}
+          </div>
+        )}
 
         {files.length > 0 && (
           <FileBrowser files={files} persistable={false} />
@@ -117,7 +124,9 @@ export default function CoursePage({
             </div>
           )}
           {bulletinsError && (
-            <p className="text-red-500 text-sm">{t("bulletinsFailed")}</p>
+            <p className="text-red-500 dark:text-red-400 text-sm">
+              {t("bulletinsFailed")}
+            </p>
           )}
 
           {!bulletinsLoading && bulletins.length === 0 && !bulletinsError && (
@@ -148,7 +157,9 @@ export default function CoursePage({
                   <div className="text-right shrink-0 text-xs text-gray-400 dark:text-gray-500 space-y-0.5">
                     {b.PublishedDate && (
                       <div>
-                        {new Date(b.PublishedDate).toLocaleDateString()}
+                        {format.dateTime(new Date(b.PublishedDate), {
+                          dateStyle: "medium",
+                        })}
                       </div>
                     )}
                     {b.AuthorFullName && <div>{b.AuthorFullName}</div>}
@@ -158,7 +169,7 @@ export default function CoursePage({
             ))}
           </div>
         </section>
-      </div>
+      </PageContainer>
     </div>
   );
 }

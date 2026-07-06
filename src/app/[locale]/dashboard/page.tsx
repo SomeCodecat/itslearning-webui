@@ -1,9 +1,10 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import useSWR from "swr"; // Fetching data
 import { FileBrowser } from "@/components/FileBrowser";
+import { PageContainer } from "@/components/PageContainer";
 import { Loader2 } from "lucide-react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -18,6 +19,7 @@ type DashboardTask = {
 export default function DashboardPage() {
   const indexT = useTranslations("Index");
   const t = useTranslations("Dashboard");
+  const format = useFormatter();
 
   // 1. Fetch Tasks (Deadlines)
   const {
@@ -38,8 +40,8 @@ export default function DashboardPage() {
   const upcomingDeadlines = Array.isArray(tasks) ? tasks.slice(0, 5) : [];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 md:p-10">
-      <div className="max-w-[1600px] mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <PageContainer className="py-6 md:py-10">
         <header className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <div>
@@ -94,7 +96,9 @@ export default function DashboardPage() {
                     </div>
                     <span className="text-blue-600 text-xs font-semibold whitespace-nowrap ml-2">
                       {task.Deadline
-                        ? new Date(task.Deadline).toLocaleDateString()
+                        ? format.dateTime(new Date(task.Deadline), {
+                            dateStyle: "medium",
+                          })
                         : t("noDate")}
                     </span>
                   </li>
@@ -130,11 +134,11 @@ export default function DashboardPage() {
               <Loader2 className="animate-spin w-8 h-8 text-blue-500 mx-auto" />
             </div>
           ) : filesError ? (
-            <div className="p-4 bg-red-50 text-red-500 rounded-lg">
+            <div className="p-4 bg-red-50 dark:bg-red-950/40 text-red-500 dark:text-red-400 rounded-lg">
               {t("failedRecentFiles")}
             </div>
           ) : Array.isArray(recentFiles) && recentFiles.length > 0 ? (
-            <FileBrowser files={recentFiles} />
+            <FileBrowser files={recentFiles} cacheKey="/api/files/recent" />
           ) : (
             <div className="text-center py-10 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
               <p className="text-gray-500">{t("noFilesDownloaded")}</p>
@@ -144,7 +148,7 @@ export default function DashboardPage() {
             </div>
           )}
         </section>
-      </div>
+      </PageContainer>
     </div>
   );
 }
