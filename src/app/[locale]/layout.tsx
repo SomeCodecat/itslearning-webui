@@ -2,8 +2,19 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { Navigation } from "@/components/Navigation";
 import { notFound } from "next/navigation";
+import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
+
+const instrumentSans = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-instrument-sans",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+});
 
 export async function generateMetadata({
   params,
@@ -39,9 +50,11 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body
+        className={`${instrumentSans.variable} ${jetBrainsMono.variable} bg-slate-950 text-slate-100 antialiased`}
+      >
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <div className="min-h-screen bg-slate-950 text-slate-100">
             <Navigation />
 
             {/* Main Content */}

@@ -7,8 +7,11 @@ import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect, useCallback } from "react";
 import useSWR, { mutate } from "swr";
 import {
+  Check,
   ChevronDown,
+  Clock,
   LogOut,
+  Loader2,
   Menu,
   Settings,
   User,
@@ -41,10 +44,10 @@ export function Navigation() {
     { href: "/calendar", label: t("calendar") },
   ];
   const linkClassName = (href: string) =>
-    `text-sm font-medium transition-colors ${
+    `text-sm transition-colors ${
       isActive(href)
-        ? "text-blue-600 dark:text-blue-400 font-bold"
-        : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+        ? "font-bold text-indigo-300"
+        : "font-medium text-slate-400 hover:text-indigo-300"
     }`;
 
   // Hide app chrome on unauthenticated screens (paths like /en/login, /de/login).
@@ -185,16 +188,57 @@ export function Navigation() {
 
   if (hideChrome) return null;
 
+  const syncText = (() => {
+    if (syncStatus === "syncing") return navT("syncing");
+    if (syncStatus === "success") return navT("synced");
+    if (syncStatus === "error") return navT("failed");
+    if (syncStatus === "rate_limited") {
+      return navT("waitSeconds", { seconds: retryAfter });
+    }
+
+    return lastSyncedText
+      ? navT("syncedRelative", { relative: lastSyncedText })
+      : navT("notSynced");
+  })();
+
+  const syncStateClasses = {
+    idle: {
+      label: "text-slate-500",
+      button: "bg-slate-800 text-slate-400 hover:text-indigo-300",
+      icon: <RefreshCw size={18} />,
+    },
+    syncing: {
+      label: "text-indigo-300",
+      button: "bg-indigo-500/14 text-indigo-300",
+      icon: <Loader2 size={18} className="animate-spin" />,
+    },
+    success: {
+      label: "font-semibold text-emerald-400",
+      button: "bg-emerald-500/14 text-emerald-400",
+      icon: <Check size={18} strokeWidth={2.6} />,
+    },
+    error: {
+      label: "font-semibold text-red-400",
+      button: "bg-red-500/14 text-red-400",
+      icon: <X size={18} />,
+    },
+    rate_limited: {
+      label: "font-mono font-bold text-orange-400",
+      button: "cursor-not-allowed bg-orange-500/14 text-orange-400",
+      icon: <Clock size={18} />,
+    },
+  }[syncStatus];
+
   return (
-    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <PageContainer className="pt-4">
-        <nav className="pb-4" aria-label={navT("mainMenu")}>
+    <header className="border-b border-slate-800 bg-[#0b1120]">
+      <PageContainer>
+        <nav className="py-3.5" aria-label={navT("mainMenu")}>
           <div className="flex items-center justify-between gap-4 w-full">
             <div className="flex items-center gap-3">
               <button
                 ref={mobileMenuButtonRef}
                 type="button"
-                className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-800 text-slate-400 transition-colors hover:text-indigo-300 md:hidden"
                 aria-label={
                   isMobileMenuOpen ? navT("closeMenu") : navT("openMenu")
                 }
@@ -218,129 +262,109 @@ export function Navigation() {
               </div>
             </div>
 
-            <div className="flex items-center">
-          {/* Sync Section */}
-          <div className="flex items-center gap-2 sm:gap-3 pr-3 sm:pr-6 border-r border-gray-200 dark:border-gray-700 mr-3 sm:mr-6">
-            <div className="text-right hidden sm:block">
-              <div
-                className={`text-xs font-medium ${syncStatus === "rate_limited" ? "text-orange-500 font-bold" : "text-gray-500"}`}
-              >
-                {syncStatus === "syncing" && navT("syncing")}
-                {syncStatus === "success" && navT("synced")}
-                {syncStatus === "error" && navT("failed")}
-                {syncStatus === "rate_limited" &&
-                  navT("waitSeconds", { seconds: retryAfter })}
-                {syncStatus === "idle" &&
-                  (lastSyncedText
-                    ? navT("syncedRelative", { relative: lastSyncedText })
-                    : navT("notSynced"))}
-              </div>
-            </div>
-
-            <button
-              onClick={handleSync}
-              disabled={
-                syncStatus === "syncing" || syncStatus === "rate_limited"
-              }
-              className={`p-2 rounded-full transition-colors ${
-                syncStatus === "rate_limited"
-                  ? "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-300 cursor-not-allowed"
-                  : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
-              }`}
-              title={navT("syncTitle")}
-              aria-label={navT("syncTitle")}
-            >
-              <RefreshCw
-                size={18}
-                className={
-                  syncStatus === "syncing" ? "animate-spin text-blue-600" : ""
-                }
-              />
-            </button>
-          </div>
-
-          <NotificationBell />
-
-          {/* User Dropdown */}
-          <div className="relative" ref={menuRef}>
-            <button
-              ref={userMenuButtonRef}
-              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="flex items-center gap-3 pl-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors focus:outline-none"
-              aria-label={navT("userMenuLabel")}
-              aria-haspopup="menu"
-              aria-expanded={isUserMenuOpen}
-              aria-controls={userMenuId}
-            >
-              <div className="text-right hidden sm:block">
-                <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                  {isLoading ? (
-                    <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
-                  ) : (
-                    user?.firstName || navT("userFallback")
-                  )}
-                </div>
-              </div>
-              <div className="bg-blue-100 dark:bg-blue-900/30 p-1.5 rounded-full text-blue-600 dark:text-blue-400">
-                <User size={18} />
-              </div>
-              <ChevronDown
-                size={14}
-                className={`text-gray-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-
-            {/* Dropdown Menu */}
-            {isUserMenuOpen && (
-              <div
-                id={userMenuId}
-                role="menu"
-                className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-2 z-50 animate-in fade-in zoom-in-95 duration-200"
-              >
-                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {user?.firstName} {user?.lastName}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate">
-                    {user?.email}
-                  </p>
+            <div className="flex items-center gap-3 sm:gap-3.5">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="hidden text-right sm:block">
+                  <div className={`text-xs font-medium ${syncStateClasses.label}`}>
+                    {syncText}
+                  </div>
                 </div>
 
-                <div className="py-1">
-                  <Link
-                    href="/settings"
-                    onClick={() => setIsUserMenuOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                    role="menuitem"
+                <button
+                  onClick={handleSync}
+                  disabled={
+                    syncStatus === "syncing" || syncStatus === "rate_limited"
+                  }
+                  className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${syncStateClasses.button}`}
+                  title={navT("syncTitle")}
+                  aria-label={navT("syncTitle")}
+                >
+                  {syncStateClasses.icon}
+                </button>
+              </div>
+
+              <NotificationBell />
+
+              {/* User Dropdown */}
+              <div className="relative border-l border-slate-800 pl-3" ref={menuRef}>
+                <button
+                  ref={userMenuButtonRef}
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-2 rounded-[10px] py-1 text-slate-100 transition-colors hover:text-indigo-300 focus:outline-none"
+                  aria-label={navT("userMenuLabel")}
+                  aria-haspopup="menu"
+                  aria-expanded={isUserMenuOpen}
+                  aria-controls={userMenuId}
+                >
+                  <div className="hidden text-right sm:block">
+                    <div className="text-[13px] font-semibold text-slate-100">
+                      {isLoading ? (
+                        <div className="h-4 w-20 animate-pulse rounded bg-slate-800" />
+                      ) : (
+                        user?.firstName || navT("userFallback")
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-indigo-500/14 text-indigo-300">
+                    <User size={16} />
+                  </div>
+                  <ChevronDown
+                    size={14}
+                    className={`text-slate-500 transition-transform ${isUserMenuOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {/* Dropdown Menu */}
+                {isUserMenuOpen && (
+                  <div
+                    id={userMenuId}
+                    role="menu"
+                    className="absolute right-0 z-50 mt-2 w-56 animate-in rounded-xl border border-slate-700 bg-slate-900 py-2 shadow-popover fade-in zoom-in-95 duration-200"
                   >
-                    <Settings size={16} />
-                    {t("settings")}
-                  </Link>
-                </div>
+                    <div className="border-b border-slate-800 px-4 py-3">
+                      <p className="text-sm font-medium text-slate-100">
+                        {user?.firstName} {user?.lastName}
+                      </p>
+                      <p className="truncate text-xs text-slate-500">
+                        {user?.email}
+                      </p>
+                    </div>
 
-                <div className="border-t border-gray-100 dark:border-gray-700 py-1">
-                  <button
-                    onClick={async () => {
-                      await fetch("/api/auth/logout", { method: "POST" });
-                      window.location.href = "/";
-                    }}
-                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 text-left"
-                    role="menuitem"
-                  >
-                    <LogOut size={16} />
-                    {navT("logout")}
-                  </button>
-                </div>
+                    <div className="py-1">
+                      <Link
+                        href="/settings"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+                        role="menuitem"
+                      >
+                        <Settings size={16} />
+                        {t("settings")}
+                      </Link>
+                    </div>
+
+                    <div className="border-t border-slate-800 py-1">
+                      <button
+                        onClick={async () => {
+                          await fetch("/api/auth/logout", { method: "POST" });
+                          window.location.href = "/";
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-400 hover:bg-red-500/14"
+                        role="menuitem"
+                      >
+                        <LogOut size={16} />
+                        {navT("logout")}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
             </div>
           </div>
 
           {isMobileMenuOpen && (
             <div
               id={mobileMenuId}
-              className="md:hidden mt-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden"
+              className="mt-3 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-card md:hidden"
             >
               {navLinks.map((item) => (
                 <Link

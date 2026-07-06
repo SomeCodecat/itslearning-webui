@@ -163,59 +163,60 @@ export function NotificationBell() {
   }, []);
 
   return (
-    <div className="relative mr-3" ref={dropdownRef}>
+    <div className="relative" ref={dropdownRef}>
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setIsOpen((current) => !current)}
-        className="relative p-2 rounded-full text-gray-500 hover:text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-slate-400 transition-colors hover:bg-slate-800 hover:text-indigo-300 focus:outline-none"
         aria-label={t("ariaLabel")}
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
         <Bell size={18} />
         {totalCount > 0 && (
-          <span
-            className={`absolute -top-1 -right-1 min-w-6 h-5 px-1 rounded-full text-[10px] leading-5 text-center font-semibold ${
-              unreadCount > 0
-                ? "bg-red-600 text-white"
-                : "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200"
-            }`}
-            title={t("countTitle", { unread: unreadCount, total: totalCount })}
-          >
-            {unreadCount}/{totalCount}
+          <span title={t("countTitle", { unread: unreadCount, total: totalCount })}>
+            {unreadCount > 0 && (
+              <span
+                aria-hidden="true"
+                className="absolute right-[5px] top-[5px] h-2 w-2 rounded-full bg-red-400 ring-2 ring-[#0b1120]"
+              />
+            )}
+            <span className="sr-only">
+              {unreadCount}/{totalCount}
+            </span>
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-2 z-50 animate-in fade-in zoom-in-95 duration-200">
-          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+        <div className="absolute right-0 z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] animate-in rounded-xl border border-slate-700 bg-slate-900 py-2 shadow-popover fade-in zoom-in-95 duration-200">
+          <div className="border-b border-slate-800 px-4 py-3">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">
+              <p className="text-sm font-semibold text-slate-100">
                 {t("title")}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs font-medium text-slate-500">
                 {t("unreadSummary", { unread: unreadCount, total: totalCount })}
               </p>
             </div>
           </div>
 
           {isLoading && (
-            <div className="flex items-center gap-2 px-4 py-4 text-sm text-gray-500">
-              <Loader2 size={16} className="animate-spin" />
+            <div className="flex items-center gap-2 px-4 py-4 text-sm text-slate-400">
+              <Loader2 size={16} className="animate-spin text-indigo-300" />
               {t("loading")}
             </div>
           )}
 
           {error && (
-            <div className="px-4 py-4 text-sm text-red-600">
+            <div className="px-4 py-4 text-sm font-medium text-red-400">
               {t("error")}
             </div>
           )}
 
           {!isLoading && !error && recentItems.length === 0 && (
-            <div className="px-4 py-4 text-sm text-gray-500">
+            <div className="px-4 py-4 text-sm text-slate-500">
               {t("empty")}
             </div>
           )}
@@ -238,15 +239,15 @@ export function NotificationBell() {
                       <span
                         className={`mt-1.5 h-2 w-2 flex-none rounded-full ${
                           notification.IsRead === false
-                            ? "bg-blue-600"
-                            : "bg-gray-300 dark:bg-gray-600"
+                            ? "bg-indigo-500"
+                            : "bg-slate-700"
                         }`}
                       />
                       <div className="min-w-0">
-                        <p className="text-sm text-gray-800 dark:text-gray-100 line-clamp-2">
+                        <p className="line-clamp-2 text-sm text-slate-100">
                           {notificationText}
                         </p>
-                        <div className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-xs text-gray-500">
+                        <div className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-xs text-slate-500">
                           {getPublisherName(notification) && (
                             <span>{getPublisherName(notification)}</span>
                           )}
@@ -264,7 +265,7 @@ export function NotificationBell() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      className="block px-4 py-3 hover:bg-slate-800"
                       onClick={() => setIsOpen(false)}
                     >
                       {content}
