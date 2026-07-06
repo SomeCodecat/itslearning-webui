@@ -16,6 +16,7 @@ import {
   AlertTriangle,
   CheckCircle2,
 } from "lucide-react";
+import { NotificationBell } from "./NotificationBell";
 
 export function Navigation() {
   const t = useTranslations("Index");
@@ -213,6 +214,8 @@ export function Navigation() {
               />
             </button>
           </div>
+
+          <NotificationBell />
 
           {/* User Dropdown */}
           <div className="relative" ref={menuRef}>
