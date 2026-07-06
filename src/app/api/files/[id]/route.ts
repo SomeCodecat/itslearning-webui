@@ -30,11 +30,11 @@ export async function PATCH(
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
-    const allowedKeys = ["isExamRelevant", "isAP1", "isAP2"] as const;
-    type FlagKey = (typeof allowedKeys)[number];
+    const allowedFlags = ["isExamRelevant", "isAP1", "isAP2"] as const;
+    type FlagKey = (typeof allowedFlags)[number];
 
-    const update: Partial<Record<FlagKey, boolean>> = {};
-    for (const key of allowedKeys) {
+    const flagUpdate: Partial<Record<FlagKey, boolean>> = {};
+    for (const key of allowedFlags) {
       if (key in body) {
         if (typeof body[key] !== "boolean") {
           return NextResponse.json(
@@ -42,18 +42,54 @@ export async function PATCH(
             { status: 400 },
           );
         }
-        update[key] = body[key] as boolean;
+        flagUpdate[key] = body[key] as boolean;
       }
     }
 
-    if (Object.keys(update).length === 0) {
+    // Tag assignment fields
+    const addTagIds = body.addTagIds;
+    const removeTagIds = body.removeTagIds;
+
+    const hasAddTags =
+      Array.isArray(addTagIds) && addTagIds.length > 0;
+    const hasRemoveTags =
+      Array.isArray(removeTagIds) && removeTagIds.length > 0;
+
+    // Validate that at least one kind of update is provided
+    if (
+      Object.keys(flagUpdate).length === 0 &&
+      !hasAddTags &&
+      !hasRemoveTags
+    ) {
       return NextResponse.json(
         { error: "No valid fields to update" },
         { status: 400 },
       );
     }
 
-    // Verify ownership
+    // Validate tag ID arrays contain numbers
+    if (
+      addTagIds !== undefined &&
+      (!Array.isArray(addTagIds) ||
+        (addTagIds as unknown[]).some((v) => typeof v !== "number"))
+    ) {
+      return NextResponse.json(
+        { error: "addTagIds must be an array of numbers" },
+        { status: 400 },
+      );
+    }
+    if (
+      removeTagIds !== undefined &&
+      (!Array.isArray(removeTagIds) ||
+        (removeTagIds as unknown[]).some((v) => typeof v !== "number"))
+    ) {
+      return NextResponse.json(
+        { error: "removeTagIds must be an array of numbers" },
+        { status: 400 },
+      );
+    }
+
+    // Verify file ownership
     const existing = await prisma.userFile.findUnique({
       where: { id: userFileId },
     });
@@ -65,15 +101,57 @@ export async function PATCH(
       );
     }
 
+    // Validate tag ownership for addTagIds
+    if (hasAddTags) {
+      const ownedTags = await prisma.tag.findMany({
+        where: { id: { in: addTagIds as number[] }, userId },
+        select: { id: true },
+      });
+      if (ownedTags.length !== (addTagIds as number[]).length) {
+        return NextResponse.json(
+          { error: "One or more tags not found or not owned by user" },
+          { status: 403 },
+        );
+      }
+    }
+
+    // Validate tag ownership for removeTagIds
+    if (hasRemoveTags) {
+      const ownedTags = await prisma.tag.findMany({
+        where: { id: { in: removeTagIds as number[] }, userId },
+        select: { id: true },
+      });
+      if (ownedTags.length !== (removeTagIds as number[]).length) {
+        return NextResponse.json(
+          { error: "One or more tags not found or not owned by user" },
+          { status: 403 },
+        );
+      }
+    }
+
+    // Build update data
+    const tagConnect = hasAddTags
+      ? { connect: (addTagIds as number[]).map((id) => ({ id })) }
+      : undefined;
+    const tagDisconnect = hasRemoveTags
+      ? { disconnect: (removeTagIds as number[]).map((id) => ({ id })) }
+      : undefined;
+
     // Apply update
     const updated = await prisma.userFile.update({
       where: { id: userFileId },
-      data: update,
+      data: {
+        ...flagUpdate,
+        ...(tagConnect || tagDisconnect
+          ? { tags: { ...tagConnect, ...tagDisconnect } }
+          : {}),
+      },
       include: {
         storedFile: true,
         plan: {
           include: { course: true },
         },
+        tags: { select: { id: true, name: true } },
       },
     });
 

@@ -1,9 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./Badge";
-import { Tag } from "lucide-react";
+import { Tag, Plus, X } from "lucide-react";
+
+interface TagItem {
+  id: number;
+  name: string;
+}
 
 interface FileCardProps {
   id: number;
@@ -16,6 +21,8 @@ interface FileCardProps {
   courseTitle?: string;
   fileType?: string;
   date?: string;
+  /** Tags currently assigned to this file */
+  tags?: TagItem[];
   /** When true the file exists in the DB and flags can be PATCH-ed */
   persistable?: boolean;
   onFlagsChange?: (updated: {
@@ -23,6 +30,10 @@ interface FileCardProps {
     isAP1: boolean;
     isAP2: boolean;
   }) => void;
+  /** Called after tags are changed so parent can mutate its SWR cache */
+  onTagsChange?: (updatedTags: TagItem[]) => void;
+  /** Highlight this card as a content-matched search result */
+  contentMatch?: boolean;
 }
 
 export function FileCard({
@@ -36,8 +47,11 @@ export function FileCard({
   courseTitle,
   fileType,
   date,
+  tags: initialTags = [],
   persistable = true,
   onFlagsChange,
+  onTagsChange,
+  contentMatch = false,
 }: FileCardProps) {
   const t = useTranslations("FileBrowser");
 
@@ -46,8 +60,20 @@ export function FileCard({
     isAP1: initialAP1,
     isAP2: initialAP2,
   });
+  const [tags, setTags] = useState<TagItem[]>(initialTags);
   const [menuOpen, setMenuOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // All user tags (fetched once when the menu opens)
+  const [allTags, setAllTags] = useState<TagItem[]>([]);
+  const [tagsLoaded, setTagsLoaded] = useState(false);
+  const [newTagName, setNewTagName] = useState("");
+  const [creatingTag, setCreatingTag] = useState(false);
+
+  // Sync props → state when parent refreshes
+  useEffect(() => {
+    setTags(initialTags);
+  }, [initialTags]);
 
   async function toggleFlag(key: "isExamRelevant" | "isAP1" | "isAP2") {
     if (!persistable || saving) return;
@@ -83,6 +109,90 @@ export function FileCard({
     }
   }
 
+  async function loadAllTags() {
+    if (tagsLoaded) return;
+    try {
+      const res = await fetch("/api/tags");
+      if (res.ok) {
+        setAllTags(await res.json());
+      }
+    } catch (err) {
+      console.error("Failed to load tags", err);
+    }
+    setTagsLoaded(true);
+  }
+
+  function handleMenuOpen() {
+    setMenuOpen((o) => !o);
+    if (!tagsLoaded) loadAllTags();
+  }
+
+  async function toggleTag(tag: TagItem) {
+    if (!persistable || saving) return;
+    const isAssigned = tags.some((t) => t.id === tag.id);
+    const optimistic = isAssigned
+      ? tags.filter((t) => t.id !== tag.id)
+      : [...tags, tag];
+    setTags(optimistic);
+    setSaving(true);
+    try {
+      const body = isAssigned
+        ? { removeTagIds: [tag.id] }
+        : { addTagIds: [tag.id] };
+      const res = await fetch(`/api/files/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        setTags(tags); // rollback
+        console.error("Failed to update tags", await res.text());
+      } else {
+        const updated = await res.json();
+        const newTags: TagItem[] = updated.tags ?? [];
+        setTags(newTags);
+        onTagsChange?.(newTags);
+      }
+    } catch (err) {
+      setTags(tags);
+      console.error("Network error updating tags", err);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function createAndAssignTag() {
+    const name = newTagName.trim();
+    if (!name || creatingTag) return;
+    setCreatingTag(true);
+    try {
+      // Create (or retrieve existing) tag
+      const res = await fetch("/api/tags", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      if (!res.ok && res.status !== 409) {
+        console.error("Failed to create tag", await res.text());
+        return;
+      }
+      const newTag: TagItem = await res.json();
+      // Add to global list if it isn't there yet
+      setAllTags((prev) =>
+        prev.some((t) => t.id === newTag.id) ? prev : [...prev, newTag],
+      );
+      setNewTagName("");
+      // Assign if not already assigned
+      if (!tags.some((t) => t.id === newTag.id)) {
+        await toggleTag(newTag);
+      }
+    } catch (err) {
+      console.error("Network error creating tag", err);
+    } finally {
+      setCreatingTag(false);
+    }
+  }
+
   const flagItems: {
     key: "isExamRelevant" | "isAP1" | "isAP2";
     label: string;
@@ -94,9 +204,15 @@ export function FileCard({
   ];
 
   return (
-    <div className="relative flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-4">
-        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400">
+    <div
+      className={`relative flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border transition-shadow hover:shadow-md ${
+        contentMatch
+          ? "border-amber-300 dark:border-amber-700"
+          : "border-gray-200 dark:border-gray-700"
+      }`}
+    >
+      <div className="flex items-center gap-4 min-w-0">
+        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400 flex-shrink-0">
           {/* Placeholder Icon */}
           <svg
             className="w-6 h-6"
@@ -112,7 +228,7 @@ export function FileCard({
             />
           </svg>
         </div>
-        <div>
+        <div className="min-w-0">
           <h3
             className="font-medium text-gray-900 dark:text-white truncate max-w-md"
             title={fileName}
@@ -124,6 +240,12 @@ export function FileCard({
             {flags.isAP2 && <Badge label={t("ap2")} color="blue" />}
             {flags.isExamRelevant && (
               <Badge label={t("examRelevant")} color="red" />
+            )}
+            {tags.map((tag) => (
+              <Badge key={tag.id} label={tag.name} color="yellow" />
+            ))}
+            {contentMatch && (
+              <Badge label="matched in content" color="gray" />
             )}
           </div>
           {date && (
@@ -139,18 +261,21 @@ export function FileCard({
         </div>
       </div>
 
-      <div className="flex gap-3 items-center">
-        {/* Flag menu — only shown when the file has a real DB row */}
+      <div className="flex gap-3 items-center flex-shrink-0">
+        {/* Flag + Tag menu — only shown when the file has a real DB row */}
         {persistable && (
           <div className="relative">
             <button
               id={`flag-menu-btn-${id}`}
               aria-label="Toggle IHK flags"
               title="IHK flags"
-              onClick={() => setMenuOpen((o) => !o)}
+              onClick={handleMenuOpen}
               disabled={saving}
               className={`p-2 rounded-md transition-colors ${
-                flags.isExamRelevant || flags.isAP1 || flags.isAP2
+                flags.isExamRelevant ||
+                flags.isAP1 ||
+                flags.isAP2 ||
+                tags.length > 0
                   ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
                   : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               } ${saving ? "opacity-50 cursor-wait" : ""}`}
@@ -167,8 +292,9 @@ export function FileCard({
                 />
                 <div
                   id={`flag-menu-${id}`}
-                  className="absolute right-0 top-full mt-1 z-20 min-w-[160px] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1"
+                  className="absolute right-0 top-full mt-1 z-20 min-w-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1"
                 >
+                  {/* IHK Flags section */}
                   <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                     IHK Flags
                   </div>
@@ -218,6 +344,85 @@ export function FileCard({
                       </span>
                     </button>
                   ))}
+
+                  {/* Tags section */}
+                  <div className="mt-1 border-t border-gray-100 dark:border-gray-700 pt-1">
+                    <div className="px-3 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      Tags
+                    </div>
+
+                    {/* Existing tags list */}
+                    {allTags.length === 0 && tagsLoaded && (
+                      <p className="px-3 py-1.5 text-xs text-gray-400 dark:text-gray-500">
+                        No tags yet
+                      </p>
+                    )}
+                    {allTags.map((tag) => {
+                      const assigned = tags.some((t) => t.id === tag.id);
+                      return (
+                        <button
+                          key={tag.id}
+                          id={`tag-toggle-${id}-${tag.id}`}
+                          onClick={() => toggleTag(tag)}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        >
+                          <span
+                            className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${
+                              assigned
+                                ? "bg-yellow-400 border-yellow-400"
+                                : "border-gray-300 dark:border-gray-600"
+                            }`}
+                          >
+                            {assigned && (
+                              <svg
+                                className="w-3 h-3 text-white"
+                                viewBox="0 0 12 12"
+                                fill="none"
+                              >
+                                <path
+                                  d="M2 6l3 3 5-5"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            )}
+                          </span>
+                          <span className="text-gray-700 dark:text-gray-300 truncate">
+                            {tag.name}
+                          </span>
+                        </button>
+                      );
+                    })}
+
+                    {/* Create new tag inline */}
+                    <div className="px-3 py-2 flex items-center gap-1">
+                      <input
+                        id={`new-tag-input-${id}`}
+                        type="text"
+                        placeholder="New tag…"
+                        value={newTagName}
+                        onChange={(e) => setNewTagName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            createAndAssignTag();
+                          }
+                        }}
+                        className="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                      <button
+                        id={`new-tag-btn-${id}`}
+                        onClick={createAndAssignTag}
+                        disabled={!newTagName.trim() || creatingTag}
+                        aria-label="Create tag"
+                        className="p-1.5 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40 transition-colors"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </>
             )}

@@ -23,6 +23,7 @@ export async function GET() {
         plan: {
           include: { course: true },
         },
+        tags: { select: { id: true, name: true } },
       },
     });
 

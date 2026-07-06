@@ -14,5 +14,8 @@ export function mapUserFileForList(f: any) {
     size: f.storedFile?.size != null ? f.storedFile.size.toString() : null,
     courseTitle: f.plan?.course.title,
     type: f.storedFile?.mimeType || inferredMimeType || null,
+    tags: Array.isArray(f.tags)
+      ? (f.tags as { id: number; name: string }[])
+      : [],
   };
 }
