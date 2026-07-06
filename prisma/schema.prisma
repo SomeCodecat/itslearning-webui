@@ -9,11 +9,14 @@ generator client {
 
 model User {
   id             Int        @id @default(autoincrement())
+
+  email          String?    @unique
+  passwordHash   String?
   
   // Itslearning Credentials (Encrypted)
-  itslearningUser String     @unique  // [MODIFIED] Now the primary local identifier
-  itslearningPwd  String     // [MODIFIED] Required
-  itslearningIv   String     // Required for decryption
+  itslearningUser String?    @unique
+  itslearningPwd  String?
+  itslearningIv   String?
   itslearningUrl  String?
   itslearningAccessToken String?
   itslearningTokenExpiresAt DateTime?

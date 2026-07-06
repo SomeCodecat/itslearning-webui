@@ -6,6 +6,17 @@ import { useRouter } from "@/i18n/routing";
 import useSWR, { mutate } from "swr";
 import { User, School, Save, Loader2 } from "lucide-react";
 
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to load user");
+  }
+
+  return data;
+};
+
 export default function SettingsPage() {
   const t = useTranslations("Index");
   const router = useRouter();
@@ -13,9 +24,7 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<"profile" | "school">("profile");
 
   // --- Profile State ---
-  const { data: user, isLoading: userLoading } = useSWR("/api/user", (url) =>
-    fetch(url).then((res) => res.json()),
-  );
+  const { data: user, isLoading: userLoading } = useSWR("/api/user", fetcher);
 
   const [profileForm, setProfileForm] = useState({
     firstName: "",
@@ -25,6 +34,7 @@ export default function SettingsPage() {
   const [profileStatus, setProfileStatus] = useState<
     "idle" | "saving" | "success" | "error"
   >("idle");
+  const [profileMessage, setProfileMessage] = useState("");
 
   // --- School State ---
   const [schoolForm, setSchoolForm] = useState({
@@ -59,19 +69,22 @@ export default function SettingsPage() {
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setProfileStatus("saving");
+    setProfileMessage("");
     try {
       const res = await fetch("/api/user", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profileForm),
       });
-      if (!res.ok) throw new Error("Failed to update profile");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to update profile");
 
       await mutate("/api/user"); // Refresh local data
       setProfileStatus("success");
       setTimeout(() => setProfileStatus("idle"), 2000);
-    } catch (err) {
+    } catch (err: any) {
       setProfileStatus("error");
+      setProfileMessage(err.message || "Failed to save.");
     }
   };
 
@@ -229,7 +242,7 @@ export default function SettingsPage() {
                       )}
                       {profileStatus === "error" && (
                         <span className="ml-3 text-red-600 text-sm font-medium">
-                          Failed to save.
+                          {profileMessage || "Failed to save."}
                         </span>
                       )}
                     </div>

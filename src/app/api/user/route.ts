@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
+import { Prisma } from "@prisma/client";
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function normalizeOptionalText(value: unknown): string | null | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
+}
 
 // GET: Fetch current user profile
 export async function GET() {
@@ -17,6 +33,7 @@ export async function GET() {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
+        email: true,
         firstName: true,
         lastName: true,
         itslearningUrl: true,
@@ -52,16 +69,24 @@ export async function PATCH(request: Request) {
     const userId = parseInt(userIdCookie.value);
     const body = await request.json();
 
-    // Allowed fields to update
-    const { firstName, lastName } = body;
+    const email = normalizeOptionalText(body.email);
+
+    if (email && !EMAIL_PATTERN.test(email)) {
+      return NextResponse.json(
+        { error: "A valid email address is required" },
+        { status: 400 },
+      );
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: {
-        firstName,
-        lastName,
+        firstName: normalizeOptionalText(body.firstName),
+        lastName: normalizeOptionalText(body.lastName),
+        email,
       },
       select: {
+        email: true,
         firstName: true,
         lastName: true,
         lastSyncedAt: true,
@@ -70,6 +95,23 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json(updatedUser);
   } catch (error: any) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return NextResponse.json(
+        { error: "Email address is already in use" },
+        { status: 409 },
+      );
+    }
+
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
     console.error("Failed to update user:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
