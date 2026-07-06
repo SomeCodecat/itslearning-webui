@@ -590,7 +590,7 @@ export function TaskList({ courseId }: { courseId?: string }) {
                     );
                   }}
                   disabled={!taskId}
-                  className="flex flex-1 items-start gap-3 text-left focus:outline-none disabled:cursor-not-allowed md:gap-3.5"
+                  className="flex min-w-0 flex-1 items-start gap-3 text-left focus:outline-none disabled:cursor-not-allowed md:gap-3.5"
                 >
                   <span className={`mt-0.5 flex-none ${isOpen ? "text-accent-text" : "text-text-tertiary"}`}>
                     {isOpen ? (
@@ -599,7 +599,7 @@ export function TaskList({ courseId }: { courseId?: string }) {
                       <ChevronRight size={18} />
                     )}
                   </span>
-                  <span className="min-w-0">
+                  <span className="min-w-0 flex-1">
                     <span className="block truncate text-[15px] font-semibold text-text-primary">
                       {task.Title}
                     </span>

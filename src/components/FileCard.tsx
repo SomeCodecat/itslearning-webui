@@ -250,7 +250,11 @@ export function FileCard({
     { key: "isAP1", label: t("ap1"), color: "blue" },
     { key: "isAP2", label: t("ap2"), color: "blue" },
   ];
-  const extension = (fileType || fileName.split(".").pop() || "FILE")
+  const extension = (
+    (fileName.includes(".") && fileName.split(".").pop()) ||
+    (fileType?.includes("/") ? fileType.split("/").pop() : fileType) ||
+    "FILE"
+  )
     .replace(/^\./, "")
     .slice(0, 4)
     .toUpperCase();
