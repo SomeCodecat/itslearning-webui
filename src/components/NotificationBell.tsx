@@ -179,7 +179,7 @@ export function NotificationBell() {
             {unreadCount > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute right-[5px] top-[5px] h-2 w-2 rounded-full bg-red-400 ring-2 ring-[#0b1120]"
+                className="absolute right-[5px] top-[5px] h-2 w-2 rounded-full bg-red-400 ring-2 ring-bar"
               />
             )}
             <span className="sr-only">
@@ -191,7 +191,7 @@ export function NotificationBell() {
 
       {isOpen && (
         <div className="absolute right-0 z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] animate-in rounded-xl border border-slate-700 bg-slate-900 py-2 shadow-popover fade-in zoom-in-95 duration-200">
-          <div className="border-b border-slate-800 px-4 py-3">
+          <div className="border-b border-line px-4 py-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-slate-100">
                 {t("title")}

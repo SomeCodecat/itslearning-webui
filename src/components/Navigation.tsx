@@ -230,7 +230,7 @@ export function Navigation() {
   }[syncStatus];
 
   return (
-    <header className="border-b border-slate-800 bg-[#0b1120]">
+    <header className="border-b border-line bg-bar">
       <PageContainer>
         <nav className="py-3.5" aria-label={navT("mainMenu")}>
           <div className="flex items-center justify-between gap-4 w-full">
@@ -286,7 +286,7 @@ export function Navigation() {
               <NotificationBell />
 
               {/* User Dropdown */}
-              <div className="relative border-l border-slate-800 pl-3" ref={menuRef}>
+              <div className="relative border-l border-line pl-3" ref={menuRef}>
                 <button
                   ref={userMenuButtonRef}
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -321,7 +321,7 @@ export function Navigation() {
                     role="menu"
                     className="absolute right-0 z-50 mt-2 w-56 animate-in rounded-xl border border-slate-700 bg-slate-900 py-2 shadow-popover fade-in zoom-in-95 duration-200"
                   >
-                    <div className="border-b border-slate-800 px-4 py-3">
+                    <div className="border-b border-line px-4 py-3">
                       <p className="text-sm font-medium text-slate-100">
                         {user?.firstName} {user?.lastName}
                       </p>
@@ -342,7 +342,7 @@ export function Navigation() {
                       </Link>
                     </div>
 
-                    <div className="border-t border-slate-800 py-1">
+                    <div className="border-t border-line py-1">
                       <button
                         onClick={async () => {
                           await fetch("/api/auth/logout", { method: "POST" });
@@ -364,7 +364,7 @@ export function Navigation() {
           {isMobileMenuOpen && (
             <div
               id={mobileMenuId}
-              className="mt-3 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-card md:hidden"
+              className="mt-3 overflow-hidden rounded-xl border border-line bg-slate-900 shadow-card md:hidden"
             >
               {navLinks.map((item) => (
                 <Link

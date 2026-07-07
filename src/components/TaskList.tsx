@@ -190,8 +190,8 @@ function TaskDetailsPanel({
 
   if (error) {
     return (
-      <div className="mt-[18px] border-t border-line pt-[18px] text-sm text-error">
-        {t("detailsFailed")}
+      <div className="mt-[18px] border-t border-line pt-[18px]">
+        <ErrorState message={t("detailsFailed")} />
       </div>
     );
   }

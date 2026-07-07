@@ -71,6 +71,12 @@ export function FileBrowser({
   allowCourseGrouping = false,
 }: FileBrowserProps) {
   const t = useTranslations("FileBrowser");
+  const toggleClass = (active: boolean) =>
+    `whitespace-nowrap rounded-control border px-3 py-2 text-xs font-semibold transition-colors max-md:py-1.5 ${
+      active
+        ? "border-accent bg-accent-subtle text-accent-text"
+        : "border-line-strong bg-elevated text-text-secondary hover:bg-elevated-strong"
+    }`;
   const format = useFormatter();
   const { mutate } = useSWRConfig();
   const [search, setSearch] = useState("");
@@ -368,11 +374,7 @@ export function FileBrowser({
               key={ft}
               id={`filter-btn-${ft}`}
               onClick={() => setFilterType(ft)}
-              className={`whitespace-nowrap rounded-control border px-3 py-2 text-xs font-semibold transition-colors max-md:py-1.5 ${
-                filterType === ft
-                  ? "border-accent bg-accent-subtle text-accent-text"
-                  : "border-line-strong bg-elevated text-text-secondary hover:bg-elevated-strong"
-              }`}
+              className={toggleClass(filterType === ft)}
             >
               {filterLabels[ft]}
             </button>
@@ -386,11 +388,7 @@ export function FileBrowser({
               id="group-flat-btn"
               type="button"
               onClick={() => handleGroupingChange("flat")}
-              className={`whitespace-nowrap rounded-control border px-3 py-2 text-xs font-semibold transition-colors max-md:py-1.5 ${
-                groupingMode === "flat"
-                  ? "border-accent bg-accent-subtle text-accent-text"
-                  : "border-line-strong bg-elevated text-text-secondary hover:bg-elevated-strong"
-              }`}
+              className={toggleClass(groupingMode === "flat")}
             >
               {t("groupingFlat")}
             </button>
@@ -398,11 +396,7 @@ export function FileBrowser({
               id="group-topic-btn"
               type="button"
               onClick={() => handleGroupingChange("topic")}
-              className={`whitespace-nowrap rounded-control border px-3 py-2 text-xs font-semibold transition-colors max-md:py-1.5 ${
-                groupingMode === "topic"
-                  ? "border-accent bg-accent-subtle text-accent-text"
-                  : "border-line-strong bg-elevated text-text-secondary hover:bg-elevated-strong"
-              }`}
+              className={toggleClass(groupingMode === "topic")}
             >
               {t("groupingTopic")}
             </button>
@@ -411,11 +405,7 @@ export function FileBrowser({
                 id="group-course-btn"
                 type="button"
                 onClick={() => handleGroupingChange("course")}
-                className={`whitespace-nowrap rounded-control border px-3 py-2 text-xs font-semibold transition-colors max-md:py-1.5 ${
-                  groupingMode === "course"
-                    ? "border-accent bg-accent-subtle text-accent-text"
-                    : "border-line-strong bg-elevated text-text-secondary hover:bg-elevated-strong"
-                }`}
+                className={toggleClass(groupingMode === "course")}
               >
                 {t("groupingCourse")}
               </button>

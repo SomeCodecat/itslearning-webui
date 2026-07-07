@@ -26,6 +26,7 @@
   --sky: #7dd3fc;
   --sky-dot: #38bdf8;
   --sky-subtle: rgba(56, 189, 248, 0.14);
+  --bar: #0b1120;
 }
 
 @theme inline {
@@ -54,6 +55,7 @@
   --color-sky: var(--sky);
   --color-sky-dot: var(--sky-dot);
   --color-sky-subtle: var(--sky-subtle);
+  --color-bar: var(--bar);
   --font-sans: var(--font-instrument-sans);
   --font-mono: var(--font-jetbrains-mono);
   --radius-card: 14px;

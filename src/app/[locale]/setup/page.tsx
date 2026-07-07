@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { Eye, EyeOff } from "lucide-react";
+import { ErrorState } from "@/components/ui/ErrorState";
 
 const fieldClass =
   "relative block w-full rounded-control border border-line-strong bg-elevated px-3 py-[10px] text-sm text-text-primary outline-none transition-colors placeholder:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50";
@@ -74,11 +75,7 @@ export default function SetupPage() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="rounded-control border border-error/30 bg-error-subtle p-3 text-center text-sm text-error">
-              {error}
-            </div>
-          )}
+          {error && <ErrorState message={error} />}
 
           <div className="space-y-4">
             <div>

@@ -6,6 +6,7 @@ import useSWR, { mutate } from "swr";
 import { Save, Loader2, Eye, EyeOff } from "lucide-react";
 import { PageContainer } from "@/components/PageContainer";
 import { LoadingState } from "@/components/ui/LoadingState";
+import { ErrorState } from "@/components/ui/ErrorState";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -354,9 +355,7 @@ export default function SettingsPage() {
                     </div>
 
                     {schoolStatus === "error" && (
-                      <div className="rounded-control border border-error/30 bg-error-subtle p-3 text-sm text-error">
-                        {schoolMessage}
-                      </div>
+                      <ErrorState message={schoolMessage} />
                     )}
                     {schoolStatus === "success" && (
                       <div className="rounded-control border border-success/30 bg-success-subtle p-3 text-sm text-success">

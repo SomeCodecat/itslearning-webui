@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import useSWR from "swr";
 import { PageContainer } from "@/components/PageContainer";
@@ -41,6 +42,15 @@ export default function CalendarPage() {
     error,
     isLoading,
   } = useSWR<CalendarEvent[]>("/api/calendar", fetcher);
+
+  const parsedEvents = useMemo(() => {
+    if (!Array.isArray(events)) return [];
+    return events.map((event) => ({
+      ...event,
+      fromDate: new Date(event.From),
+      toDate: new Date(event.To),
+    }));
+  }, [events]);
 
   const handleExportIcs = () => {
     if (!events) return;
@@ -93,11 +103,7 @@ export default function CalendarPage() {
         )}
 
         <div className="flex flex-col gap-2.5">
-          {Array.isArray(events) &&
-            events.map((event) => {
-              const from = new Date(event.From);
-              const to = new Date(event.To);
-
+          {parsedEvents.map((event) => {
               return (
                 <article
                   key={event.EventId}
@@ -105,10 +111,10 @@ export default function CalendarPage() {
                 >
                   <div className="w-[46px] flex-none text-center">
                     <div className="font-mono text-xl font-bold leading-none text-accent-text">
-                      {format.dateTime(from, { day: "2-digit" })}
+                      {format.dateTime(event.fromDate, { day: "2-digit" })}
                     </div>
                     <div className="font-mono text-[10px] font-semibold uppercase text-text-tertiary">
-                      {format.dateTime(from, { month: "short" })}
+                      {format.dateTime(event.fromDate, { month: "short" })}
                     </div>
                   </div>
                   <div className="min-w-0 flex-1">
@@ -116,7 +122,7 @@ export default function CalendarPage() {
                       {event.Title}
                     </h3>
                     <p className="truncate text-[11px] font-medium text-text-tertiary">
-                      {[event.Description, `${format.dateTime(from, { timeStyle: "short" })}-${format.dateTime(to, { timeStyle: "short" })}`]
+                      {[event.Description, `${format.dateTime(event.fromDate, { timeStyle: "short" })}-${format.dateTime(event.toDate, { timeStyle: "short" })}`]
                         .filter(Boolean)
                         .join(" · ")}
                     </p>
@@ -128,7 +134,7 @@ export default function CalendarPage() {
                 </article>
               );
             })}
-          {!isLoading && !error && (!Array.isArray(events) || events.length === 0) && (
+          {!isLoading && !error && parsedEvents.length === 0 && (
             <EmptyState icon={<CalendarDays size={20} />} title={t("empty")} />
           )}
         </div>
