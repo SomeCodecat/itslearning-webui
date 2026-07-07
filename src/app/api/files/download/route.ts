@@ -18,6 +18,12 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Missing file ID" }, { status: 400 });
     }
 
+    // Clicking a file card opens it for in-browser viewing (?disposition=inline)
+    // so the browser renders it in a tab instead of saving to Downloads. The
+    // download button omits this and gets the default attachment behaviour.
+    const disposition =
+      searchParams.get("disposition") === "inline" ? "inline" : "attachment";
+
     const userId = await getSessionUserId();
     if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -55,7 +61,7 @@ export async function GET(request: Request) {
             "Content-Type":
               userFile.storedFile.mimeType || "application/octet-stream",
             "Content-Length": String(fileBuffer.length),
-            "Content-Disposition": `attachment; filename="${encodeURIComponent(userFile.customName || "download")}"`,
+            "Content-Disposition": `${disposition}; filename="${encodeURIComponent(userFile.customName || "download")}"`,
           },
         });
       } catch {
@@ -96,7 +102,7 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type": fileData.mimeType || "application/octet-stream",
         "Content-Length": String(fileData.buffer.length),
-        "Content-Disposition": `attachment; filename="${encodeURIComponent(fileData.filename)}"`,
+        "Content-Disposition": `${disposition}; filename="${encodeURIComponent(fileData.filename)}"`,
       },
     });
   } catch (error) {

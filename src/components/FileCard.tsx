@@ -132,6 +132,18 @@ export function FileCard({
     });
   }, [initialExamRelevant, initialAP1, initialAP2]);
 
+  // Clicking the card opens the file inline in a new tab for quick viewing,
+  // without saving it to the Downloads folder. The server serves it with an
+  // `inline` disposition so the browser renders (rather than downloads) it.
+  function handleView() {
+    const query = persistable ? `id=${id}` : `elementId=${id}`;
+    window.open(
+      `/api/files/download?${query}&disposition=inline`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  }
+
   async function handleDownload() {
     if (downloading) return;
     setDownloading(true);
@@ -337,13 +349,26 @@ export function FileCard({
           : "border-line hover:border-line-strong"
       }`}
     >
-      <div className="flex min-w-0 items-center gap-3.5">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={handleView}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleView();
+          }
+        }}
+        title={t("viewFile")}
+        aria-label={t("viewFile")}
+        className="group flex min-w-0 flex-1 cursor-pointer items-center gap-3.5 rounded-control focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      >
         <div className={`flex h-10 w-10 flex-none items-center justify-center rounded-[9px] font-mono text-[10px] font-bold ${extensionTone} max-md:h-[34px] max-md:w-[34px] max-md:text-[9px]`}>
           {extension || <FileText className="h-4 w-4" />}
         </div>
         <div className="min-w-0 flex-1">
           <h3
-            className="max-w-md truncate text-sm font-semibold text-text-primary max-md:text-[13px]"
+            className="max-w-md truncate text-sm font-semibold text-text-primary transition-colors group-hover:text-accent-text max-md:text-[13px]"
             title={fileName}
           >
             {fileName}
