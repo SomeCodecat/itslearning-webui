@@ -206,6 +206,19 @@ interface ResourcesResponse {
   Resources?: EntityArrayResponse<Resource>;
 }
 
+// Normalize a user-entered instance URL: prepend https:// when no http(s)://
+// scheme is present, and strip trailing slashes. A scheme-less value (e.g.
+// "kreisrastatt.itslearning.com") would otherwise become an invalid axios
+// baseURL and every request — including the OAuth token call — would fail.
+export function normalizeInstanceUrl(raw: string): string {
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return trimmed;
+  const withScheme = /^https?:\/\//i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed}`;
+  return withScheme.replace(/\/+$/, "");
+}
+
 export class ScraperService {
   public apiClient: AxiosInstance; // For REST API and file downloads (Bearer Token)
   private accessToken: string = "";
@@ -214,7 +227,7 @@ export class ScraperService {
   public onAuthFailure?: () => Promise<void>;
 
   constructor(instanceUrl: string = "https://sdu.itslearning.com") {
-    this.instanceUrl = instanceUrl.replace(/\/$/, ""); // Remove trailing slash
+    this.instanceUrl = normalizeInstanceUrl(instanceUrl);
 
     // 1. API Client (Stateless/Bearer) - For REST API
     this.apiClient = axios.create({
@@ -269,7 +282,7 @@ export class ScraperService {
   }
 
   public setInstanceUrl(url: string) {
-    this.instanceUrl = url.replace(/\/$/, "");
+    this.instanceUrl = normalizeInstanceUrl(url);
     this.apiClient.defaults.baseURL = this.instanceUrl;
   }
 

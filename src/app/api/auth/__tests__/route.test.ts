@@ -38,6 +38,12 @@ vi.mock("@/lib/services/ScraperService", () => ({
       getAccessToken: mockGetAccessToken,
     };
   }),
+  normalizeInstanceUrl: (raw: string) => {
+    const t = (raw || "").trim();
+    if (!t) return t;
+    const w = /^https?:\/\//i.test(t) ? t : `https://${t}`;
+    return w.replace(/\/+$/, "");
+  },
 }));
 
 vi.mock("@/lib/services/CryptoService", () => ({

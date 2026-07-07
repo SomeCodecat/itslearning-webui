@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { ScraperService } from "@/lib/services/ScraperService";
+import {
+  ScraperService,
+  normalizeInstanceUrl,
+} from "@/lib/services/ScraperService";
 import { CryptoService } from "@/lib/services/CryptoService";
 import { getSessionUserId } from "@/lib/session";
 
@@ -37,6 +40,10 @@ export async function POST(request: Request) {
     if (!allowCustom || !organizationUrl) {
       organizationUrl = defaultInstance;
     }
+
+    // Accept a scheme-less link (e.g. "kreisrastatt.itslearning.com") by
+    // defaulting to https:// and stripping trailing slashes.
+    organizationUrl = normalizeInstanceUrl(organizationUrl);
 
     if (!itslearningUser || !password) {
       return NextResponse.json(
