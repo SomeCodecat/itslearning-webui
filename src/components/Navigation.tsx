@@ -39,6 +39,7 @@ export function Navigation() {
     { href: "/dashboard", label: t("dashboard") },
     { href: "/courses", label: t("courses") },
     { href: "/files", label: t("files") },
+    { href: "/plans", label: t("plans") },
     { href: "/tasks", label: t("tasks") },
     { href: "/grades", label: t("grades") },
     { href: "/calendar", label: t("calendar") },

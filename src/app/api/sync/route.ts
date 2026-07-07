@@ -1,6 +1,7 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 import { isFileResource } from "@/lib/services/ScraperService";
+import { parseResourcePath } from "@/lib/resourcePath";
 import { getScraperForSession } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
 import { getSessionUserId } from "@/lib/session";
@@ -122,7 +123,11 @@ export async function POST() {
       });
 
       // --- 2a. Fetch and Sync Plans (Topics) ---
-      const elementToPlanMap = new Map<number, number>(); // ElementID -> PlanID (DB ID)
+      // Files are linked to a Plan by topic name: the itslearning Planner lists
+      // each topic's display name in `TopicName`, and every file resource's
+      // breadcrumb `Path` contains that same name as the segment after the
+      // course title, so we join the two on the name.
+      const topicNameToPlanId = new Map<string, number>();
       try {
         const topics = await scraperService.getTopics(course.CourseId);
         console.log(
@@ -130,26 +135,24 @@ export async function POST() {
         );
 
         for (const topic of topics) {
+          const topicName = topic.TopicName?.trim() || null;
           // Upsert Plan
           const dbPlan = await prisma.plan.upsert({
-            where: { id: topic.TopicId }, // Assuming TopicId is the unique Planner ID
+            where: { id: topic.TopicId }, // TopicId is the unique Planner ID
             update: {
-              title: topic.Title || "Untitled Plan",
-              topic: topic.Name || null,
+              title: topicName || "Untitled Plan",
+              topic: topicName,
             },
             create: {
               id: topic.TopicId,
               courseId: dbCourse.id,
-              title: topic.Title || "Untitled Plan",
-              topic: topic.Name || null,
+              title: topicName || "Untitled Plan",
+              topic: topicName,
             },
           });
 
-          // Map resources in this plan
-          if (topic.Resources && Array.isArray(topic.Resources.EntityArray)) {
-            for (const res of topic.Resources.EntityArray) {
-              elementToPlanMap.set(res.ElementId, dbPlan.id);
-            }
+          if (topicName) {
+            topicNameToPlanId.set(topicName, dbPlan.id);
           }
         }
       } catch (err) {
@@ -167,8 +170,12 @@ export async function POST() {
         for (const res of resources) {
           if (res.ContentUrl && isFileResource(res)) {
             try {
-              // Determine Plan
-              const planId = elementToPlanMap.get(res.ElementId);
+              // Determine the Plan (topic) and folder from the resource's
+              // breadcrumb: the segment after the course title is the topic.
+              const { topic, folderPath } = parseResourcePath(res.Path);
+              const planId = topic
+                ? topicNameToPlanId.get(topic) ?? null
+                : null;
 
               // Upsert UserFile stub (no download yet)
               const userFile = await prisma.userFile.findFirst({
@@ -179,7 +186,8 @@ export async function POST() {
                 await prisma.userFile.update({
                   where: { id: userFile.id },
                   data: {
-                    planId: planId || null,
+                    planId,
+                    folderPath,
                     customName: res.Title,
                     webUrl: res.ContentUrl,
                   },
@@ -191,7 +199,8 @@ export async function POST() {
                     elementId: res.ElementId,
                     customName: res.Title,
                     webUrl: res.ContentUrl,
-                    planId: planId || null,
+                    planId,
+                    folderPath,
                     uploader: "System",
                   },
                 });

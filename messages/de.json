@@ -7,6 +7,7 @@
     "tasks": "Aufgaben",
     "grades": "Noten",
     "files": "Dateien",
+    "plans": "Pläne",
     "calendar": "Kalender",
     "settings": "Einstellungen",
     "recentFiles": "Aktuelle Dateien"
@@ -124,6 +125,14 @@
     "loading": "Deine Dateien werden geladen...",
     "loadFailed": "Dateien konnten nicht geladen werden",
     "loadFailedHint": "Aktualisiere die Seite oder prüfe deine Verbindung."
+  },
+  "Plans": {
+    "title": "Pläne",
+    "subtitle": "Deine Dateien nach Kurs und Thema geordnet.",
+    "loading": "Deine Pläne werden geladen...",
+    "loadFailed": "Pläne konnten nicht geladen werden",
+    "loadFailedHint": "Aktualisiere die Seite oder prüfe deine Verbindung.",
+    "empty": "Noch keine Dateien zum Ordnen. Synchronisiere, um sie zu laden."
   },
   "Courses": {
     "title": "Meine Kurse",

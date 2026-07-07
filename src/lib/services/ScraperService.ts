@@ -153,6 +153,10 @@ export interface Resource {
   LearningToolId?: number;
   IconUrl?: string;
   ContentUrl?: string; // Sometimes available
+  // Breadcrumb from the API, e.g. " / FI24-BFKO / Programmieren in Java 1".
+  // The segment after the course title is the topic (Planner) the file lives
+  // under, so the sync uses it to group files by topic.
+  Path?: string;
 }
 
 // 5009 = File tool, 5006 = uploaded audio; verified against live instance 2026-07.
@@ -184,15 +188,14 @@ export interface TaskItem {
   Url?: string | null;
 }
 
-interface TopicResource {
-  ElementId: number;
-}
-
+// Shape returned by /restapi/personal/courses/{id}/topics/v1. The Planner
+// ("Topics") lists each topic's display name in `TopicName` and the id of the
+// resource folder backing it in `FolderId`. (The older `Title`/`Name`/embedded
+// `Resources` fields this code once expected are not part of the response.)
 export interface TopicItem {
   TopicId: number;
-  Title?: string;
-  Name?: string | null;
-  Resources?: EntityArrayResponse<TopicResource>;
+  TopicName?: string | null;
+  FolderId?: number;
 }
 
 export interface RssItem {
@@ -475,6 +478,8 @@ export class ScraperService {
         IconUrl: item.IconUrl,
         // Sync depends on ContentUrl to create UserFile stubs — keep it mapped.
         ContentUrl: item.ContentUrl,
+        // Path carries the topic breadcrumb used for by-topic grouping.
+        Path: item.Path,
       };
 
       results.push(resource);

@@ -7,6 +7,7 @@
     "tasks": "Tasks",
     "grades": "Grades",
     "files": "Files",
+    "plans": "Plans",
     "calendar": "Calendar",
     "settings": "Settings",
     "recentFiles": "Recent Files"
@@ -124,6 +125,14 @@
     "loading": "Loading your files...",
     "loadFailed": "Failed to load files",
     "loadFailedHint": "Please try refreshing the page or check your connection."
+  },
+  "Plans": {
+    "title": "Plans",
+    "subtitle": "Your files organized by course and topic.",
+    "loading": "Loading your plans...",
+    "loadFailed": "Failed to load plans",
+    "loadFailedHint": "Please try refreshing the page or check your connection.",
+    "empty": "No files to organize yet. Sync to pull them in."
   },
   "Courses": {
     "title": "My Courses",

@@ -202,6 +202,7 @@ describe("POST /api/sync grades integration", () => {
         webUrl:
           "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317614",
         planId: null,
+        folderPath: null,
         uploader: "System",
       },
     });
@@ -213,6 +214,7 @@ describe("POST /api/sync grades integration", () => {
         webUrl:
           "https://school.example/LearningToolElement/ViewLearningToolElement.aspx?LearningToolElementId=317615",
         planId: null,
+        folderPath: null,
         uploader: "System",
       },
     });
