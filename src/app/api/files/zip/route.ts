@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import archiver from "archiver";
 import { Readable } from "stream";
+import { ensureFileExtension } from "@/lib/fileExtension";
 
 export async function POST(request: Request) {
   try {
@@ -97,8 +98,12 @@ export async function POST(request: Request) {
         continue;
       }
 
-      // Display name
-      const displayName = uf.customName || "Untitled";
+      // Display name; itslearning titles often lack an extension, so derive
+      // one from the stored blob's MIME type when missing.
+      const displayName = ensureFileExtension(
+        uf.customName || "Untitled",
+        uf.storedFile.mimeType,
+      );
       // Sanitize filename characters: remove invalid path characters
       const sanitizedName = displayName.replace(/[\/\\?%*:|"<>]/g, "_");
 

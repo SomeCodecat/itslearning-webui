@@ -3,6 +3,7 @@ import { getScraperForSession, isAuthSessionError } from "@/lib/userScraper";
 import { prisma } from "@/lib/db";
 import { getSessionUserId } from "@/lib/session";
 import { FileService } from "@/lib/services/FileService";
+import { ensureFileExtension } from "@/lib/fileExtension";
 import fs from "fs/promises";
 
 export async function GET(request: Request) {
@@ -61,7 +62,7 @@ export async function GET(request: Request) {
             "Content-Type":
               userFile.storedFile.mimeType || "application/octet-stream",
             "Content-Length": String(fileBuffer.length),
-            "Content-Disposition": `${disposition}; filename="${encodeURIComponent(userFile.customName || "download")}"`,
+            "Content-Disposition": `${disposition}; filename="${encodeURIComponent(ensureFileExtension(userFile.customName || "download", userFile.storedFile.mimeType))}"`,
           },
         });
       } catch {
@@ -102,7 +103,7 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type": fileData.mimeType || "application/octet-stream",
         "Content-Length": String(fileData.buffer.length),
-        "Content-Disposition": `${disposition}; filename="${encodeURIComponent(fileData.filename)}"`,
+        "Content-Disposition": `${disposition}; filename="${encodeURIComponent(ensureFileExtension(fileData.filename, fileData.mimeType))}"`,
       },
     });
   } catch (error) {
