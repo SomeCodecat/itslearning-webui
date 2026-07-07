@@ -99,6 +99,40 @@ export interface Participant {
   Groups?: unknown;
 }
 
+// instantmessages/messagethreads/v1 item — one conversation thread.
+export interface MessageThread {
+  InstantMessageThreadId: number;
+  Name?: string | null;
+  Type?: string | null;
+  Created?: string | null;
+  CreatedBy?: string | null;
+  CreatedByTeacher?: boolean;
+  LastMessage?: unknown;
+  Messages?: unknown;
+  Participants?: unknown;
+  ParticipantsCount?: number;
+  LastReadInstantMessageId?: number | null;
+  IsBlocked?: boolean;
+}
+
+// courses/{id}/bulletins/v1 item (LightBulletin).
+export interface LightBulletin {
+  LightBulletinId: number;
+  Text?: string | null;
+  EmbedUrl?: string | null;
+  Pinned?: boolean;
+  AllowComments?: boolean;
+  HasResources?: boolean;
+  AttachedImages?: unknown;
+  ResourcesCount?: number;
+  CommentsCount?: number;
+  ActiveFromDate?: string | null;
+  ActiveToDate?: string | null;
+  IsSubscribed?: boolean;
+  PublishedDate?: string | null;
+  PublishedBy?: string | null;
+}
+
 // notifications/v2 item.
 export interface Notification {
   NotificationId: number;
@@ -602,11 +636,33 @@ export class ScraperService {
   }
 
   // Course Bulletins (LightBulletins)
-  async getLightBulletins(courseId: number): Promise<unknown[]> {
-    const res = await this.apiGet<EntityArrayResponse<unknown>>(
+  async getLightBulletins(courseId: number): Promise<LightBulletin[]> {
+    const res = await this.apiGet<EntityArrayResponse<LightBulletin>>(
       `/restapi/personal/courses/${courseId}/bulletins/v1`,
     );
     return res.data.EntityArray || [];
+  }
+
+  // Instant-message threads (inbox). Read-only. The account may not have the
+  // instant-message system enabled -> 403/404 yields an empty list.
+  async getMessageThreads(): Promise<MessageThread[]> {
+    if (!this.accessToken) throw new Error("Not authenticated");
+
+    try {
+      const res = await this.apiGet<EntityArrayResponse<MessageThread>>(
+        "/restapi/personal/instantmessages/messagethreads/v1",
+        { pageSize: 30 },
+      );
+      return res.data.EntityArray || [];
+    } catch (err) {
+      if (
+        axios.isAxiosError(err) &&
+        (err.response?.status === 403 || err.response?.status === 404)
+      ) {
+        return [];
+      }
+      throw err;
+    }
   }
 
   // Get Tasks (Assignments) - Active or All
