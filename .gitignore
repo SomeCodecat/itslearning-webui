@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# runtime data — local database and downloaded file blobs
+prisma/app.db
+prisma/app.db-journal
+storage/
