@@ -44,27 +44,27 @@ export function Badge({
   const resolvedVariant = inferVariant(label, color, variant);
   const variants = {
     exam: {
-      classes: "bg-red-500/14 text-red-300",
+      classes: "bg-error-subtle text-error",
       dot: "bg-red-400",
     },
     ap1: {
-      classes: "bg-indigo-500/14 text-indigo-300",
+      classes: "bg-accent-subtle text-accent-text",
       dot: "bg-indigo-500",
     },
     ap2: {
-      classes: "bg-sky-400/14 text-sky-300",
+      classes: "bg-sky-subtle text-sky",
       dot: "bg-sky-400",
     },
     active: {
-      classes: "bg-indigo-500/14 text-indigo-300",
+      classes: "bg-accent-subtle text-accent-text",
       dot: null,
     },
     completed: {
-      classes: "bg-emerald-500/14 text-emerald-400",
+      classes: "bg-success-subtle text-success",
       dot: null,
     },
     "content-match": {
-      classes: "bg-amber-500/14 text-amber-400",
+      classes: "bg-warning-subtle text-warning",
       dot: null,
     },
     tag: {

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./Badge";
+import { getFileExtension, getFileTone } from "./ui/fileType";
 import { Download, ExternalLink, FileText, Plus, Tag } from "lucide-react";
 
 interface TagItem {
@@ -250,21 +251,8 @@ export function FileCard({
     { key: "isAP1", label: t("ap1"), color: "blue" },
     { key: "isAP2", label: t("ap2"), color: "blue" },
   ];
-  const extension = (
-    (fileName.includes(".") && fileName.split(".").pop()) ||
-    (fileType?.includes("/") ? fileType.split("/").pop() : fileType) ||
-    "FILE"
-  )
-    .replace(/^\./, "")
-    .slice(0, 4)
-    .toUpperCase();
-  const extensionTone = extension.startsWith("XL")
-    ? "bg-success-subtle text-success"
-    : extension.startsWith("PP")
-      ? "bg-sky-subtle text-sky"
-      : extension.startsWith("DO")
-        ? "bg-warning-subtle text-warning"
-        : "bg-accent-subtle text-accent-text";
+  const extension = getFileExtension(fileName, fileType);
+  const extensionTone = getFileTone(extension);
 
   return (
     <div

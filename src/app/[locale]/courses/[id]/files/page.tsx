@@ -24,8 +24,7 @@ export default function CourseFilesPage({
   const { data: files, error, isLoading } = useSWR(cacheKey, fetcher);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
+    <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
         <CourseNav courseId={id} />
 
         <h2 className="mb-4 text-card-title text-text-primary">
@@ -40,6 +39,5 @@ export default function CourseFilesPage({
           <FileBrowser files={files || []} cacheKey={cacheKey} />
         )}
       </PageContainer>
-    </div>
   );
 }

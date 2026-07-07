@@ -13,11 +13,9 @@ export default function CourseGradesPage({
   const { id } = use(params);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
-        <CourseNav courseId={id} />
-        <GradesTable courseId={id} />
-      </PageContainer>
-    </div>
+    <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
+      <CourseNav courseId={id} />
+      <GradesTable courseId={id} />
+    </PageContainer>
   );
 }

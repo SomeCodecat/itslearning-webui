@@ -119,8 +119,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-6 py-6 md:px-10">
+    <PageContainer className="px-6 py-6 md:px-10">
         <header className="mb-[18px]">
           <h1 className="mb-1 text-xl font-bold text-text-primary md:text-2xl">
             {t("title")}
@@ -395,6 +394,5 @@ export default function SettingsPage() {
           </div>
         </div>
       </PageContainer>
-    </div>
   );
 }

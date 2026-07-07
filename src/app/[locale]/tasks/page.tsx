@@ -8,8 +8,7 @@ export default function TasksPage() {
   const t = useTranslations("Tasks");
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
+    <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
         <header className="mb-5">
           <h1 className="text-xl font-bold text-text-primary md:text-[28px]">
             {t("title")}
@@ -18,6 +17,5 @@ export default function TasksPage() {
 
         <TaskList />
       </PageContainer>
-    </div>
   );
 }

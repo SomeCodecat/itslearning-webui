@@ -12,8 +12,8 @@ describe("Badge", () => {
 
     const badge = screen.getByText("AP2").closest("span");
 
-    expect(badge?.className).toContain("bg-sky-400/14");
-    expect(badge?.className).toContain("text-sky-300");
+    expect(badge?.className).toContain("bg-sky-subtle");
+    expect(badge?.className).toContain("text-sky");
   });
 
   it("renders user tags as neutral hash chips from the existing yellow color", () => {

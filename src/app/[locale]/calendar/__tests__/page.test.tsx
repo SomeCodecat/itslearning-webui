@@ -68,7 +68,7 @@ describe("CalendarPage", () => {
       expect(screen.getByText("Datenbank-Übung")).toBeDefined();
     });
 
-    expect(container.firstElementChild?.className).toContain("bg-background");
+    expect(container.firstElementChild?.className).toContain("max-w-[1600px]");
     const eventCard = screen.getByText("Datenbank-Übung").closest("article");
     expect(eventCard?.className).toContain("bg-card");
     expect(eventCard?.className).toContain("border-line");

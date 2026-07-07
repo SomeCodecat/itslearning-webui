@@ -75,7 +75,7 @@ describe("SettingsPage", () => {
       expect(screen.getByDisplayValue("Lena")).toBeDefined();
     });
 
-    expect(container.firstElementChild?.className).toContain("bg-background");
+    expect(container.firstElementChild?.className).toContain("max-w-[1600px]");
     expect(screen.getByRole("button", { name: "Profile" }).className).toContain(
       "bg-card",
     );

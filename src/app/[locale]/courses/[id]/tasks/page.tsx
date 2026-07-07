@@ -15,14 +15,12 @@ export default function CourseTasksPage({
   const tCourse = useTranslations("CourseDetail");
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
+    <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
         <CourseNav courseId={id} />
         <h2 className="mb-4 text-card-title text-text-primary">
           {tCourse("tasks")}
         </h2>
         <TaskList courseId={id} />
       </PageContainer>
-    </div>
   );
 }

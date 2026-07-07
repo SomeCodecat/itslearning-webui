@@ -8,6 +8,7 @@ import { Clock3, FileText, FolderOpen } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
+import { getFileExtension, getFileTone } from "@/components/ui/fileType";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -28,32 +29,19 @@ type DashboardFile = {
   uploadedAt?: string | null;
 };
 
-function getDeadlineTone(deadline?: string | null) {
-  if (!deadline) return "bg-accent shadow-[0_0_0_4px_var(--accent-subtle)]";
-  const date = new Date(deadline);
-  if (Number.isNaN(date.getTime())) {
-    return "bg-accent shadow-[0_0_0_4px_var(--accent-subtle)]";
-  }
-  const now = new Date();
-  if (date.getTime() < now.getTime()) {
-    return "bg-error shadow-[0_0_0_4px_var(--error-subtle)]";
-  }
-  if (date.toDateString() === now.toDateString()) {
-    return "bg-warning shadow-[0_0_0_4px_var(--warning-subtle)]";
-  }
-  return "bg-accent shadow-[0_0_0_4px_var(--accent-subtle)]";
-}
-
 function getDeadlineStatus(
   deadline: string | null | undefined,
   t: ReturnType<typeof useTranslations<"Dashboard">>,
   format: ReturnType<typeof useFormatter>,
+  now: Date,
 ) {
+  const defaultTone = "bg-accent shadow-[0_0_0_4px_var(--accent-subtle)]";
   if (!deadline) {
     return {
       text: t("noDate"),
       color: "text-text-secondary",
       formattedDate: "",
+      tone: defaultTone,
     };
   }
 
@@ -63,10 +51,10 @@ function getDeadlineStatus(
       text: "",
       color: "",
       formattedDate: "",
+      tone: defaultTone,
     };
   }
 
-  const now = new Date();
   const isOverdue = date.getTime() < now.getTime();
   const isToday = date.toDateString() === now.toDateString();
 
@@ -89,6 +77,7 @@ function getDeadlineStatus(
       text: t("overdue"),
       color: "text-error",
       formattedDate: formattedDate,
+      tone: "bg-error shadow-[0_0_0_4px_var(--error-subtle)]",
     };
   }
 
@@ -97,31 +86,26 @@ function getDeadlineStatus(
       text: t("today"),
       color: "text-warning",
       formattedDate: t("dueAt", { time: formattedTime }),
+      tone: "bg-warning shadow-[0_0_0_4px_var(--warning-subtle)]",
     };
   }
 
-  const relTime = format.relativeTime(date, new Date());
+  const relTime = format.relativeTime(date, now);
   const capitalizedRelTime = relTime.charAt(0).toUpperCase() + relTime.slice(1);
 
   return {
     text: capitalizedRelTime,
     color: "text-text-secondary",
     formattedDate: formattedDate,
+    tone: defaultTone,
   };
-}
-
-function getFileTone(value?: string | null) {
-  const extension = (value || "FILE").replace(/^\./, "").slice(0, 4).toUpperCase();
-  if (extension.startsWith("XL")) return "bg-success-subtle text-success";
-  if (extension.startsWith("PP")) return "bg-sky-subtle text-sky";
-  if (extension.startsWith("DO")) return "bg-warning-subtle text-warning";
-  return "bg-accent-subtle text-accent-text";
 }
 
 export default function DashboardPage() {
   const indexT = useTranslations("Index");
   const t = useTranslations("Dashboard");
   const format = useFormatter();
+  const now = new Date();
 
   // 1. Fetch Tasks (Deadlines)
   const {
@@ -143,8 +127,7 @@ export default function DashboardPage() {
   const newFiles = Array.isArray(recentFiles) ? recentFiles.slice(0, 5) : [];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-6 py-6 md:px-10 md:py-10">
+    <PageContainer className="px-6 py-6 md:px-10 md:py-10">
         <header className="mb-6 md:mb-[26px]">
           <h1 className="mb-1 text-xl font-bold text-text-primary md:text-[28px]">
             {indexT("title")}
@@ -173,46 +156,44 @@ export default function DashboardPage() {
               <EmptyState icon={<Clock3 size={20} />} title={t("noActiveDeadlines")} />
             ) : (
               <ul className="flex flex-col">
-                {upcomingDeadlines.map((task) => (
-                  <li
-                    key={task.TaskId}
-                    className="flex items-center gap-[13px] border-b border-line py-3 text-sm last:border-b-0"
-                  >
-                    <span className={`h-[9px] w-[9px] flex-none rounded-[3px] ${getDeadlineTone(task.Deadline)}`} />
-                    <div className="min-w-0 flex-1">
-                      <span className="block truncate font-semibold text-text-primary">
-                        {task.Title}
-                      </span>
-                      <div className="mt-1 flex items-center gap-1">
-                        <span className="text-[11px] text-text-tertiary">
-                          {t("fromCourse")}
+                {upcomingDeadlines.map((task) => {
+                  const deadlineInfo = getDeadlineStatus(task.Deadline, t, format, now);
+                  return (
+                    <li
+                      key={task.TaskId}
+                      className="flex items-center gap-[13px] border-b border-line py-3 text-sm last:border-b-0"
+                    >
+                      <span className={`h-[9px] w-[9px] flex-none rounded-[3px] ${deadlineInfo.tone}`} />
+                      <div className="min-w-0 flex-1">
+                        <span className="block truncate font-semibold text-text-primary">
+                          {task.Title}
                         </span>
-                        <span className="rounded-[5px] bg-elevated px-2 py-0.5 text-[11px] font-medium text-text-secondary">
-                          {task.CourseTitle}
-                        </span>
+                        <div className="mt-1 flex items-center gap-1">
+                          <span className="text-[11px] text-text-tertiary">
+                            {t("fromCourse")}
+                          </span>
+                          <span className="rounded-[5px] bg-elevated px-2 py-0.5 text-[11px] font-medium text-text-secondary">
+                            {task.CourseTitle}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    {task.Deadline ? (
-                      (() => {
-                        const { text, color, formattedDate } = getDeadlineStatus(task.Deadline, t, format);
-                        return (
-                          <div className="ml-2 flex-none text-right">
-                            <div className={`font-mono text-xs font-semibold ${color}`}>
-                              {text}
-                            </div>
-                            <div className="font-mono text-[11px] text-text-tertiary">
-                              {formattedDate}
-                            </div>
+                      {task.Deadline ? (
+                        <div className="ml-2 flex-none text-right">
+                          <div className={`font-mono text-xs font-semibold ${deadlineInfo.color}`}>
+                            {deadlineInfo.text}
                           </div>
-                        );
-                      })()
-                    ) : (
-                      <span className="ml-2 whitespace-nowrap text-right font-mono text-xs font-semibold text-text-secondary">
-                        {t("noDate")}
-                      </span>
-                    )}
-                  </li>
-                ))}
+                          <div className="font-mono text-[11px] text-text-tertiary">
+                            {deadlineInfo.formattedDate}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="ml-2 whitespace-nowrap text-right font-mono text-xs font-semibold text-text-secondary">
+                          {t("noDate")}
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </section>
@@ -239,16 +220,14 @@ export default function DashboardPage() {
               <ul className="flex flex-col">
                 {newFiles.map((file, index) => {
                   const name = file.customName || file.fileName || "";
-                  const extension = name.includes(".")
-                    ? name.split(".").pop() || "FILE"
-                    : file.type?.split("/").pop() || "FILE";
+                  const extension = getFileExtension(name, file.type || undefined);
                   return (
                     <li
                       key={file.id ?? name ?? index}
                       className="flex items-center gap-3 border-b border-line py-[11px] last:border-b-0"
                     >
                       <span className={`flex h-[34px] w-[34px] flex-none items-center justify-center rounded-[8px] font-mono text-[10px] font-bold ${getFileTone(extension)}`}>
-                        {extension.slice(0, 4).toUpperCase()}
+                        {extension}
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-[13px] font-medium text-text-primary">
@@ -260,7 +239,7 @@ export default function DashboardPage() {
                       </div>
                       {file.uploadedAt && (
                         <span className="flex-none font-mono text-[11px] text-text-tertiary">
-                          {format.relativeTime(new Date(file.uploadedAt), new Date())}
+                          {format.relativeTime(new Date(file.uploadedAt), now)}
                         </span>
                       )}
                     </li>
@@ -277,6 +256,5 @@ export default function DashboardPage() {
         </section>
         </div>
       </PageContainer>
-    </div>
   );
 }

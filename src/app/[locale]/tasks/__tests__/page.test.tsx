@@ -154,7 +154,7 @@ describe("TasksPage", () => {
     await waitFor(() => {
       expect(screen.getByText("Essay")).toBeDefined();
     });
-    expect(container.firstElementChild?.className).toContain("bg-background");
+    expect(container.firstElementChild?.className).toContain("max-w-[1600px]");
     expect(screen.getByPlaceholderText("Search tasks...").className).toContain(
       "bg-elevated",
     );

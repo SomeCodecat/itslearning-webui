@@ -15,8 +15,7 @@ export default function FilesPage() {
   const { data: files, error, isLoading } = useSWR("/api/files/all", fetcher);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
+    <PageContainer className="px-6 py-6 md:px-10 md:py-7 md:pb-10">
         <header className="mb-5 flex flex-wrap items-end justify-between gap-3.5">
           <div>
             <h1 className="mb-1 text-xl font-bold text-text-primary md:text-[28px]">
@@ -36,6 +35,5 @@ export default function FilesPage() {
           <FileBrowser files={files || []} cacheKey="/api/files/all" allowCourseGrouping />
         )}
       </PageContainer>
-    </div>
   );
 }
