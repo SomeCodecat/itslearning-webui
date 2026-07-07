@@ -137,7 +137,10 @@ export function FileCard({
     setDownloading(true);
     setDownloadPct(null);
     try {
-      const res = await fetch(`/api/files/download?id=${id}`);
+      // Live-scraped resources (persistable=false) carry the itslearning
+      // ElementId rather than a UserFile id, so resolve by elementId there.
+      const query = persistable ? `id=${id}` : `elementId=${id}`;
+      const res = await fetch(`/api/files/download?${query}`);
       if (!res.ok || !res.body) {
         showError(t("downloadError"));
         return;

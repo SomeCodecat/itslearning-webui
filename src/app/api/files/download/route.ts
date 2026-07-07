@@ -9,22 +9,35 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const idParam = searchParams.get("id");
+    // Live-scraped course resources are identified by their itslearning
+    // ElementId (they have no stable UserFile.id in the UI), so allow resolving
+    // by elementId as well.
+    const elementIdParam = searchParams.get("elementId");
 
-    if (!idParam) {
+    if (!idParam && !elementIdParam) {
       return NextResponse.json({ error: "Missing file ID" }, { status: 400 });
     }
-    const userFileId = parseInt(idParam);
 
     const userId = await getSessionUserId();
     if (userId === null) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 1. Find UserFile in DB
-    const userFile = await prisma.userFile.findUnique({
-      where: { id: userFileId },
-      include: { storedFile: true },
-    });
+    // 1. Find UserFile in DB (by elementId for live resources, else by id)
+    const userFile = elementIdParam
+      ? await prisma.userFile.findFirst({
+          where: {
+            userId,
+            elementId: parseInt(elementIdParam),
+            isArchived: false,
+          },
+          include: { storedFile: true },
+          orderBy: { id: "desc" },
+        })
+      : await prisma.userFile.findUnique({
+          where: { id: parseInt(idParam as string) },
+          include: { storedFile: true },
+        });
 
     if (!userFile || userFile.userId !== userId) {
       return NextResponse.json(

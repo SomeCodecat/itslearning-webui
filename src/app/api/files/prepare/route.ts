@@ -48,17 +48,31 @@ export async function POST(request: Request) {
     );
   }
 
-  const userFiles = await prisma.userFile.findMany({
-    where: { userId, id: { in: ids } },
-    include: { storedFile: true },
-  });
+  // Live-scraped course resources are addressed by itslearning ElementId; the
+  // DB-backed file pages use UserFile.id. Both only ever resolve this user's
+  // own files (userId filter), so ownership is always enforced.
+  const byElement = body.by === "elementId";
 
-  // Ownership: any id we couldn't load is either missing or not owned.
-  if (userFiles.length !== ids.length) {
-    return NextResponse.json(
-      { error: "Forbidden: Some requested files were not found or not owned by you" },
-      { status: 403 },
-    );
+  let userFiles;
+  if (byElement) {
+    userFiles = await prisma.userFile.findMany({
+      where: { userId, elementId: { in: ids }, isArchived: false },
+      include: { storedFile: true },
+    });
+    // Lenient: a live resource may not be a downloadable file (e.g. a link or
+    // test), so missing ones are simply not prepared rather than a hard 403.
+  } else {
+    userFiles = await prisma.userFile.findMany({
+      where: { userId, id: { in: ids } },
+      include: { storedFile: true },
+    });
+    // Ownership: any id we couldn't load is either missing or not owned.
+    if (userFiles.length !== ids.length) {
+      return NextResponse.json(
+        { error: "Forbidden: Some requested files were not found or not owned by you" },
+        { status: 403 },
+      );
+    }
   }
 
   // Resolve the scraper up-front so an auth failure returns a clean 401 rather

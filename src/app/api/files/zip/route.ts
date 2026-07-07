@@ -38,23 +38,32 @@ export async function POST(request: Request) {
       );
     }
 
-    // Load UserFiles and storedFiles for ownership verification
-    const userFiles = await prisma.userFile.findMany({
-      where: {
-        userId,
-        id: { in: ids },
-      },
-      include: {
-        storedFile: true,
-      },
-    });
+    // Live-scraped course resources are addressed by itslearning ElementId; the
+    // DB-backed file pages use UserFile.id. The userId filter enforces ownership
+    // in both cases.
+    const byElement = body.by === "elementId";
 
-    // Verify ownership: if some IDs were not found, it means they are either missing or not owned by user
-    if (userFiles.length !== ids.length) {
-      return NextResponse.json(
-        { error: "Forbidden: Some requested files were not found or not owned by you" },
-        { status: 403 },
-      );
+    // Load UserFiles and storedFiles for ownership verification
+    let userFiles;
+    if (byElement) {
+      userFiles = await prisma.userFile.findMany({
+        where: { userId, elementId: { in: ids }, isArchived: false },
+        include: { storedFile: true },
+      });
+      // Lenient: a live resource may not be a downloadable file, so missing
+      // ones are simply skipped rather than a hard 403.
+    } else {
+      userFiles = await prisma.userFile.findMany({
+        where: { userId, id: { in: ids } },
+        include: { storedFile: true },
+      });
+      // Verify ownership: if some IDs were not found, they are either missing or not owned by user
+      if (userFiles.length !== ids.length) {
+        return NextResponse.json(
+          { error: "Forbidden: Some requested files were not found or not owned by you" },
+          { status: 403 },
+        );
+      }
     }
 
     // Refuse if total size > 2GB

@@ -318,6 +318,9 @@ export function FileBrowser({
   async function handleZipDownload() {
     if (zipLoading || sorted.length === 0) return;
     const ids = sorted.map((f) => f.id);
+    // Live-scraped resources (persistable=false) carry itslearning ElementIds
+    // rather than UserFile ids, so tell the API to resolve by elementId.
+    const by = persistable ? "id" : "elementId";
     setZipLoading(true);
     setZipError(false);
     setZipSkipped(0);
@@ -330,7 +333,7 @@ export function FileBrowser({
       const prep = await fetch("/api/files/prepare", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids }),
+        body: JSON.stringify({ ids, by }),
       });
       if (!prep.ok || !prep.body) {
         setZipError(true);
@@ -371,7 +374,7 @@ export function FileBrowser({
       const res = await fetch("/api/files/zip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids }),
+        body: JSON.stringify({ ids, by }),
       });
       if (!res.ok) {
         setZipError(true);
