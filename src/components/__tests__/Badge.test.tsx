@@ -22,7 +22,7 @@ describe("Badge", () => {
     const badge = screen.getByText("Netzwerke").closest("span");
 
     expect(screen.getByText("#")).toBeDefined();
-    expect(badge?.className).toContain("bg-slate-800");
-    expect(badge?.className).toContain("border-slate-700");
+    expect(badge?.className).toContain("bg-elevated");
+    expect(badge?.className).toContain("border-line-strong");
   });
 });

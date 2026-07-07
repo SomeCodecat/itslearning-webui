@@ -45,15 +45,15 @@ export function Badge({
   const variants = {
     exam: {
       classes: "bg-error-subtle text-error",
-      dot: "bg-red-400",
+      dot: "bg-error",
     },
     ap1: {
       classes: "bg-accent-subtle text-accent-text",
-      dot: "bg-indigo-500",
+      dot: "bg-accent",
     },
     ap2: {
       classes: "bg-sky-subtle text-sky",
-      dot: "bg-sky-400",
+      dot: "bg-sky-dot",
     },
     active: {
       classes: "bg-accent-subtle text-accent-text",
@@ -68,11 +68,11 @@ export function Badge({
       dot: null,
     },
     tag: {
-      classes: "border border-slate-700 bg-slate-800 text-slate-400 font-medium",
+      classes: "border border-line-strong bg-elevated text-text-secondary font-medium",
       dot: null,
     },
     neutral: {
-      classes: "border border-slate-700 bg-slate-800 text-slate-400 font-medium",
+      classes: "border border-line-strong bg-elevated text-text-secondary font-medium",
       dot: null,
     },
   };

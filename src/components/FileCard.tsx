@@ -383,7 +383,7 @@ export function FileCard({
               <Badge key={tag.id} label={tag.name} color="yellow" />
             ))}
             {contentMatch && (
-              <Badge label={t("contentMatchedBadge")} color="gray" />
+              <Badge label={t("contentMatchedBadge")} variant="content-match" />
             )}
           </div>
           {date && (

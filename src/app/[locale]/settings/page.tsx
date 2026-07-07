@@ -132,9 +132,15 @@ export default function SettingsPage() {
 
         <div>
           {/* Segmented Navigation */}
-          <div className="mb-5 flex w-fit gap-1.5 rounded-control bg-elevated p-1">
+          <div
+            role="tablist"
+            aria-label={t("title")}
+            className="mb-5 flex w-fit gap-1.5 rounded-control bg-elevated p-1"
+          >
             <button
               type="button"
+              role="tab"
+              aria-selected={activeTab === "profile"}
               onClick={() => setActiveTab("profile")}
               className={`rounded-[7px] px-4 py-[7px] text-[13px] transition-colors ${
                 activeTab === "profile"
@@ -146,6 +152,8 @@ export default function SettingsPage() {
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={activeTab === "school"}
               onClick={() => setActiveTab("school")}
               className={`rounded-[7px] px-4 py-[7px] text-[13px] transition-colors ${
                 activeTab === "school"

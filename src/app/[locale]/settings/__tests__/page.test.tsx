@@ -76,7 +76,7 @@ describe("SettingsPage", () => {
     });
 
     expect(container.firstElementChild?.className).toContain("max-w-[1600px]");
-    expect(screen.getByRole("button", { name: "Profile" }).className).toContain(
+    expect(screen.getByRole("tab", { name: "Profile" }).className).toContain(
       "bg-card",
     );
     expect(screen.getByLabelText("First Name").className).toContain(

@@ -230,9 +230,20 @@ export default function DashboardPage() {
                         {extension}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-[13px] font-medium text-text-primary">
-                          {name}
-                        </p>
+                        {file.id ? (
+                          <a
+                            href={`/api/files/download?id=${file.id}&disposition=inline`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block truncate text-[13px] font-medium text-text-primary transition-colors hover:text-accent-text"
+                          >
+                            {name}
+                          </a>
+                        ) : (
+                          <p className="truncate text-[13px] font-medium text-text-primary">
+                            {name}
+                          </p>
+                        )}
                         <p className="truncate text-[11px] text-text-tertiary">
                           {[file.courseTitle, file.size].filter(Boolean).join(" · ")}
                         </p>
