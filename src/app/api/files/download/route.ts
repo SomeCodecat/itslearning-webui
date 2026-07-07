@@ -37,11 +37,12 @@ export async function GET(request: Request) {
     if (userFile.storedFile) {
       try {
         const fileBuffer = await fs.readFile(userFile.storedFile.localPath);
-        return new NextResponse(fileBuffer, {
+        return new NextResponse(new Uint8Array(fileBuffer), {
           headers: {
             "Content-Type":
               userFile.storedFile.mimeType || "application/octet-stream",
-            "Content-Disposition": `inline; filename="${encodeURIComponent(userFile.customName || "download")}"`,
+            "Content-Length": String(fileBuffer.length),
+            "Content-Disposition": `attachment; filename="${encodeURIComponent(userFile.customName || "download")}"`,
           },
         });
       } catch {
@@ -81,7 +82,8 @@ export async function GET(request: Request) {
     return new NextResponse(new Uint8Array(fileData.buffer), {
       headers: {
         "Content-Type": fileData.mimeType || "application/octet-stream",
-        "Content-Disposition": `inline; filename="${encodeURIComponent(fileData.filename)}"`,
+        "Content-Length": String(fileData.buffer.length),
+        "Content-Disposition": `attachment; filename="${encodeURIComponent(fileData.filename)}"`,
       },
     });
   } catch (error) {

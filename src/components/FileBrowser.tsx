@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { groupFiles } from "@/lib/groupFiles";
 import { EmptyState } from "./ui/EmptyState";
+import { ProgressBar } from "./ui/ProgressBar";
 
 interface TagItem {
   id: number;
@@ -92,6 +93,13 @@ export function FileBrowser({
   const [zipLoading, setZipLoading] = useState(false);
   const [zipError, setZipError] = useState(false);
   const [zipSkipped, setZipSkipped] = useState(0);
+  const [zipFailed, setZipFailed] = useState(0);
+  // Per-file download progress during the "prepare" phase. Null once we move to
+  // the (indeterminate) server-side compression phase.
+  const [zipProgress, setZipProgress] = useState<{
+    done: number;
+    total: number;
+  } | null>(null);
 
   // Full-text search state
   const [searchResults, setSearchResults] = useState<FileItem[]>([]);
@@ -309,14 +317,61 @@ export function FileBrowser({
 
   async function handleZipDownload() {
     if (zipLoading || sorted.length === 0) return;
+    const ids = sorted.map((f) => f.id);
     setZipLoading(true);
     setZipError(false);
     setZipSkipped(0);
+    setZipFailed(0);
+    setZipProgress({ done: 0, total: ids.length });
     try {
+      // Phase 1: make sure every selected file is downloaded and stored on the
+      // server. Progress streams back as newline-delimited JSON, one line per
+      // file, so we can show a determinate bar.
+      const prep = await fetch("/api/files/prepare", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids }),
+      });
+      if (!prep.ok || !prep.body) {
+        setZipError(true);
+        return;
+      }
+
+      const reader = prep.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let failedCount = 0;
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let nl: number;
+        while ((nl = buffer.indexOf("\n")) >= 0) {
+          const line = buffer.slice(0, nl).trim();
+          buffer = buffer.slice(nl + 1);
+          if (!line) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === "progress") {
+              setZipProgress({ done: msg.done, total: msg.total });
+            } else if (msg.type === "done") {
+              failedCount = msg.failed ?? 0;
+            }
+          } catch {
+            // Ignore a malformed/partial line — the next chunk completes it.
+          }
+        }
+      }
+      if (failedCount > 0) setZipFailed(failedCount);
+
+      // Phase 2: build and download the ZIP from the now-present files. The
+      // server streams the archive without a known length, so show an
+      // indeterminate bar while it compresses.
+      setZipProgress(null);
       const res = await fetch("/api/files/zip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: sorted.map((f) => f.id) }),
+        body: JSON.stringify({ ids }),
       });
       if (!res.ok) {
         setZipError(true);
@@ -337,6 +392,7 @@ export function FileBrowser({
       setZipError(true);
     } finally {
       setZipLoading(false);
+      setZipProgress(null);
     }
   }
   const filterLabels = {
@@ -466,10 +522,39 @@ export function FileBrowser({
         </button>
       </div>
 
+      {/* ZIP download progress */}
+      {zipLoading && (
+        <div className="space-y-1.5 px-1">
+          <ProgressBar
+            value={
+              zipProgress && zipProgress.total > 0
+                ? (zipProgress.done / zipProgress.total) * 100
+                : zipProgress
+                  ? 0
+                  : null
+            }
+            aria-label={t("preparingDownload")}
+          />
+          <p className="text-xs text-text-secondary">
+            {zipProgress
+              ? t("preparingProgress", {
+                  done: zipProgress.done,
+                  total: zipProgress.total,
+                })
+              : t("compressing")}
+          </p>
+        </div>
+      )}
+
       {/* ZIP download feedback */}
       {zipError && (
         <p className="px-1 text-xs text-error" role="alert">
           {t("zipError")}
+        </p>
+      )}
+      {zipFailed > 0 && (
+        <p className="px-1 text-xs text-warning">
+          {t("zipFailed", { count: zipFailed })}
         </p>
       )}
       {zipSkipped > 0 && (

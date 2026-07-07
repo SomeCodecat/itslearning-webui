@@ -3,8 +3,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./Badge";
+import { ProgressBar } from "./ui/ProgressBar";
 import { getFileExtension, getFileTone } from "./ui/fileType";
-import { Download, ExternalLink, FileText, Plus, Tag } from "lucide-react";
+import {
+  Download,
+  ExternalLink,
+  FileText,
+  Loader2,
+  Plus,
+  Tag,
+} from "lucide-react";
 
 interface TagItem {
   id: number;
@@ -65,6 +73,12 @@ export function FileCard({
   const [menuOpen, setMenuOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  // Download state. `downloadPct` is null while the server is fetching the file
+  // from itslearning (no measurable byte progress yet), then 0–100 as bytes
+  // stream to the browser.
+  const [downloading, setDownloading] = useState(false);
+  const [downloadPct, setDownloadPct] = useState<number | null>(null);
+
   // All user tags (fetched once when the menu opens)
   const [allTags, setAllTags] = useState<TagItem[]>([]);
   const [tagsLoaded, setTagsLoaded] = useState(false);
@@ -117,6 +131,64 @@ export function FileCard({
       isAP2: initialAP2,
     });
   }, [initialExamRelevant, initialAP1, initialAP2]);
+
+  async function handleDownload() {
+    if (downloading) return;
+    setDownloading(true);
+    setDownloadPct(null);
+    try {
+      const res = await fetch(`/api/files/download?id=${id}`);
+      if (!res.ok || !res.body) {
+        showError(t("downloadError"));
+        return;
+      }
+
+      const lenHeader = res.headers.get("Content-Length");
+      const totalBytes = lenHeader ? parseInt(lenHeader, 10) : 0;
+      const reader = res.body.getReader();
+      const chunks: Uint8Array[] = [];
+      let received = 0;
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) {
+          chunks.push(value);
+          received += value.length;
+          if (totalBytes > 0) {
+            setDownloadPct(Math.min(100, (received / totalBytes) * 100));
+          }
+        }
+      }
+
+      // Derive a filename from Content-Disposition, falling back to the display name.
+      const disposition = res.headers.get("Content-Disposition") || "";
+      const match = /filename\*?=(?:UTF-8''|")?([^;"']+)/i.exec(disposition);
+      let suggested = fileName;
+      if (match) {
+        try {
+          suggested = decodeURIComponent(match[1]);
+        } catch {
+          suggested = match[1];
+        }
+      }
+
+      const blob = new Blob(chunks as BlobPart[]);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = suggested || "download";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download failed", err);
+      showError(t("downloadError"));
+    } finally {
+      setDownloading(false);
+      setDownloadPct(null);
+    }
+  }
 
   async function toggleFlag(key: "isExamRelevant" | "isAP1" | "isAP2") {
     if (!persistable || saving) return;
@@ -301,6 +373,14 @@ export function FileCard({
               {errorMsg}
             </span>
           )}
+          {downloading && (
+            <div className="mt-2 max-w-xs">
+              <ProgressBar
+                value={downloadPct}
+                aria-label={t("downloading")}
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -477,13 +557,20 @@ export function FileCard({
           </div>
         )}
 
-        <a
-          href={`/api/files/download?id=${id}`}
-          className="flex items-center justify-center gap-2 rounded-control bg-accent px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-accent-hover max-md:flex-1"
+        <button
+          type="button"
+          onClick={handleDownload}
+          disabled={downloading}
+          aria-label={t("download")}
+          className="flex items-center justify-center gap-2 rounded-control bg-accent px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-wait disabled:opacity-60 max-md:flex-1"
         >
           {t("download")}
-          <Download className="h-4 w-4" />
-        </a>
+          {downloading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Download className="h-4 w-4" />
+          )}
+        </button>
         <a
           href={webUrl}
           target="_blank"
