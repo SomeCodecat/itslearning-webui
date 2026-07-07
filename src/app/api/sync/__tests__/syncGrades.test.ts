@@ -45,6 +45,7 @@ const {
   mockGetScraperForSession: vi.fn(),
   mockScraper: {
     getCourses: vi.fn(),
+    getCourseCards: vi.fn(),
     getTasks: vi.fn(),
     getTopics: vi.fn(),
     getResources: vi.fn(),
@@ -88,6 +89,7 @@ describe("POST /api/sync grades integration", () => {
     mockScraper.getCourses.mockResolvedValue([
       { CourseId: 100, Title: "Math", Code: "MATH" },
     ]);
+    mockScraper.getCourseCards.mockResolvedValue([]);
     mockScraper.getTasks.mockResolvedValue([]);
     mockScraper.getTopics.mockResolvedValue([]);
     mockScraper.getResources.mockResolvedValue([]);
