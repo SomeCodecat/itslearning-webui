@@ -64,6 +64,41 @@ export interface CourseCard {
   IsFavouriteCourse?: boolean;
 }
 
+// person/v1 — the signed-in person, incl. capability flags the UI can use to
+// hide features the account cannot access.
+export interface Person {
+  PersonId: number;
+  FirstName?: string;
+  LastName?: string;
+  FullName?: string;
+  Language?: string | null;
+  ProfileImageUrl?: string | null;
+  iCalUrl?: string | null;
+  iCalFavoriteOnlyUrl?: string | null;
+  TimeZoneId?: string | null;
+  Use12HTimeFormat?: boolean;
+  CanAccessMessageSystem?: boolean;
+  CanAccessCalendar?: boolean;
+  CanAccessPersonalSettings?: boolean;
+  CanAccessInstantMessageSystem?: boolean;
+  CanAccessCourses?: boolean;
+}
+
+// courses/{id}/participants/v3 item — a person enrolled in a course.
+export interface Participant {
+  PersonId: number;
+  FullName?: string;
+  Role?: string | null;
+  RoleId?: number;
+  PictureUrl?: string | null;
+  LastVisited?: string | null;
+  LastVisitedRelative?: string | null;
+  CompletedTasks?: number;
+  TotalTasks?: number;
+  CanHaveTasks?: boolean;
+  Groups?: unknown;
+}
+
 // notifications/v2 item.
 export interface Notification {
   NotificationId: number;
@@ -534,6 +569,36 @@ export class ScraperService {
       ]);
 
     return { unreadNotifications, unseenNotifications, unreadMessages };
+  }
+
+  // The signed-in person (profile + capability flags).
+  async getPerson(): Promise<Person> {
+    if (!this.accessToken) throw new Error("Not authenticated");
+
+    const res = await this.apiGet<Person>("/restapi/personal/person/v1");
+    return res.data;
+  }
+
+  // Course roster with per-person task progress. 403/404 (e.g. no permission)
+  // yields an empty list rather than an error.
+  async getParticipants(courseId: number): Promise<Participant[]> {
+    if (!this.accessToken) throw new Error("Not authenticated");
+
+    try {
+      const res = await this.apiGet<EntityArrayResponse<Participant>>(
+        `/restapi/personal/courses/${courseId}/participants/v3`,
+        { pageIndex: 0, pageSize: 200 },
+      );
+      return res.data.EntityArray || [];
+    } catch (err) {
+      if (
+        axios.isAxiosError(err) &&
+        (err.response?.status === 403 || err.response?.status === 404)
+      ) {
+        return [];
+      }
+      throw err;
+    }
   }
 
   // Course Bulletins (LightBulletins)
